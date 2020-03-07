@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 
 import 'EntryActivity.dart';
+import 'audio/audio_screen.dart';
 
 void main() => runApp(MaterialApp(
-        title: 'Flutter Demo',
+        title: 'Proyecto SW',
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        initialRoute: '/entry',
+        initialRoute: '/playing',
         routes: {
           '/entry': (context) => EntryActivity(),
+          '/playing': (context) => PlayingScreen(),
         }
       )
 );
