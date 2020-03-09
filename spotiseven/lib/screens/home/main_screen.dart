@@ -38,7 +38,7 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
           BottomNavigationBarItem(icon: Icon(Icons.person), title: Text('')),
         ],
         onTap: (index) {
-          print('$index');
+          print('bottom: $index');
           setState(() {
             _currentIndex = index;
           });
