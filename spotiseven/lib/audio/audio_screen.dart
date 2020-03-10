@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+// To play audio from URL
+import 'package:flutter_exoplayer/audioplayer.dart';
 
 class PlayingScreen extends StatefulWidget {
   @override
@@ -7,6 +9,26 @@ class PlayingScreen extends StatefulWidget {
 }
 
 class _PlayingScreenState extends State<PlayingScreen> {
+
+  AudioPlayer _audioPlayer = AudioPlayer();
+  // TODO: Para hacer pruebas. En version final pasar como parámetro
+  final String _url = 'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Yung_Kartz/August_2019/Yung_Kartz_-_04_-_One_Way.mp3';
+  // Para controlar el tiempo de la reproducción
+  int _time;
+  // Para controlar el estado de la reproduccion
+  bool _playing = true;
+
+  @override
+  void initState() {
+    // Reproducimos la URL
+    _audioPlayer.play(_url);
+    // Para la actualización de la barra temporal y los segundos
+    _audioPlayer.onAudioPositionChanged.listen((Duration d) => setState(() => _time = d.inSeconds) );
+    // Tiempo inicial
+    _time = 0;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,6 +82,44 @@ class _PlayingScreenState extends State<PlayingScreen> {
             ),
             // Controles de musica
             buildAudioControlls(),
+            // ProgressBar -> En segundos
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                FutureBuilder(
+                  future: _audioPlayer.getDuration(),
+                  builder: (context, snapshot) {
+                    if(snapshot.hasData){
+                      return Slider(
+                        // TODO: Change this colors and style
+                        activeColor: Colors.black,
+                        inactiveColor: Colors.green[800],
+                        min: 0,
+                        max: (snapshot.data as Duration).inSeconds.toDouble(),
+                        value: _time.toDouble(),
+                        // TODO: igual esto se puede hacer de otra forma
+                        onChanged: (value) {
+                          print('${value.toInt().toString()}');
+                          _audioPlayer.seekPosition(Duration(seconds: value.toInt()));
+                          setState(() {
+                            _time = value.toInt();
+                          });
+                        },
+                      );
+                    }else{
+                      return Slider(
+                        min: 0,
+                        max: 0,
+                        value: 0,
+                      );
+                    }
+                  },
+                ),
+                // Tiempo en segundos
+                Text('${Duration(seconds: _time).toString().substring(2, 7)}'),
+              ],
+            ),
+            // Controles de playlist
             buildPlaylistControlls(),
           ],
         ),
@@ -89,7 +149,17 @@ class _PlayingScreenState extends State<PlayingScreen> {
             children: <Widget>[
               IconButton(onPressed: () => print('Repeat'), icon: Icon(Icons.repeat_one), ),
               IconButton(onPressed: () => print('skip_previous'), icon: Icon(Icons.skip_previous), ),
-              IconButton(onPressed: () => print('play_arrow'), icon: Icon(Icons.play_arrow), ),
+              IconButton(onPressed: () {
+                print('play_arrow');
+                if(_playing){
+                  _audioPlayer.pause();
+                }else{
+                  _audioPlayer.resume();
+                }
+                setState(() {
+                  _playing = !_playing;
+                });
+              }, icon: Icon(_playing? Icons.pause : Icons.play_arrow), ),
               IconButton(onPressed: () => print('skip_next'), icon: Icon(Icons.skip_next), ),
               IconButton(onPressed: () => print('volume_up'), icon: Icon(Icons.volume_up), ),
             ],
