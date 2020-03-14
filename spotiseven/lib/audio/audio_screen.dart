@@ -85,11 +85,7 @@ class _PlayingScreenState extends State<PlayingScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
-                        IconButton(
-                          onPressed: () => print('share'),
-                          icon: Icon(Icons.share),
-                          iconSize: 40,
-                        ),
+                        buildIconButton(Icons.share, () => print('share')),
                       ],
                     ),
                     CircleAvatar(
@@ -173,20 +169,23 @@ class _PlayingScreenState extends State<PlayingScreen> {
     );
   }
 
+  IconButton buildIconButton(IconData icon, Function f) {
+    return IconButton(
+      onPressed: f,
+      icon: Icon(
+        icon,
+        color: Colors.black,
+      ),
+      iconSize: 40,
+    );
+  }
+
   ButtonBar buildPlaylistControlls() {
     return ButtonBar(
       alignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        IconButton(
-          onPressed: () => print('subtitles'),
-          icon: Icon(Icons.subtitles),
-          iconSize: 40,
-        ),
-        IconButton(
-          onPressed: () => print('playlist_add'),
-          icon: Icon(Icons.playlist_add),
-          iconSize: 40,
-        ),
+        buildIconButton(Icons.subtitles, () => print('subtitles')),
+        buildIconButton(Icons.playlist_add, () => print('playlist_add')),
       ],
     );
   }
@@ -195,42 +194,22 @@ class _PlayingScreenState extends State<PlayingScreen> {
     return ButtonBar(
       alignment: MainAxisAlignment.center,
       children: <Widget>[
-        IconButton(
-          onPressed: () => print('Repeat'),
-          icon: Icon(Icons.repeat_one),
-          iconSize: 40,
-        ),
-        IconButton(
-          onPressed: () => print('skip_previous'),
-          icon: Icon(Icons.skip_previous),
-          iconSize: 40,
-        ),
-        IconButton(
-          onPressed: () {
-            print('play_arrow');
-            if (_playing) {
-              _audioPlayer.pause();
-            } else {
-              _audioPlayer.resume();
-            }
-            setState(() {
-              _playing = !_playing;
-            });
-          },
-          // TODO: Change this icon
-          icon: Icon(_playing ? Icons.pause : Icons.play_arrow),
-          iconSize: 40,
-        ),
-        IconButton(
-          onPressed: () => print('skip_next'),
-          icon: Icon(Icons.skip_next),
-          iconSize: 40,
-        ),
-        IconButton(
-          onPressed: () => print('volume_up'),
-          icon: Icon(Icons.volume_up),
-          iconSize: 40,
-        ),
+        buildIconButton(Icons.repeat, () => print('Repeat')),
+        buildIconButton(Icons.skip_previous, () => print('skip_previous')),
+        // TODO: Change this icon
+        buildIconButton(_playing ? Icons.pause : Icons.play_arrow, () {
+          print('play_arrow');
+          if (_playing) {
+            _audioPlayer.pause();
+          } else {
+            _audioPlayer.resume();
+          }
+          setState(() {
+            _playing = !_playing;
+          });
+        }),
+        buildIconButton(Icons.skip_next, () => print('skip_next')),
+        buildIconButton(Icons.volume_up, () => print('volume_up')),
       ],
     );
   }
