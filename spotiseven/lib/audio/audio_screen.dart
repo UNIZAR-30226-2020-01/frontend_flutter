@@ -44,6 +44,7 @@ class _PlayingScreenState extends State<PlayingScreen> {
               child: Container(
                 decoration: BoxDecoration(
                   image: DecorationImage(
+                    // TODO: Change this dinamically
                     image: NetworkImage(
                         'https://image.shutterstock.com/image-photo/serious-computer-hacker-dark-clothing-600w-1557297230.jpg'),
                     fit: BoxFit.cover,
@@ -51,7 +52,6 @@ class _PlayingScreenState extends State<PlayingScreen> {
                 ),
                 child: Center(
                   child: Text(
-                    // TODO: Poner esto en el cuerpo del Scaffold para aumentar el tamaño y poner una imagen de fondo.
                     // TODO: Change this dinamically
                     'MOTIVATION',
                     style: TextStyle(
@@ -124,9 +124,9 @@ class _PlayingScreenState extends State<PlayingScreen> {
                           builder: (context, snapshot) {
                             if (snapshot.hasData) {
                               return Slider(
-                                // TODO: Change this colors and style
+                                // TODO: Change this color and style if needed
                                 activeColor: Colors.black,
-                                inactiveColor: Colors.green[800],
+                                inactiveColor: Color(0xff73afc5),
                                 min: 0,
                                 max: (snapshot.data as Duration)
                                     .inSeconds
