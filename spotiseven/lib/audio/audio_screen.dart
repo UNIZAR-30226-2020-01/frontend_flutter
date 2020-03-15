@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 // To play audio from URL
 import 'package:flutter_exoplayer/audioplayer.dart';
+import 'package:spotiseven/audio/playingSingleton.dart';
 
 class PlayingScreen extends StatefulWidget {
   @override
@@ -9,24 +10,20 @@ class PlayingScreen extends StatefulWidget {
 }
 
 class _PlayingScreenState extends State<PlayingScreen> {
-  AudioPlayer _audioPlayer = AudioPlayer();
   // TODO: Para hacer pruebas. En version final pasar como parámetro
-  final String _url =
-      'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Yung_Kartz/August_2019/Yung_Kartz_-_04_-_One_Way.mp3';
-  // Para controlar el tiempo de la reproducción
-  int _time;
-  // Para controlar el estado de la reproduccion
-  bool _playing = true;
+  PlayingSingleton _player;
+  // TODO: Comprobar si se puede desacoplar este tiempo.
+  static int _time;
+
+  void updateTime(int time) => _time = time;
 
   @override
   void initState() {
-    // Reproducimos la URL
-    _audioPlayer.play(_url);
-    // Para la actualización de la barra temporal y los segundos
-    _audioPlayer.onAudioPositionChanged
-        .listen((Duration d) => setState(() => _time = d.inSeconds));
-    // Tiempo inicial
-    _time = 0;
+    _player = PlayingSingleton();
+    _time = _player.time;
+    _player.getStreamedTime().listen((Duration d) => setState(() {
+          _time = d.inSeconds;
+        }));
     super.initState();
   }
 
@@ -116,7 +113,7 @@ class _PlayingScreenState extends State<PlayingScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         FutureBuilder(
-                          future: _audioPlayer.getDuration(),
+                          future: _player.duration,
                           builder: (context, snapshot) {
                             if (snapshot.hasData) {
                               return Slider(
@@ -124,15 +121,12 @@ class _PlayingScreenState extends State<PlayingScreen> {
                                 activeColor: Colors.black,
                                 inactiveColor: Color(0xff73afc5),
                                 min: 0,
-                                max: (snapshot.data as Duration)
-                                    .inSeconds
-                                    .toDouble(),
+                                max: (snapshot.data as int).toDouble(),
                                 value: _time.toDouble(),
                                 // TODO: igual esto se puede hacer de otra forma
                                 onChanged: (value) {
                                   print('${value.toInt().toString()}');
-                                  _audioPlayer.seekPosition(
-                                      Duration(seconds: value.toInt()));
+                                  _player.seekPosition(value.toInt());
                                   setState(() {
                                     _time = value.toInt();
                                   });
@@ -149,7 +143,7 @@ class _PlayingScreenState extends State<PlayingScreen> {
                         ),
                         // Tiempo en segundos
                         Text(
-                          '${Duration(seconds: _time).toString().substring(2, 7)}',
+                          '${_player.toShortString()}',
                           style: TextStyle(
                             fontSize: 15,
                             color: Colors.black,
@@ -197,15 +191,10 @@ class _PlayingScreenState extends State<PlayingScreen> {
         buildIconButton(Icons.repeat, () => print('Repeat')),
         buildIconButton(Icons.skip_previous, () => print('skip_previous')),
         // TODO: Change this icon
-        buildIconButton(_playing ? Icons.pause : Icons.play_arrow, () {
+        buildIconButton(_player.playing ? Icons.pause : Icons.play_arrow, () {
           print('play_arrow');
-          if (_playing) {
-            _audioPlayer.pause();
-          } else {
-            _audioPlayer.resume();
-          }
           setState(() {
-            _playing = !_playing;
+            _player.changeReproductionState();
           });
         }),
         buildIconButton(Icons.skip_next, () => print('skip_next')),
