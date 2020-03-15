@@ -10,17 +10,19 @@ class PlayingScreen extends StatefulWidget {
 }
 
 class _PlayingScreenState extends State<PlayingScreen> {
-  // TODO: Para hacer pruebas. En version final pasar como parámetro
-  PlayingSingleton _player;
-  // TODO: Comprobar si se puede desacoplar este tiempo.
-  static int _time;
 
-  void updateTime(int time) => _time = time;
+  // Objeto singleton para controlar la reproduccion de audio de manera uniforme.
+  PlayingSingleton _player;
+  // TODO: Comprobar si se puede desacoplar este tiempo. Creo que no.
+  static int _time;
 
   @override
   void initState() {
+    // Obtenemos una instancia de singleton
     _player = PlayingSingleton();
+    // Obtenemos el tiempo de reproduccion actual
     _time = _player.time;
+    // Establecemos una funcion ante el cambio del tiempo de reproduccion
     _player.getStreamedTime().listen((Duration d) => setState(() {
           _time = d.inSeconds;
         }));

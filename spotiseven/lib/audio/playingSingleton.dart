@@ -6,7 +6,7 @@ class PlayingSingleton{
   // Singleton atribute
   static final PlayingSingleton _instance = PlayingSingleton._internal();
   // Player atributes
-  // TODO: Change this
+  // TODO: Change this to playlist or something else
   final String _url =
       'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Yung_Kartz/August_2019/Yung_Kartz_-_04_-_One_Way.mp3';
   // Player
@@ -54,11 +54,14 @@ class PlayingSingleton{
     _playing = !_playing;
   }
 
+  // TODO: Añadir cola de reproduccion
+
 /*  /// Aplica una funcion al metodo _audioPlayer.onAudioPositionChanged
   void onAudioPositionChanged(Function f){
     _audioPlayer.onAudioPositionChanged.listen(f);
   }*/
 
+  /// Para permitir la actualizacion del slider del tiempo
   Stream<Duration> getStreamedTime() => _audioPlayer.onAudioPositionChanged;
 
   // Funciones de representacion
