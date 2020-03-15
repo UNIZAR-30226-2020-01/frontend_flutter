@@ -7,7 +7,6 @@ class HomeScreenWrapper extends StatefulWidget {
 }
 
 class _HomeScreenWrapperState extends State<HomeScreenWrapper> {
-
   // To control index
   int _currentIndex = 0;
 
@@ -16,46 +15,50 @@ class _HomeScreenWrapperState extends State<HomeScreenWrapper> {
     return DefaultTabController(
       length: 5,
       child: Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          // TODO: Change this color
-          backgroundColor: Colors.cyan,
-          bottom: TabBar(
-            // TODO: Use <indicator> property to change indicator
-            isScrollable: true,
-            // TODO: change labelStyle
-            labelStyle: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-            ),
-            tabs: <Widget>[
-              Tab(child: Text('Following')),
-              Tab(child: Text('Your playlists')),
-              Tab(child: Text('Genres')),
-              Tab(child: Text('Albums')),
-              Tab(child: Text('Artists')),
-            ],
-            onTap: (value) {
-              print('tab: $value');
-              setState(() {
-                _currentIndex = value;
-              });
-            },
-          ),
-        ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text('Item Selected: $_currentIndex'),
-            Row(
-              children: <Widget>[
-                AlbumCardWidget(),
+        // TODO: Change this color
+        backgroundColor: Color(0xff73afc5),
+        body: SafeArea(
+          child: Stack(
+            children: <Widget>[
+              TabBar(
+                // TODO: Use <indicator> property to change indicator
+                isScrollable: true,
+                indicatorColor: Colors.black,
+                // TODO: change labelStyle -> By the moment changed in tab's text
+                labelStyle: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
+                onTap: (value) => setState(() => _currentIndex = value),
+                tabs: <Widget>[
+                  Tab(child: buildTextTab('Following')),
+                  Tab(child: buildTextTab('Your playlists')),
+                  Tab(child: buildTextTab('Genres')),
+                  Tab(child: buildTextTab('Albums')),
+                  Tab(child: buildTextTab('Artists')),
+                ],
+              ),
+              // Contenido principal de la pantalla
+              // TODO: Cambiar a ListView
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text('Item Selected: $_currentIndex'),
+                  Row(
+                    children: <Widget>[
+                      AlbumCardWidget(),
 //                AlbumDetailWidget(),
-              ],
-            ),
-          ],
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
+
+  Text buildTextTab(String text) =>
+      Text(text, style: TextStyle(color: Colors.black));
 }
