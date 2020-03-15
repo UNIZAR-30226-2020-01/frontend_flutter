@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../GenericLoginButton.dart';
+import '../generic_components/GenericLoginButton.dart';
 
 class EntryActivity extends StatelessWidget {
   @override
