@@ -47,7 +47,7 @@ class _HomeScreenWrapperState extends State<HomeScreenWrapper> {
                   Row(
                     children: <Widget>[
                       AlbumCardWidget(),
-//                AlbumDetailWidget(),
+                      AlbumCardWidget(),
                     ],
                   ),
                 ],
