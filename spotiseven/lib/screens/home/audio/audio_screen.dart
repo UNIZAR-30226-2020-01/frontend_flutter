@@ -23,6 +23,7 @@ class _PlayingScreenState extends State<PlayingScreen> {
     // Obtenemos el tiempo de reproduccion actual
     _time = _player.time;
     // Establecemos una funcion ante el cambio del tiempo de reproduccion
+    // FIXME: Igual esto causa un memory leak
     _player.getStreamedTime().listen((Duration d) => setState(() {
           _time = d.inSeconds;
         }));

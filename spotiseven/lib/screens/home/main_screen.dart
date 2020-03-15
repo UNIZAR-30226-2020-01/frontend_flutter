@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:spotiseven/audio/playingSingleton.dart';
 import 'package:spotiseven/screens/home/home_screen.dart';
 
 class MainScreenWrapper extends StatefulWidget {
@@ -18,6 +19,14 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
   ];
   // To show reproductor bar
   bool _showReprBar = false;
+  // PlayingSingleton
+  PlayingSingleton _player;
+
+  @override
+  void initState() {
+    _player = PlayingSingleton();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +88,10 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
       height: 80,
       color: Colors.black,
       child: FlatButton(
-        onPressed: () => print('Cambio a pantalla de reproduccion'),
+        onPressed: () {
+          print('Cambio a pantalla de reproduccion');
+          Navigator.pushNamed(context, '/playing');
+        },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -97,9 +109,7 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
                 Text(
                   'Song name',
                   style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold
-                  ),
+                      color: Colors.white, fontWeight: FontWeight.bold),
                 ),
 //              SizedBox(height: 10),
                 Text(
@@ -111,9 +121,14 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
               ],
             ),
             IconButton(
-              onPressed: () => print('play'),
+              onPressed: () {
+                print('play');
+                setState(() {
+                _player.changeReproductionState();
+                });
+              },
               icon: Icon(
-                Icons.play_arrow,
+                _player.playing ? Icons.pause : Icons.play_arrow,
                 color: Colors.white,
               ),
               iconSize: 40,
