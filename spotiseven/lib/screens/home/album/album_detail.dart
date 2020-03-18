@@ -5,7 +5,7 @@ class AlbumCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(left: 20, right: 0),
+      margin: EdgeInsets.only(left: 15, right: 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(40)),
         // TODO: Change this color
@@ -14,7 +14,7 @@ class AlbumCardWidget extends StatelessWidget {
         // TODO: Change this color
         color: Colors.cyan[100],
       ),
-      child: SizedBox(
+      child: Container(
         width: MediaQuery.of(context).size.width / 2.3,
         height: MediaQuery.of(context).size.width / 2.3 + 100,
         child: Column(
