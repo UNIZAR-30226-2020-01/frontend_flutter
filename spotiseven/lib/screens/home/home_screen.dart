@@ -31,11 +31,11 @@ class _HomeScreenWrapperState extends State<HomeScreenWrapper> {
                 ),
                 onTap: (value) => setState(() => _currentIndex = value),
                 tabs: <Widget>[
-                  Tab(child: buildTextTab('Following')),
-                  Tab(child: buildTextTab('Your playlists')),
-                  Tab(child: buildTextTab('Genres')),
-                  Tab(child: buildTextTab('Albums')),
-                  Tab(child: buildTextTab('Artists')),
+                  buildTextTab('Following'),
+                  buildTextTab('Your playlists'),
+                  buildTextTab('Genres'),
+                  buildTextTab('Albums'),
+                  buildTextTab('Artists'),
                 ],
               ),
               // Contenido principal de la pantalla
@@ -59,6 +59,6 @@ class _HomeScreenWrapperState extends State<HomeScreenWrapper> {
     );
   }
 
-  Text buildTextTab(String text) =>
-      Text(text, style: TextStyle(color: Colors.black));
+  Tab buildTextTab(String text) =>
+      Tab(child: Text(text, style: TextStyle(color: Colors.black)));
 }
