@@ -10,9 +10,9 @@ class AlbumCardWidget extends StatelessWidget {
         borderRadius: BorderRadius.all(Radius.circular(40)),
         // TODO: Change this color
         border:
-            Border.all(width: 1, color: Colors.cyan, style: BorderStyle.solid),
+            Border.all(width: 1, color: Colors.cyan[100], style: BorderStyle.solid),
         // TODO: Change this color
-        color: Colors.cyan,
+        color: Colors.cyan[100],
       ),
       child: SizedBox(
         width: MediaQuery.of(context).size.width / 2.3,
