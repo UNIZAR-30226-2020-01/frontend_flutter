@@ -1,32 +1,44 @@
-
+import 'dart:convert';
 import 'package:flutter_exoplayer/audioplayer.dart';
+// Clase PlaylistController
+import 'package:spotiseven/audio/playlistController.dart';
+// Clase Playlist
+import 'package:spotiseven/audio/utils/playlist.dart';
+// Clase Song
+import 'package:spotiseven/audio/utils/song.dart';
 
-class PlayingSingleton{
-
-  // Singleton atribute
+class PlayingSingleton {
+  // Singleton attribute
   static final PlayingSingleton _instance = PlayingSingleton._internal();
-  // Player atributes
+  // Player attributes
   // TODO: Change this to playlist or something else
   final String _url =
       'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Yung_Kartz/August_2019/Yung_Kartz_-_04_-_One_Way.mp3';
   // Player
   AudioPlayer _audioPlayer = AudioPlayer();
   // Reproduction control
+  // Lista de reproduccion actual
+  PlaylistController _playlistController;
   // Para controlar el tiempo de la reproducción
   int _time;
   // Para controlar el estado de la reproduccion
   bool _playing;
 
+  factory PlayingSingleton() => _instance;
 
-  factory PlayingSingleton()=> _instance;
-
-  PlayingSingleton._internal(){
+  PlayingSingleton._internal() {
     // Creacion del objeto aqui
-    _audioPlayer.play(_url);
-    _audioPlayer.stop();
+    // TODO: El inicio de la reproduccion lo manda la playlist
+//    _audioPlayer.play(_url);
+//    _audioPlayer.stop();
     _time = 0;
     _playing = false;
-    _audioPlayer.onAudioPositionChanged.listen((Duration d) => _time = d.inSeconds);
+    _audioPlayer.onAudioPositionChanged
+        .listen((Duration d) => _time = d.inSeconds);
+    // TODO: Cuando se acabe una cancion cambiar a la siguiente
+//    _audioPlayer.onPlayerStateChanged.listen(() => );
+    // Iniciamos el PlaylistController con una lista vacia (null)
+    _playlistController = PlaylistController(null);
   }
 
   // Geters de la reproduccion
@@ -36,7 +48,48 @@ class PlayingSingleton{
 
   // Setters de valores especificos
 
+  // Setter de playlist a reproducir
+  void setPlayList(Playlist p) {
+    // Paramos cualquier cancion que estuviera reproduciendose
+    _audioPlayer.stop();
+    _playing = false;
+    // Cambiamos el PlaylistController con la nueva lista de reproduccion
+    _playlistController = PlaylistController(p);
+    // Actualizamos la reproduccion
+    play(_playlistController.actualSong);
+  }
+
   // Funciones de control de la reproduccion
+
+  /// Reproducir una nueva cancion
+  Future<void> play(Song song) async {
+    print('${song.url}');
+    await _audioPlayer.dispose();
+    _audioPlayer = AudioPlayer();
+    _audioPlayer.play(song.url);
+    // Cambiamos al estado predeterminado
+    _time = 0;
+    _playing = true;
+  }
+
+  /// Reproducir la siguiente cancion
+  Future<void> next() async {
+    print('PLAYINGSINGLETON: Next Song');
+    _audioPlayer.stop();
+    _playing = false;
+    _playlistController.next();
+    print('${_playlistController.actualSong.title}');
+    await play(_playlistController.actualSong);
+  }
+
+  /// Reproducir la cancion anterior
+  void previous() {
+    _audioPlayer.stop();
+    _playing = false;
+    _playlistController.previous();
+    play(_playlistController.actualSong);
+  }
+
   /// Reproduce el audio en la posicion dada.
   /// [position] in seconds
   void seekPosition(int position) async {
@@ -45,16 +98,19 @@ class PlayingSingleton{
   }
 
   /// Cambia el estado de la reproduccion de _playing a !_playing
-  void changeReproductionState(){
-    if(_playing){
-      _audioPlayer.pause();
-    }else{
-      _audioPlayer.resume();
+  void changeReproductionState() {
+    if (_playlistController.actualSong != null) {
+      // Si no hay cancion actual -> No hay lista de reproduccion
+      if (_playing) {
+        _audioPlayer.pause();
+      } else {
+        _audioPlayer.resume();
+      }
+      _playing = !_playing;
     }
-    _playing = !_playing;
   }
 
-  // TODO: Añadir cola de reproduccion
+  // TODO: Añadir a cola de reproduccion
 
 /*  /// Aplica una funcion al metodo _audioPlayer.onAudioPositionChanged
   void onAudioPositionChanged(Function f){
@@ -63,6 +119,10 @@ class PlayingSingleton{
 
   /// Para permitir la actualizacion del slider del tiempo
   Stream<Duration> getStreamedTime() => _audioPlayer.onAudioPositionChanged;
+
+  /// Para permitir el cambio del esado de reproduccion
+  Stream<PlayerState> getStreamedPlayedState() =>
+      _audioPlayer.onPlayerStateChanged;
 
   // Funciones de representacion
   /// Devuelve una notación textual de la forma -> mm:ss, donde m son minutos y s segundos
