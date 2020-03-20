@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_exoplayer/audioplayer.dart';
 import 'package:spotiseven/audio/playingSingleton.dart';
 import 'package:spotiseven/screens/home/home_screen.dart';
 
@@ -22,10 +25,28 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
   // PlayingSingleton
   PlayingSingleton _player;
 
+  // Evento de suscripcion al estado de la reproduccion (impedira memory leaks)
+  StreamSubscription _subscription;
+
   @override
   void initState() {
     _player = PlayingSingleton();
+    // Ante el cambio del estado del reproductor central
+    // FIXME: Arreglar esto con el dispose de cambio de cancion
+//    _subscription = _player.getStreamedPlayedState().listen((playerState) {
+//      // TODO: Añadir evento Completed para recargar la vista
+//      if([PlayerState.PLAYING, PlayerState.PAUSED].contains(playerState)){
+//        // El reproductor se ha pausado o ha empezado a reproducir. Actualizamos el estado
+//        setState(() {});
+//      }
+//    });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+//    _subscription.cancel();
+    super.dispose();
   }
 
   @override

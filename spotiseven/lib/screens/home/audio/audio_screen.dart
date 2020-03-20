@@ -1,8 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 // To play audio from URL
 import 'package:flutter_exoplayer/audioplayer.dart';
 import 'package:spotiseven/audio/playingSingleton.dart';
+import 'package:spotiseven/audio/utils/playlist.dart';
+import 'package:spotiseven/audio/utils/song.dart';
 
 class PlayingScreen extends StatefulWidget {
   @override
@@ -16,18 +20,36 @@ class _PlayingScreenState extends State<PlayingScreen> {
   // TODO: Comprobar si se puede desacoplar este tiempo. Creo que no.
   static int _time;
 
+  // FIXME: Arreglar esto con el dispose de cambio de cancion
+  // Suscripcion al evento de cambio de tiempo (arregla el memory leak)
+  StreamSubscription _subscriptionTime;
+
   @override
   void initState() {
     // Obtenemos una instancia de singleton
     _player = PlayingSingleton();
     // Obtenemos el tiempo de reproduccion actual
+    initVariables();
+    super.initState();
+  }
+
+  void initVariables() {
+    // Obtenemos el tiempo de reproduccion actual
     _time = _player.time;
     // Establecemos una funcion ante el cambio del tiempo de reproduccion
-    // FIXME: Igual esto causa un memory leak
-    _player.getStreamedTime().listen((Duration d) => setState(() {
-          _time = d.inSeconds;
-        }));
-    super.initState();
+//    _subscriptionTime = _player.getStreamedTime().listen((Duration d) => setState(() {
+//      _time = d.inSeconds;
+//    }));
+  }
+
+  @override
+  void dispose() {
+    cancelVariables();
+    super.dispose();
+  }
+
+  void cancelVariables() {
+//    _subscriptionTime.cancel();
   }
 
   @override
@@ -200,7 +222,16 @@ class _PlayingScreenState extends State<PlayingScreen> {
             _player.changeReproductionState();
           });
         }),
-        buildIconButton(Icons.skip_next, () => print('skip_next')),
+        buildIconButton(Icons.skip_next, () async {
+          print('skip_next');
+          await _player.next();
+          cancelVariables();
+          initVariables();
+          setState(() {
+            // La nueva cancion empieza en el segundo 0
+            _time = 0;
+          });
+        }),
         buildIconButton(Icons.volume_up, () => print('volume_up')),
       ],
     );
