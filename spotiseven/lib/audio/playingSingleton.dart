@@ -103,11 +103,13 @@ class PlayingSingleton {
   }
 
   /// Reproducir la cancion anterior
-  void previous() {
+  Future<void> previous() async {
+    print('PLAYINGSINGLETON: Previous Song');
     _audioPlayer.stop();
     _playing = false;
     _playlistController.previous();
-    play(_playlistController.actualSong);
+    print('${_playlistController.actualSong.title}');
+    await play(_playlistController.actualSong);
   }
 
   /// Reproduce el audio en la posicion dada.

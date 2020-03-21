@@ -50,14 +50,12 @@ class PlaylistController {
 
   // Pasar a la siguiente cancion
   void next() {
-    print('Index pre-incremento: $_index');
 //    _index = _index == _numSongs - 1? 0 : _index ++;
     _index = (_index + 1) % _numSongs;
-    print('Index post-incremento: $_index');
   }
 
   // Pasar a la cancion anterior
   void previous() {
-    _index = _index > 0 ? _index-- : _numSongs - 1;
+    _index = (_index - 1) % _numSongs;
   }
 }

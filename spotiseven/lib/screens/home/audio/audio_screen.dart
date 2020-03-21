@@ -215,7 +215,22 @@ class _PlayingScreenState extends State<PlayingScreen> {
       alignment: MainAxisAlignment.center,
       children: <Widget>[
         buildIconButton(Icons.repeat, () => print('Repeat')),
-        buildIconButton(Icons.skip_previous, () => print('skip_previous')),
+        buildIconButton(Icons.skip_previous, () async {
+          print('skip_previous');
+          if(_time < 2){
+            // Si han pasado menos de 2 segundos desde el inicio de una cancion, pasamos a la anterior
+            cancelVariables();
+            await _player.previous();
+            initVariables();
+            setState(() {
+              // La nueva cancion empieza en el segundo 0
+              _time = 0;
+            });
+          }else{
+            // Si han pasado más, retrocedemos al inicio de la misma
+            _player.seekPosition(0);
+          }
+        }),
         // TODO: Change this icon
         buildIconButton(_player.playing ? Icons.pause : Icons.play_arrow, () {
           print('play_arrow');
