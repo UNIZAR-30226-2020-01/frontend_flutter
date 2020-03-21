@@ -138,8 +138,8 @@ class _PlayingScreenState extends State<PlayingScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         // TODO: Cambiar este FutureBuilder por un StreamBuilder
-                        FutureBuilder(
-                          future: _player.duration,
+                        StreamBuilder(
+                          stream: _player.getStreamedDuration(),
                           builder: (context, snapshot) {
                             if (snapshot.hasData) {
                               return Slider(
@@ -147,7 +147,7 @@ class _PlayingScreenState extends State<PlayingScreen> {
                                 activeColor: Colors.black,
                                 inactiveColor: Color(0xff73afc5),
                                 min: 0,
-                                max: (snapshot.data as int).toDouble(),
+                                max: (snapshot.data as Duration).inSeconds.toDouble(),
                                 value: _time.toDouble(),
                                 // TODO: igual esto se puede hacer de otra forma
                                 onChanged: (value) {

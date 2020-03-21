@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:flutter_exoplayer/audioplayer.dart';
 // Clase PlaylistController
@@ -26,6 +27,9 @@ class PlayingSingleton {
 
   factory PlayingSingleton() => _instance;
 
+  // Suscripcion a evento de cambio de posicion
+  StreamSubscription _subscriptionTime;
+
   PlayingSingleton._internal() {
     // Creacion del objeto aqui
     // TODO: El inicio de la reproduccion lo manda la playlist
@@ -33,12 +37,16 @@ class PlayingSingleton {
 //    _audioPlayer.stop();
     _time = 0;
     _playing = false;
-    _audioPlayer.onAudioPositionChanged
-        .listen((Duration d) => _time = d.inSeconds);
+    _subscriptionTime = _subscribeTime();
     // TODO: Cuando se acabe una cancion cambiar a la siguiente
 //    _audioPlayer.onPlayerStateChanged.listen(() => );
     // Iniciamos el PlaylistController con una lista vacia (null)
     _playlistController = PlaylistController(null);
+  }
+
+  StreamSubscription<Duration> _subscribeTime() {
+    return _audioPlayer.onAudioPositionChanged
+        .listen((Duration d) => _time = d.inSeconds);
   }
 
   // Geters de la reproduccion
@@ -64,11 +72,19 @@ class PlayingSingleton {
   /// Reproducir una nueva cancion
   Future<void> play(Song song) async {
     print('${song.url}');
+    // Cancelamos todas las suscripciones
+    _subscriptionTime.cancel();
+    // Eliminamos el objeto
     _audioPlayer.dispose();
 //    print('dispose1');
+    // Creamos un nuevo objeto
     _audioPlayer = AudioPlayer();
     await _audioPlayer.play(song.url);
+    // Volvemos a activar las suscripciones
+    _subscriptionTime = _subscribeTime();
+
 //    print('STATE: ${_audioPlayer.state.toString()}');
+//    print('${(await _audioPlayer.getDuration()).inSeconds}');
     // Cambiamos al estado predeterminado
     _time = 0;
     _playing = true;
@@ -125,6 +141,9 @@ class PlayingSingleton {
   /// Para permitir el cambio del esado de reproduccion
   Stream<PlayerState> getStreamedPlayedState() =>
       _audioPlayer.onPlayerStateChanged;
+
+  /// Para permitir la actualizacion de la duracion
+  Stream<Duration> getStreamedDuration() => _audioPlayer.onDurationChanged;
 
   // Funciones de representacion
   /// Devuelve una notación textual de la forma -> mm:ss, donde m son minutos y s segundos
