@@ -66,7 +66,7 @@ class _PlayingScreenState extends State<PlayingScreen> {
               child: Container(
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    // TODO: Change this dinamically
+                    // TODO: Change this dinamically (playlist photo?)
                     image: NetworkImage(
                         'https://image.shutterstock.com/image-photo/serious-computer-hacker-dark-clothing-600w-1557297230.jpg'),
                     fit: BoxFit.cover,
@@ -75,7 +75,7 @@ class _PlayingScreenState extends State<PlayingScreen> {
                 child: Center(
                   child: Text(
                     // TODO: Change this dinamically
-                    'MOTIVATION',
+                    '${_player.playlist.title}',
                     style: TextStyle(
                       // TODO: Poner la fuentes
                       color: Colors.white,
@@ -113,12 +113,12 @@ class _PlayingScreenState extends State<PlayingScreen> {
                     CircleAvatar(
                       // TODO: Change this dinamically
                       backgroundImage: NetworkImage(
-                          'https://yt3.ggpht.com/a/AATXAJzgtF2V2m4KsP1ZHU12UcqzoDBEL4GH4e_CmQ=s288-c-k-c0xffffffff-no-rj-mo'),
+                          _player.song.photoUrl),
                       radius: 90,
                     ),
                     Text(
                       // TODO: Change this dinamically
-                      'The Song Name',
+                      '${_player.song.title}',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 25,
@@ -126,7 +126,7 @@ class _PlayingScreenState extends State<PlayingScreen> {
                     ),
                     Text(
                       // TODO: Change this dinamically
-                      'Artist Name',
+                      '${_player.song.album.artista}',
                       style: TextStyle(
                         fontSize: 18,
                       ),

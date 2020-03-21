@@ -33,19 +33,22 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
     _player = PlayingSingleton();
     // Ante el cambio del estado del reproductor central
     // FIXME: Arreglar esto con el dispose de cambio de cancion
-//    _subscription = _player.getStreamedPlayedState().listen((playerState) {
-//      // TODO: Añadir evento Completed para recargar la vista
-//      if([PlayerState.PLAYING, PlayerState.PAUSED].contains(playerState)){
-//        // El reproductor se ha pausado o ha empezado a reproducir. Actualizamos el estado
-//        setState(() {});
-//      }
-//    });
+    // TODO: Añadir Stream de Song
+    _subscription = subscribeEvents();
     super.initState();
   }
 
+  StreamSubscription subscribeEvents() => _player.getStreamedPlayedState().listen((playerState) {
+    // TODO: Añadir evento Completed para recargar la vista
+    if([PlayerState.PLAYING, PlayerState.PAUSED].contains(playerState)){
+      // El reproductor se ha pausado o ha empezado a reproducir. Actualizamos el estado
+      setState(() {});
+    }
+  });
+
   @override
   void dispose() {
-//    _subscription.cancel();
+    _subscription.cancel();
     super.dispose();
   }
 
@@ -78,9 +81,14 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
           ? FloatingActionButton(
               onPressed: () {
                 print('pressed fab');
-                setState(() {
-                  _showReprBar = true;
-                });
+                if(_player.song != null){
+                  // Hay una canción en reproduccion. Actualizamos el estado.
+                  setState(() {
+                    _showReprBar = true;
+                  });
+                }else{
+                  // No hay nada en reproduccion -> No hacemos nada
+                }
               },
               // TODO: Change this color
               backgroundColor: Colors.black,
@@ -109,32 +117,39 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
       height: 80,
       color: Colors.black,
       child: FlatButton(
-        onPressed: () {
+        onPressed: () async{
           print('Cambio a pantalla de reproduccion');
-          Navigator.pushNamed(context, '/playing');
+          // Para cancelar en caso de que cambie el audio
+          if (_subscription != null) {
+            print('La suscripcion NO es null');
+            _subscription.cancel();
+          }
+          await Navigator.pushNamed(context, '/playing');
+          _subscription.cancel();
+          _subscription = subscribeEvents();
+          // TODO: Recargar el estado a la vuelta para cambios.
+          setState(() {});
         },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             CircleAvatar(
-              // TODO: Change this dinamically
               backgroundImage: NetworkImage(
-                  'https://yt3.ggpht.com/a/AATXAJzgtF2V2m4KsP1ZHU12UcqzoDBEL4GH4e_CmQ=s288-c-k-c0xffffffff-no-rj-mo'),
+                  _player.song.photoUrl),
             ),
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                // TODO: Change this dinamically
                 Text(
-                  'Song name',
+                  '${_player.song.title}',
                   style: TextStyle(
                       color: Colors.white, fontWeight: FontWeight.bold),
                 ),
 //              SizedBox(height: 10),
                 Text(
-                  'Artist Name',
+                  '${_player.song.album.artista}',
                   style: TextStyle(
                     color: Colors.white,
                   ),

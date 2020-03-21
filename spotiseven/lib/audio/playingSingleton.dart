@@ -53,6 +53,8 @@ class PlayingSingleton {
   get playing => _playing;
   get time => _time;
   get duration async => (await _audioPlayer.getDuration()).inSeconds;
+  Playlist get playlist => _playlistController.actualPlaylist;
+  Song get song => _playlistController.actualSong;
 
   // Setters de valores especificos
 
