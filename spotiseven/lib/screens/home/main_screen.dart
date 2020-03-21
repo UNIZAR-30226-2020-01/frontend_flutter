@@ -35,7 +35,8 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
     _player = PlayingSingleton();
     // Ante el cambio del estado del reproductor central
     _subscriptionState = subscribeStateEvents();
-    _subscriptionSong = _player.getStreamedSong().listen((s) => setState(() {}));
+    _subscriptionSong =
+        _player.getStreamedSong().listen((s) => setState(() {}));
     super.initState();
   }
 

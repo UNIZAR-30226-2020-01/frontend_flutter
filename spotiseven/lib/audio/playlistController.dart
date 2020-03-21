@@ -14,9 +14,9 @@ class PlaylistController {
   // Variable interna de la cuenta
   int _index;
 
-  // TODO: Reproduccion en bucle
+  // TODO: Reproduccion en bucle (POR DEFECTO SE EJECUTA ESTA)
   // TODO: Reproduccion aleatoria
-  // TODO: Encapsular comportamientos extraños con excepciones
+  // TODO: Encapsular comportamientos extraños con excepciones?
 
   // Nueva Playlist a reproducir
   PlaylistController(Playlist p) {
@@ -50,7 +50,6 @@ class PlaylistController {
 
   // Pasar a la siguiente cancion
   void next() {
-//    _index = _index == _numSongs - 1? 0 : _index ++;
     _index = (_index + 1) % _numSongs;
   }
 

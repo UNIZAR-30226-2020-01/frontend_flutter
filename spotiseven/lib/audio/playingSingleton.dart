@@ -51,8 +51,9 @@ class PlayingSingleton {
   void subscribeStreams() {
     _subscriptionTime = _audioPlayer.onAudioPositionChanged
         .listen((Duration d) => _time = d.inSeconds);
-    _subscriptionFinal = _audioPlayer.onPlayerStateChanged.listen((playerState){
-      if(playerState == PlayerState.COMPLETED){
+    _subscriptionFinal =
+        _audioPlayer.onPlayerStateChanged.listen((playerState) {
+      if (playerState == PlayerState.COMPLETED) {
         // Se ha completado la cancion. Pasamos a la siguiente.
         this.next();
       }
@@ -150,11 +151,6 @@ class PlayingSingleton {
 
   // TODO: Añadir a cola de reproduccion
 
-/*  /// Aplica una funcion al metodo _audioPlayer.onAudioPositionChanged
-  void onAudioPositionChanged(Function f){
-    _audioPlayer.onAudioPositionChanged.listen(f);
-  }*/
-
   /// Para permitir la actualizacion del slider del tiempo
   Stream<Duration> getStreamedTime() => _audioPlayer.onAudioPositionChanged;
 
@@ -174,5 +170,4 @@ class PlayingSingleton {
 
   /// Devuelve una notación textual de la forma -> hh:mm:ss, donde h son horas, m son minutos y s segundos
   String toLongString() => Duration(seconds: _time).toString();
-
 }

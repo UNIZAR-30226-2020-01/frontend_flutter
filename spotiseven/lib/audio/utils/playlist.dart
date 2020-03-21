@@ -1,6 +1,7 @@
 // Clase Song
 import 'package:spotiseven/audio/utils/song.dart';
 
+// TODO: Cambiar esto para que coincida con los campos de la BD.
 class Playlist {
   // Titulo de la playlist
   String title;

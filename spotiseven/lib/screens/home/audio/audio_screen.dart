@@ -15,7 +15,6 @@ class PlayingScreen extends StatefulWidget {
 }
 
 class _PlayingScreenState extends State<PlayingScreen> {
-
   // Objeto singleton para controlar la reproduccion de audio de manera uniforme.
   PlayingSingleton _player;
   // TODO: Comprobar si se puede desacoplar este tiempo. Creo que no.
@@ -46,17 +45,10 @@ class _PlayingScreenState extends State<PlayingScreen> {
     // Obtenemos el tiempo de reproduccion actual
     _time = _player.time;
     // Establecemos una funcion ante el cambio del tiempo de reproduccion
-    _subscriptionTime = _player.getStreamedTime().listen((Duration d) => setState(() {
-      _time = d.inSeconds;
-    }));
-//    _subscriptionFinal = _player.getStreamedPlayedState().listen((playerState){
-//      if(playerState == PlayerState.COMPLETED){
-//        // Se ha alcanzado el final de la cancion. Recargamos y eliminamos los eventos
-//        cancelVariables();
-//        setState(() {});
-//        initVariables();
-//      }
-//    });
+    _subscriptionTime =
+        _player.getStreamedTime().listen((Duration d) => setState(() {
+              _time = d.inSeconds;
+            }));
   }
 
   @override
@@ -129,8 +121,7 @@ class _PlayingScreenState extends State<PlayingScreen> {
                       ],
                     ),
                     CircleAvatar(
-                      backgroundImage: NetworkImage(
-                          _player.song.photoUrl),
+                      backgroundImage: NetworkImage(_player.song.photoUrl),
                       radius: 90,
                     ),
                     Text(
@@ -152,7 +143,6 @@ class _PlayingScreenState extends State<PlayingScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        // FIXME: A veces no se actualiza al pasar de cancion. (Se queda en 00:00).
                         StreamBuilder(
                           stream: _player.getStreamedDuration(),
                           builder: (context, snapshot) {
@@ -162,7 +152,9 @@ class _PlayingScreenState extends State<PlayingScreen> {
                                 activeColor: Colors.black,
                                 inactiveColor: Color(0xff73afc5),
                                 min: 0,
-                                max: (snapshot.data as Duration).inSeconds.toDouble(),
+                                max: (snapshot.data as Duration)
+                                    .inSeconds
+                                    .toDouble(),
                                 value: _time.toDouble(),
                                 onChanged: (value) {
                                   print('${value.toInt().toString()}');
@@ -231,8 +223,9 @@ class _PlayingScreenState extends State<PlayingScreen> {
         buildIconButton(Icons.repeat, () => print('Repeat')),
         buildIconButton(Icons.skip_previous, () async {
           print('skip_previous');
-          if(_time < 2){
-            // Si han pasado menos de 2 segundos desde el inicio de una cancion, pasamos a la anterior
+          // Si han pasado menos de 2 segundos desde el inicio de una cancion, pasamos a la anterior
+          final tiempo_cambio = 2;
+          if (_time <= tiempo_cambio) {
             cancelVariables();
             await _player.previous();
             initVariables();
@@ -240,8 +233,8 @@ class _PlayingScreenState extends State<PlayingScreen> {
               // La nueva cancion empieza en el segundo 0
               _time = 0;
             });
-          }else{
-            // Si han pasado más, retrocedemos al inicio de la misma
+          } else {
+            // Si han pasado más, retrocedemos al inicio de la misma.
             _player.seekPosition(0);
           }
         }),

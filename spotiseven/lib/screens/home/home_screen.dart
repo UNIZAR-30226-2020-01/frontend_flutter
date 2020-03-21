@@ -71,24 +71,26 @@ class _HomeScreenWrapperState extends State<HomeScreenWrapper> {
                 ],
               ),
               // Contenido principal de la pantalla
-              // TODO: Cambiar a ListView
+              // TODO: Cambiar a ListView (Hacer en otro widget)
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text('Item Selected: $_currentIndex'),
                   Row(
                     children: <Widget>[
-                      // TODO: Quitar. Es para hacer pruebas
-                      GestureDetector(
-                        onTap: () {
-                          print(
-                              'Title ${_pruebaPlaylist.title} --- NCanciones: ${_pruebaPlaylist.playlist.length}');
-                          _playingSingleton.setPlayList(_pruebaPlaylist);
-                        },
-                        child: AlbumCardWidget(),
-                      ),
+                      AlbumCardWidget(),
                       AlbumCardWidget(),
                     ],
+                  ),
+                  // TODO: Quitar. Es para hacer pruebas
+                  RaisedButton(
+                    onPressed: () {
+                      print(
+                          'Title ${_pruebaPlaylist.title} --- NCanciones: ${_pruebaPlaylist.playlist.length}');
+                      _playingSingleton.setPlayList(_pruebaPlaylist);
+                    },
+                    elevation: 0,
+                    child: Text('REPRODUCIR LISTA DE PRUEBA'),
                   ),
                 ],
               ),
