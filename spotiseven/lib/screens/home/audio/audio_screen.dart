@@ -37,9 +37,9 @@ class _PlayingScreenState extends State<PlayingScreen> {
     // Obtenemos el tiempo de reproduccion actual
     _time = _player.time;
     // Establecemos una funcion ante el cambio del tiempo de reproduccion
-//    _subscriptionTime = _player.getStreamedTime().listen((Duration d) => setState(() {
-//      _time = d.inSeconds;
-//    }));
+    _subscriptionTime = _player.getStreamedTime().listen((Duration d) => setState(() {
+      _time = d.inSeconds;
+    }));
   }
 
   @override
@@ -49,7 +49,7 @@ class _PlayingScreenState extends State<PlayingScreen> {
   }
 
   void cancelVariables() {
-//    _subscriptionTime.cancel();
+    _subscriptionTime.cancel();
   }
 
   @override
@@ -225,8 +225,8 @@ class _PlayingScreenState extends State<PlayingScreen> {
         }),
         buildIconButton(Icons.skip_next, () async {
           print('skip_next');
-          await _player.next();
           cancelVariables();
+          await _player.next();
           initVariables();
           setState(() {
             // La nueva cancion empieza en el segundo 0
