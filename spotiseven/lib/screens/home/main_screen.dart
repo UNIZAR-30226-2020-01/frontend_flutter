@@ -25,23 +25,24 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
   // PlayingSingleton
   PlayingSingleton _player;
 
-  // Evento de suscripcion al estado de la reproduccion (impedira memory leaks)
-  StreamSubscription _subscription;
+  // Suscripcion al evento de estado de la reproduccion (impedira memory leaks)
+  StreamSubscription _subscriptionState;
+  // Suscripcion al evento de cambio de cancion en reproduccion
+  StreamSubscription _subscriptionSong;
 
   @override
   void initState() {
     _player = PlayingSingleton();
     // Ante el cambio del estado del reproductor central
-    // FIXME: Arreglar esto con el dispose de cambio de cancion
-    // TODO: Añadir Stream de Song
-    _subscription = subscribeEvents();
+    _subscriptionState = subscribeStateEvents();
+    _subscriptionSong = _player.getStreamedSong().listen((s) => setState(() {}));
     super.initState();
   }
 
-  StreamSubscription subscribeEvents() =>
+  StreamSubscription subscribeStateEvents() =>
       _player.getStreamedPlayedState().listen((playerState) {
         // TODO: Añadir evento Completed para recargar la vista
-        if ([PlayerState.PLAYING, PlayerState.PAUSED, PlayerState.STOPPED].contains(playerState)) {
+        if ([PlayerState.PLAYING, PlayerState.PAUSED].contains(playerState)) {
           // El reproductor se ha pausado o ha empezado a reproducir. Actualizamos el estado
           setState(() {});
         }
@@ -49,7 +50,8 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
 
   @override
   void dispose() {
-    _subscription.cancel();
+    _subscriptionState.cancel();
+    _subscriptionSong.cancel();
     super.dispose();
   }
 
@@ -121,13 +123,13 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
         onPressed: () async {
           print('Cambio a pantalla de reproduccion');
           // Para cancelar en caso de que cambie el audio
-          if (_subscription != null) {
+          if (_subscriptionState != null) {
             print('La suscripcion NO es null');
-            _subscription.cancel();
+            _subscriptionState.cancel();
           }
           await Navigator.pushNamed(context, '/playing');
-          _subscription.cancel();
-          _subscription = subscribeEvents();
+          _subscriptionState.cancel();
+          _subscriptionState = subscribeStateEvents();
           // TODO: Recargar el estado a la vuelta para cambios.
           setState(() {});
         },
