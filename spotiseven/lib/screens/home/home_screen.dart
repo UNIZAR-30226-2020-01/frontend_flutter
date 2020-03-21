@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:spotiseven/audio/playingSingleton.dart';
 // Clase Playlist
 import 'package:spotiseven/audio/utils/playlist.dart';
+// Clase Album
+import 'package:spotiseven/audio/utils/album.dart';
 // Clase Song
 import 'package:spotiseven/audio/utils/song.dart';
 // Clase AlbumCardWidget
@@ -21,16 +23,23 @@ class _HomeScreenWrapperState extends State<HomeScreenWrapper> {
   // To control index
   int _currentIndex = 0;
 
+  static Album _pruebaAlbum = Album(
+      lista: {}, titulo: 'El album de las pruebas', artista: 'Pedro No Tonto');
+
   // TODO: Quitar. Es para hacer pruebas
   Playlist _pruebaPlaylist = Playlist(playlist: [
     Song.fromJSON(jsonDecode(
-        '{"title": "Rap chungo de Internet", "photoUrl": "https://image.shutterstock.com/image-photo/serious-computer-hacker-dark-clothing-600w-1557297230.jpg", "url": "https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Yung_Kartz/August_2019/Yung_Kartz_-_04_-_One_Way.mp3"}')),
+        '{"title": "Rap chungo de Internet", "photoUrl": "https://yt3.ggpht.com/a/AATXAJzgtF2V2m4KsP1ZHU12UcqzoDBEL4GH4e_CmQ=s288-c-k-c0xffffffff-no-rj-mo", "url": "https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Yung_Kartz/August_2019/Yung_Kartz_-_04_-_One_Way.mp3"}'))
+      ..album = _pruebaAlbum,
     Song.fromJSON(jsonDecode(
-        '{"title": "Rock chungo de Internet", "photoUrl": "https://images-na.ssl-images-amazon.com/images/I/919JyJJiTtL._SL1500_.jpg", "url": "https://files.freemusicarchive.org/storage-freemusicarchive-org/music/Ziklibrenbib/The_New_Monitors/st/The_New_Monitors_-_08_-_Hematoma.mp3"}')),
+        '{"title": "Rock chungo de Internet", "photoUrl": "https://images-na.ssl-images-amazon.com/images/I/919JyJJiTtL._SL1500_.jpg", "url": "https://files.freemusicarchive.org/storage-freemusicarchive-org/music/Ziklibrenbib/The_New_Monitors/st/The_New_Monitors_-_08_-_Hematoma.mp3"}'))
+      ..album = _pruebaAlbum,
     Song.fromJSON(jsonDecode(
-        '{"title": "Reggae? de Internet", "photoUrl": "https://images-na.ssl-images-amazon.com/images/I/81AEst8HUtL._SL1422_.jpg", "url": "https://files.freemusicarchive.org/storage-freemusicarchive-org/music/KBOO/collection_of_lo/Live_at_KBOO_for_Higher_Reasoning_Reggae_Time_10302016/collection_of_lo_-_05_-_CoLoSo-05Heartache-Oct_2016-LIVE.mp3"}')),
+        '{"title": "Reggae? de Internet", "photoUrl": "https://images-na.ssl-images-amazon.com/images/I/81AEst8HUtL._SL1422_.jpg", "url": "https://files.freemusicarchive.org/storage-freemusicarchive-org/music/KBOO/collection_of_lo/Live_at_KBOO_for_Higher_Reasoning_Reggae_Time_10302016/collection_of_lo_-_05_-_CoLoSo-05Heartache-Oct_2016-LIVE.mp3"}'))
+      ..album = _pruebaAlbum,
     Song.fromJSON(jsonDecode(
-        '{"title": "Pop? de Internet", "photoUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQvQbsbqx_j5eyjnzdzHER7bO77o7XUedQ-Pv-JJLXkodOIrRmn", "url": "https://files.freemusicarchive.org/storage-freemusicarchive-org/music/Music_for_Video/Blue_Dot_Sessions/Banana_Cream/Blue_Dot_Sessions_-_Popism.mp3"}')),
+        '{"title": "Pop? de Internet", "photoUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQvQbsbqx_j5eyjnzdzHER7bO77o7XUedQ-Pv-JJLXkodOIrRmn", "url": "https://files.freemusicarchive.org/storage-freemusicarchive-org/music/Music_for_Video/Blue_Dot_Sessions/Banana_Cream/Blue_Dot_Sessions_-_Popism.mp3"}'))
+      ..album = _pruebaAlbum,
   ], title: 'Prueba de playlist');
 
   @override
