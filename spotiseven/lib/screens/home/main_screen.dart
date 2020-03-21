@@ -41,7 +41,7 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
   StreamSubscription subscribeEvents() =>
       _player.getStreamedPlayedState().listen((playerState) {
         // TODO: Añadir evento Completed para recargar la vista
-        if ([PlayerState.PLAYING, PlayerState.PAUSED].contains(playerState)) {
+        if ([PlayerState.PLAYING, PlayerState.PAUSED, PlayerState.STOPPED].contains(playerState)) {
           // El reproductor se ha pausado o ha empezado a reproducir. Actualizamos el estado
           setState(() {});
         }
