@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +24,8 @@ class _PlayingScreenState extends State<PlayingScreen> {
   // FIXME: Arreglar esto con el dispose de cambio de cancion
   // Suscripcion al evento de cambio de tiempo (arregla el memory leak)
   StreamSubscription _subscriptionTime;
+  // Suscropipcion al evento de cambio de cancion
+  StreamSubscription _subscriptionFinal;
 
   @override
   void initState() {
@@ -30,6 +33,12 @@ class _PlayingScreenState extends State<PlayingScreen> {
     _player = PlayingSingleton();
     // Obtenemos el tiempo de reproduccion actual
     initVariables();
+    // Suscripcion al evento de cambio de cancion
+    _subscriptionFinal = _player.getStreamedSong().listen((Song s) {
+      cancelVariables();
+      setState(() {});
+      initVariables();
+    });
     super.initState();
   }
 
@@ -40,16 +49,26 @@ class _PlayingScreenState extends State<PlayingScreen> {
     _subscriptionTime = _player.getStreamedTime().listen((Duration d) => setState(() {
       _time = d.inSeconds;
     }));
+//    _subscriptionFinal = _player.getStreamedPlayedState().listen((playerState){
+//      if(playerState == PlayerState.COMPLETED){
+//        // Se ha alcanzado el final de la cancion. Recargamos y eliminamos los eventos
+//        cancelVariables();
+//        setState(() {});
+//        initVariables();
+//      }
+//    });
   }
 
   @override
   void dispose() {
     cancelVariables();
+    _subscriptionFinal.cancel();
     super.dispose();
   }
 
   void cancelVariables() {
     _subscriptionTime.cancel();
+//    _subscriptionFinal.cancel();
   }
 
   @override
@@ -133,6 +152,7 @@ class _PlayingScreenState extends State<PlayingScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
+                        // FIXME: A veces no se actualiza al pasar de cancion. (Se queda en 00:00).
                         StreamBuilder(
                           stream: _player.getStreamedDuration(),
                           builder: (context, snapshot) {
