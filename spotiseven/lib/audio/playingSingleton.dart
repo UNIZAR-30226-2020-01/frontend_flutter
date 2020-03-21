@@ -64,9 +64,11 @@ class PlayingSingleton {
   /// Reproducir una nueva cancion
   Future<void> play(Song song) async {
     print('${song.url}');
-    await _audioPlayer.dispose();
+    _audioPlayer.dispose();
+//    print('dispose1');
     _audioPlayer = AudioPlayer();
-    _audioPlayer.play(song.url);
+    await _audioPlayer.play(song.url);
+//    print('STATE: ${_audioPlayer.state.toString()}');
     // Cambiamos al estado predeterminado
     _time = 0;
     _playing = true;

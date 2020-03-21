@@ -137,6 +137,7 @@ class _PlayingScreenState extends State<PlayingScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
+                        // TODO: Cambiar este FutureBuilder por un StreamBuilder
                         FutureBuilder(
                           future: _player.duration,
                           builder: (context, snapshot) {
