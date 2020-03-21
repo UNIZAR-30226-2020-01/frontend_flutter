@@ -74,7 +74,6 @@ class _PlayingScreenState extends State<PlayingScreen> {
                 ),
                 child: Center(
                   child: Text(
-                    // TODO: Change this dinamically
                     '${_player.playlist.title}',
                     style: TextStyle(
                       // TODO: Poner la fuentes
@@ -111,13 +110,11 @@ class _PlayingScreenState extends State<PlayingScreen> {
                       ],
                     ),
                     CircleAvatar(
-                      // TODO: Change this dinamically
                       backgroundImage: NetworkImage(
                           _player.song.photoUrl),
                       radius: 90,
                     ),
                     Text(
-                      // TODO: Change this dinamically
                       '${_player.song.title}',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
@@ -125,7 +122,6 @@ class _PlayingScreenState extends State<PlayingScreen> {
                       ),
                     ),
                     Text(
-                      // TODO: Change this dinamically
                       '${_player.song.album.artista}',
                       style: TextStyle(
                         fontSize: 18,
@@ -137,7 +133,6 @@ class _PlayingScreenState extends State<PlayingScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        // TODO: Cambiar este FutureBuilder por un StreamBuilder
                         StreamBuilder(
                           stream: _player.getStreamedDuration(),
                           builder: (context, snapshot) {
@@ -149,7 +144,6 @@ class _PlayingScreenState extends State<PlayingScreen> {
                                 min: 0,
                                 max: (snapshot.data as Duration).inSeconds.toDouble(),
                                 value: _time.toDouble(),
-                                // TODO: igual esto se puede hacer de otra forma
                                 onChanged: (value) {
                                   print('${value.toInt().toString()}');
                                   _player.seekPosition(value.toInt());

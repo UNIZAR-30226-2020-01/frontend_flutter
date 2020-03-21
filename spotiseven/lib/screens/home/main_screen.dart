@@ -38,13 +38,14 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
     super.initState();
   }
 
-  StreamSubscription subscribeEvents() => _player.getStreamedPlayedState().listen((playerState) {
-    // TODO: Añadir evento Completed para recargar la vista
-    if([PlayerState.PLAYING, PlayerState.PAUSED].contains(playerState)){
-      // El reproductor se ha pausado o ha empezado a reproducir. Actualizamos el estado
-      setState(() {});
-    }
-  });
+  StreamSubscription subscribeEvents() =>
+      _player.getStreamedPlayedState().listen((playerState) {
+        // TODO: Añadir evento Completed para recargar la vista
+        if ([PlayerState.PLAYING, PlayerState.PAUSED].contains(playerState)) {
+          // El reproductor se ha pausado o ha empezado a reproducir. Actualizamos el estado
+          setState(() {});
+        }
+      });
 
   @override
   void dispose() {
@@ -81,12 +82,12 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
           ? FloatingActionButton(
               onPressed: () {
                 print('pressed fab');
-                if(_player.song != null){
+                if (_player.song != null) {
                   // Hay una canción en reproduccion. Actualizamos el estado.
                   setState(() {
                     _showReprBar = true;
                   });
-                }else{
+                } else {
                   // No hay nada en reproduccion -> No hacemos nada
                 }
               },
@@ -117,7 +118,7 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
       height: 80,
       color: Colors.black,
       child: FlatButton(
-        onPressed: () async{
+        onPressed: () async {
           print('Cambio a pantalla de reproduccion');
           // Para cancelar en caso de que cambie el audio
           if (_subscription != null) {
@@ -135,8 +136,7 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             CircleAvatar(
-              backgroundImage: NetworkImage(
-                  _player.song.photoUrl),
+              backgroundImage: NetworkImage(_player.song.photoUrl),
             ),
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -160,7 +160,7 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
               onPressed: () {
                 print('play');
                 setState(() {
-                _player.changeReproductionState();
+                  _player.changeReproductionState();
                 });
               },
               icon: Icon(
