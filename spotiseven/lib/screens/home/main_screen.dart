@@ -81,18 +81,14 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
           });
         },
       ),
-      floatingActionButton: !_showReprBar
+      floatingActionButton: _showFloatingButton()
           ? FloatingActionButton(
               onPressed: () {
                 print('pressed fab');
-                if (_player.song != null) {
-                  // Hay una canción en reproduccion. Actualizamos el estado.
-                  setState(() {
-                    _showReprBar = true;
-                  });
-                } else {
-                  // No hay nada en reproduccion -> No hacemos nada
-                }
+                // Hay una canción en reproduccion. Actualizamos el estado.
+                setState(() {
+                  _showReprBar = true;
+                });
               },
               // TODO: Change this color
               backgroundColor: Colors.black,
@@ -103,7 +99,7 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
       body: Stack(
         children: <Widget>[
           _children[_currentIndex],
-          _showReprBar
+          _showReprobar()
               ? Positioned(
                   bottom: 0,
                   width: MediaQuery.of(context).size.width,
@@ -113,6 +109,14 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
         ],
       ),
     );
+  }
+
+  bool _showFloatingButton(){
+  return !_showReprBar && _player.song != null;
+  }
+
+  bool _showReprobar(){
+    return _showReprBar && _player.song != null;
   }
 
   Widget buildReproBar() {
