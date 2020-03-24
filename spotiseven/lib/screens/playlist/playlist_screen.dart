@@ -12,20 +12,29 @@ class PlaylistScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double border_radius = 45;
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
+        centerTitle: true,
         // TODO: Change this color
-        backgroundColor: Colors.white,
+        backgroundColor: Color(0xff9ad1e5),
         title: Text('${playlist.title}'),
       ),
       body: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(border_radius),
+              topRight: Radius.circular(border_radius)),
+          color: Color(0xff9ad1e5),
+        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           // TODO: Change this
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children:
-              playlist.playlist.map((Song s) => buildSongPreview(s, playlist)).toList(),
+          children: playlist.playlist
+              .map((Song s) => buildSongPreview(s, playlist))
+              .toList(),
         ),
       ),
     );
