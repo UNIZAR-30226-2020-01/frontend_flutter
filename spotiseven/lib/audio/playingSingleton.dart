@@ -114,6 +114,7 @@ class PlayingSingleton {
     print('PLAYINGSINGLETON: Next Song');
     _audioPlayer.stop();
     _playing = false;
+    //avanza iter a sig cancin
     _playlistController.next();
     print('${_playlistController.actualSong.title}');
     await play(_playlistController.actualSong);
