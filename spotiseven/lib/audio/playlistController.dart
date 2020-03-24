@@ -39,6 +39,16 @@ class PlaylistController {
     return this._playlist.playlist[_index];
   }
 
+  // Poner el iterador del controlador sobre una cancion de la lista
+  void setIteratorOn(Song s){
+    int index = _playlist.playlist.indexOf(s);
+    if(index == -1){
+      throw Exception('PlaylistController.setInteratorOn: Cancion no encontrada en la playlist');
+    }else{
+      _index = index;
+    }
+  }
+
   // Playlist actual
   Playlist get actualPlaylist {
     if (_playlist == null) {
