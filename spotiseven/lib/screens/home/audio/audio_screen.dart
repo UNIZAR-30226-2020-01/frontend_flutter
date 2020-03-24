@@ -156,20 +156,31 @@ class _PlayingScreenState extends State<PlayingScreen> {
                                     .inSeconds
                                     .toDouble(),
                                 value: _time.toDouble(),
-                                onChanged: (value) {
-                                  print('${value.toInt().toString()}');
-                                  _player.seekPosition(value.toInt());
-                                  setState(() {
-                                    _time = value.toInt();
-                                  });
-                                },
+                                onChanged: (value) => seekPlayerTime(value),
                               );
                             } else {
-                              return Slider(
-                                min: 0,
-                                max: 0,
-                                value: 0,
-                              );
+                              return FutureBuilder(
+                                  future: _player.duration,
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasData) {
+                                      return Slider(
+                                        // TODO: Change this color and style if needed
+                                        activeColor: Colors.black,
+                                        inactiveColor: Color(0xff73afc5),
+                                        min: 0,
+                                        max: (snapshot.data as int).toDouble(),
+                                        value: _time.toDouble(),
+                                        onChanged: (value) =>
+                                            seekPlayerTime(value),
+                                      );
+                                    } else {
+                                      return Slider(
+                                        min: 0,
+                                        max: 0,
+                                        value: 0,
+                                      );
+                                    }
+                                  });
                             }
                           },
                         ),
@@ -193,6 +204,14 @@ class _PlayingScreenState extends State<PlayingScreen> {
         ),
       ),
     );
+  }
+
+  void seekPlayerTime(double value) {
+    print('${value.toInt().toString()}');
+    _player.seekPosition(value.toInt());
+    setState(() {
+      _time = value.toInt();
+    });
   }
 
   IconButton buildIconButton(IconData icon, Function f) {
