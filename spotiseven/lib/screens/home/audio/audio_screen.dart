@@ -86,7 +86,8 @@ class _PlayingScreenState extends State<PlayingScreen> {
                   image: DecorationImage(
                     // TODO: Change this dinamically (playlist photo)
                     image: NetworkImage(
-                        'https://image.shutterstock.com/image-photo/serious-computer-hacker-dark-clothing-600w-1557297230.jpg'),
+//                        'https://image.shutterstock.com/image-photo/serious-computer-hacker-dark-clothing-600w-1557297230.jpg'
+                    '${_player.playlist.photoUrl}'),
                     fit: BoxFit.cover,
                   ),
                 ),

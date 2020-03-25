@@ -11,11 +11,24 @@ class Playlist {
   // Lista de canciones en la playlist
   List<Song> playlist;
 
+  // TODO: Cambiar la informacion de un usuario
+  // Username
+  String user;
+
+  // Imagen de playlist
+  String photoUrl;
+
   // Constructor
-  Playlist({this.title, this.playlist});
+  Playlist({this.title, this.playlist, this.photoUrl, this.user});
 
   // TODO: Cambiar esto para que coincida con la API REST
   factory Playlist.fromJSON(Map<String, Object> json) {
-    return Playlist(title: json['title'], playlist: json['playlist']);
+    return Playlist(
+      title: json['title'],
+      // TODO: Comprobar si esto devuelve un List
+      playlist: json['playlist'],
+      photoUrl: json['photoUrl'],
+      user: json['user'],
+    );
   }
 }

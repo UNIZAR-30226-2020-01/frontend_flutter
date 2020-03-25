@@ -29,7 +29,8 @@ class PlaylistScreen extends StatelessWidget {
                   image: DecorationImage(
                     // TODO: Change this dinamically (Playlist Photo)
                     image: NetworkImage(
-                        'https://image.shutterstock.com/image-photo/serious-computer-hacker-dark-clothing-600w-1557297230.jpg'),
+//                        'https://image.shutterstock.com/image-photo/serious-computer-hacker-dark-clothing-600w-1557297230.jpg'),
+                    '${playlist.photoUrl}'),
                     fit: BoxFit.cover,
                   ),
                 ),

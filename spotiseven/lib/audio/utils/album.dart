@@ -6,19 +6,24 @@ class Album {
   // Titulo
   String titulo;
 
-  // TODO: Cambiar para que coincida con la base de datos
   // Artista
   String artista;
 
+  // TODO: Comprobar la eficiencia de no tener esto siempre cargado en memoria.
   // Lista de canciones
-  Map<String, Song> lista;
+  //Map<String, Song> lista;
+
+  // Foto del album
+  String photoUrl;
 
   // Constructor
-  Album({this.titulo, this.lista, this.artista});
+  Album({this.titulo, this.artista, this.photoUrl});
 
   // TODO: Cambiar esto para que coincida con la API REST
   factory Album.fromJSON(Map<String, Object> json) {
     return Album(
-        titulo: json['titulo'], lista: json['lista'], artista: json['artista']);
+        titulo: json['titulo'],
+        artista: json['artista'],
+        photoUrl: json['photoUrl']);
   }
 }

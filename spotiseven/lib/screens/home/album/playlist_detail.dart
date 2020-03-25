@@ -17,7 +17,8 @@ class PlaylistCardWidget extends StatelessWidget {
     // TODO: Añadir imagen de playlist
     return GenericCardWidget(
       imageUrl:
-          'https://antitrustlair.files.wordpress.com/2012/09/work-in-progress.png',
+//          'https://antitrustlair.files.wordpress.com/2012/09/work-in-progress.png',
+      '${playlist.photoUrl}',
       args: lista_text,
       onPressedFunction: () => Navigator.push(context, MaterialPageRoute(builder: (context) => PlaylistScreen(playlist: playlist,))),
     );
@@ -27,7 +28,7 @@ class PlaylistCardWidget extends StatelessWidget {
     // TODO: Falta el usuario en la playlist
     return [
       '${playlist.title}',
-      'usuarioWIP',
+      '${playlist.user}',
       '${playlist.playlist.length} songs'
     ];
   }
