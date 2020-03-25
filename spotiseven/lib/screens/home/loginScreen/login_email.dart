@@ -24,6 +24,8 @@ class _LoginMailState extends State<LoginEmail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomPadding: false,
       body: Stack(
         children: <Widget>[
           //children: SafeArea(
@@ -37,24 +39,25 @@ class _LoginMailState extends State<LoginEmail> {
               ),
             ),
           ),
-          Column(
-            children: <Widget>[
-              Expanded(
-                flex: 5,
-                child: Container(
-                  decoration: BoxDecoration(
-                    image: DecorationImage(image: AssetImage('assets/images/spotiseven.png')),
-                  ),
+          Column(children: <Widget>[
+            Expanded(
+              flex: 5,
+              child: Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(image: AssetImage('assets/images/spotiseven.png')),
                 ),
               ),
-              Expanded(
-                flex: 10,
-                child: Form(
-                  autovalidate: _autovalid,
-                  key: _formKey,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
-                    child: Column(
+            ),
+            Expanded(
+              flex: 10,
+              child: Form(
+                autovalidate: _autovalid,
+                key: _formKey,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
+                  child: ListView(
+                  children: <Widget>[
+                    Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: <Widget>[
@@ -98,19 +101,37 @@ class _LoginMailState extends State<LoginEmail> {
                           SizedBox(
                             height: 20,
                           ),
-                    ]
-                   ),
-                  ),
+                          TextFormField(
+                            obscureText: true,
+                            keyboardType: TextInputType.visiblePassword,
+                            decoration: const InputDecoration(
+                              labelText: 'PASSWORD',
+                            ),
+                            validator: (String value) {
+                              if (value.isEmpty && value.length < 8) {
+                                return 'Debes introducir una contraseña';
+                              } else if (value.length < 8) {
+                                return 'La contraseña introducida es muy corta';
+                              } else {
+                                return null;
+                              }
+                            },
+                            onChanged: (value) => this.password = value,
+                          ),
 
+                        ]),
+                    ],
+                  ),
                 ),
               ),
-              Expanded(
-                flex: 1,
+            ),
+            Expanded(
+              flex: 1,
               child: Padding(
-              padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
                 child: Container(
                   //height: 1000,
-                  width: 250 ,
+                  width: 250,
                   child: RaisedButton(
                     color: Color.fromRGBO(115, 175, 197, 1),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -130,21 +151,23 @@ class _LoginMailState extends State<LoginEmail> {
                     child: Text(
                       'LOG IN',
                       style: GoogleFonts.roboto(
-                      fontWeight: FontWeight.w500,
-                      color: Colors.black,
-                      fontSize: 20,
-                      letterSpacing: 10,
-                      wordSpacing: 12,
-                    ),
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black,
+                        fontSize: 20,
+                        letterSpacing: 10,
+                        wordSpacing: 12,
+                      ),
                     ),
                   ),
                 ),
               ),
+            ),
+            Expanded(
+              flex: 2,
+              child: SizedBox(
+                width: 50,
               ),
-              Expanded(
-                flex: 2,
-                child: SizedBox(width: 50 ,),
-              ),
+            ),
           ]),
         ],
       ),

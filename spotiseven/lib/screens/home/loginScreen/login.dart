@@ -24,6 +24,7 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       body: Stack(
         children: <Widget>[
           //children: SafeArea(
@@ -31,6 +32,7 @@ class _LoginState extends State<Login> {
             child: Opacity(
               opacity: 0.6,
               child: Container(
+
                 decoration: BoxDecoration(
                   image: DecorationImage(image: AssetImage('assets/images/photo1.png')),
                 ),
@@ -116,10 +118,10 @@ class _LoginState extends State<Login> {
                         ),
                       ),
                       // TODO: Quitar, es para pruebas
-                      RaisedButton(
+                      /*RaisedButton(
                         onPressed: () => Navigator.popAndPushNamed(context, '/home'),
                         child: Text('ENTRAR A LA PANTALLA PRINCIPAL'),
-                      ),
+                      ),*/
                     ],
                   ),
                 ),
