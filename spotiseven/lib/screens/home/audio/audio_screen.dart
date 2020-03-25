@@ -76,7 +76,11 @@ class _PlayingScreenState extends State<PlayingScreen> {
               width: MediaQuery.of(context).size.width,
               height: 120,
               child: Container(
-                padding: EdgeInsets.fromLTRB(MediaQuery.of(context).size.width/5, 30, MediaQuery.of(context).size.width/5, 0),
+                padding: EdgeInsets.fromLTRB(
+                    MediaQuery.of(context).size.width / 5,
+                    30,
+                    MediaQuery.of(context).size.width / 5,
+                    0),
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     // TODO: Change this dinamically (playlist photo?)
@@ -160,28 +164,29 @@ class _PlayingScreenState extends State<PlayingScreen> {
                               );
                             } else {
                               return FutureBuilder(
-                                  future: _player.duration,
-                                  builder: (context, snapshot) {
-                                    if (snapshot.hasData) {
-                                      return Slider(
-                                        // TODO: Change this color and style if needed
-                                        activeColor: Colors.black,
-                                        inactiveColor: Color(0xff73afc5),
-                                        min: 0,
-                                        max: (snapshot.data as int).toDouble(),
-                                        value: _time.toDouble(),
-                                        onChanged: (value) =>
-                                            seekPlayerTime(value),
-                                      );
-                                    } else {
-                                      return Slider(
-                                        onChanged: (value) => null,
-                                        min: 0,
-                                        max: 0,
-                                        value: 0,
-                                      );
-                                    }
-                                  });
+                                future: _player.duration,
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    return Slider(
+                                      // TODO: Change this color and style if needed
+                                      activeColor: Colors.black,
+                                      inactiveColor: Color(0xff73afc5),
+                                      min: 0,
+                                      max: (snapshot.data as int).toDouble(),
+                                      value: _time.toDouble(),
+                                      onChanged: (value) =>
+                                          seekPlayerTime(value),
+                                    );
+                                  } else {
+                                    return Slider(
+                                      onChanged: (value) => null,
+                                      min: 0,
+                                      max: 0,
+                                      value: 0,
+                                    );
+                                  }
+                                },
+                              );
                             }
                           },
                         ),

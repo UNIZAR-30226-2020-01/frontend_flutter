@@ -10,6 +10,7 @@ import 'package:spotiseven/audio/utils/album.dart';
 import 'package:spotiseven/audio/utils/song.dart';
 // Clase AlbumCardWidget
 import 'package:spotiseven/screens/home/album/album_detail.dart';
+import 'package:spotiseven/screens/home/album/playlist_detail.dart';
 import 'package:spotiseven/screens/playlist/playlist_screen.dart';
 
 class HomeScreenWrapper extends StatefulWidget {
@@ -79,28 +80,11 @@ class _HomeScreenWrapperState extends State<HomeScreenWrapper> {
                   Text('Item Selected: $_currentIndex'),
                   Row(
                     children: <Widget>[
-                      AlbumCardWidget(),
-                      AlbumCardWidget(),
+//                      AlbumCardWidget(album: _pruebaAlbum,),
+                      PlaylistCardWidget(
+                        playlist: _pruebaPlaylist,
+                      ),
                     ],
-                  ),
-                  // TODO: Quitar. Es para hacer pruebas
-                  RaisedButton(
-                    onPressed: () {
-                      print(
-                          'Title ${_pruebaPlaylist.title} --- NCanciones: ${_pruebaPlaylist.playlist.length}');
-                      _playingSingleton.setPlayList(_pruebaPlaylist);
-                    },
-                    elevation: 0,
-                    child: Text('REPRODUCIR LISTA DE PRUEBA'),
-                  ),
-                  RaisedButton(
-                    onPressed: () async {
-                      print(
-                          'Title ${_pruebaPlaylist.title} --- NCanciones: ${_pruebaPlaylist.playlist.length}');
-                      await Navigator.push(context, MaterialPageRoute(builder: (context) => PlaylistScreen(playlist: _pruebaPlaylist,)));
-                    },
-                    elevation: 0,
-                    child: Text('MOSTRAR LISTA DE PRUEBA'),
                   ),
                 ],
               ),

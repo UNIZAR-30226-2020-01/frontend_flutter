@@ -1,44 +1,28 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+// GenericCardWidget
+import 'package:spotiseven/generic_components/GenericCardWidget.dart';
+// Clase Album
+import 'package:spotiseven/audio/utils/album.dart';
 
 class AlbumCardWidget extends StatelessWidget {
+
+  final Album album;
+
+  AlbumCardWidget({this.album});
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(left: 15, right: 10),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(40)),
-        // TODO: Change this color
-        border:
-            Border.all(width: 1, color: Colors.cyan[100], style: BorderStyle.solid),
-        // TODO: Change this color
-        color: Colors.cyan[100],
-      ),
-      child: Container(
-        width: MediaQuery.of(context).size.width / 2.3,
-        height: MediaQuery.of(context).size.width / 2.3 + 100,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            ClipRRect(
-              borderRadius: BorderRadius.circular(40),
-              child: Image.network(
-                  'https://yt3.ggpht.com/a/AATXAJzgtF2V2m4KsP1ZHU12UcqzoDBEL4GH4e_CmQ=s288-c-k-c0xffffffff-no-rj-mo'),
-            ),
-            Container(
-              padding: EdgeInsets.fromLTRB(15, 20, 15, 15),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text('Motivation'),
-                  Text('Haykk'),
-                  Text('25 songs'),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
+    List<Widget> lista_widget = getStrings().map((String s) => Text(s)).toList();
+    return GenericCardWidget(
+      // TODO: Imagen del album
+      imageUrl: 'https://antitrustlair.files.wordpress.com/2012/09/work-in-progress.png',
+      args: lista_widget,
+      // TODO: Integrar con la pantalla de album
+      onPressedFunction: () => print('Mostrar pantalla de album'),
     );
+  }
+
+  List<String> getStrings() {
+    return ['${album.titulo}', '${album.artista}', '${album.lista} songs'];
   }
 }
