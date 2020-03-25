@@ -111,11 +111,11 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
     );
   }
 
-  bool _showFloatingButton(){
-  return !_showReprBar && _player.song != null;
+  bool _showFloatingButton() {
+    return !_showReprBar && _player.song != null;
   }
 
-  bool _showReprobar(){
+  bool _showReprobar() {
     return _showReprBar && _player.song != null;
   }
 

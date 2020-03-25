@@ -4,10 +4,12 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 // To play audio from URL
-import 'package:flutter_exoplayer/audioplayer.dart';
 import 'package:spotiseven/audio/playingSingleton.dart';
-import 'package:spotiseven/audio/utils/playlist.dart';
+// Clase Song
 import 'package:spotiseven/audio/utils/song.dart';
+// Fuentes de Google
+import 'package:google_fonts/google_fonts.dart';
+import 'package:spotiseven/screens/playlist/playlist_screen.dart';
 
 class PlayingScreen extends StatefulWidget {
   @override
@@ -69,30 +71,33 @@ class _PlayingScreenState extends State<PlayingScreen> {
     return Scaffold(
       body: SafeArea(
         child: Stack(
-          children: [
+          children: <Widget> [
             Positioned(
               top: 0,
               width: MediaQuery.of(context).size.width,
-              height: 80,
+              height: 120,
               child: Container(
+                padding: EdgeInsets.fromLTRB(
+                    MediaQuery.of(context).size.width / 5,
+                    30,
+                    MediaQuery.of(context).size.width / 5,
+                    0),
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    // TODO: Change this dinamically (playlist photo?)
+                    // TODO: Change this dinamically (playlist photo)
                     image: NetworkImage(
                         'https://image.shutterstock.com/image-photo/serious-computer-hacker-dark-clothing-600w-1557297230.jpg'),
                     fit: BoxFit.cover,
                   ),
                 ),
-                child: Center(
-                  child: Text(
-                    '${_player.playlist.title}',
-                    style: TextStyle(
-                      // TODO: Poner la fuentes
-                      color: Colors.white,
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 3,
-                    ),
+                child: Text(
+                  '${_player.playlist.title}',
+                  style: GoogleFonts.roboto(
+                    fontWeight: FontWeight.w300,
+                    color: Colors.white,
+                    fontSize: 25,
+                    letterSpacing: 3,
+                    wordSpacing: 3,
                   ),
                 ),
               ),
@@ -160,27 +165,29 @@ class _PlayingScreenState extends State<PlayingScreen> {
                               );
                             } else {
                               return FutureBuilder(
-                                  future: _player.duration,
-                                  builder: (context, snapshot) {
-                                    if (snapshot.hasData) {
-                                      return Slider(
-                                        // TODO: Change this color and style if needed
-                                        activeColor: Colors.black,
-                                        inactiveColor: Color(0xff73afc5),
-                                        min: 0,
-                                        max: (snapshot.data as int).toDouble(),
-                                        value: _time.toDouble(),
-                                        onChanged: (value) =>
-                                            seekPlayerTime(value),
-                                      );
-                                    } else {
-                                      return Slider(
-                                        min: 0,
-                                        max: 0,
-                                        value: 0,
-                                      );
-                                    }
-                                  });
+                                future: _player.duration,
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    return Slider(
+                                      // TODO: Change this color and style if needed
+                                      activeColor: Colors.black,
+                                      inactiveColor: Color(0xff73afc5),
+                                      min: 0,
+                                      max: (snapshot.data as int).toDouble(),
+                                      value: _time.toDouble(),
+                                      onChanged: (value) =>
+                                          seekPlayerTime(value),
+                                    );
+                                  } else {
+                                    return Slider(
+                                      onChanged: (value) => null,
+                                      min: 0,
+                                      max: 0,
+                                      value: 0,
+                                    );
+                                  }
+                                },
+                              );
                             }
                           },
                         ),
@@ -230,7 +237,10 @@ class _PlayingScreenState extends State<PlayingScreen> {
       alignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         buildIconButton(Icons.subtitles, () => print('subtitles')),
-        buildIconButton(Icons.playlist_add, () => print('playlist_add')),
+        buildIconButton(Icons.playlist_add, () {
+          print('playlist_add');
+          Navigator.push(context, MaterialPageRoute(builder: (context) => PlaylistScreen(playlist: _player.playlist,)));
+        }),
       ],
     );
   }

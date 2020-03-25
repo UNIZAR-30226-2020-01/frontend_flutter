@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'package:flutter_exoplayer/audioplayer.dart';
 // Clase PlaylistController
 import 'package:spotiseven/audio/playlistController.dart';
@@ -12,9 +11,6 @@ class PlayingSingleton {
   // Singleton attribute
   static final PlayingSingleton _instance = PlayingSingleton._internal();
   // Player attributes
-  // TODO: Change this to playlist or something else
-  final String _url =
-      'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Yung_Kartz/August_2019/Yung_Kartz_-_04_-_One_Way.mp3';
   // Player
   AudioPlayer _audioPlayer = AudioPlayer();
   // Reproduction control
@@ -82,13 +78,19 @@ class PlayingSingleton {
     // Cambiamos el PlaylistController con la nueva lista de reproduccion
     _playlistController = PlaylistController(p);
     // Actualizamos la reproduccion
-    play(_playlistController.actualSong);
+    _play(_playlistController.actualSong);
   }
 
   // Funciones de control de la reproduccion
 
   /// Reproducir una nueva cancion
   Future<void> play(Song song) async {
+    _playlistController.setIteratorOn(song);
+    _play(song);
+  }
+
+  /// Reproducir una nueva cancion (version interna)
+  Future<void> _play(Song song) async {
     print('${song.url}');
     // Cancelamos todas las suscripciones
     cancelStreams();
@@ -109,6 +111,7 @@ class PlayingSingleton {
     _playing = true;
   }
 
+
   /// Reproducir la siguiente cancion
   Future<void> next() async {
     print('PLAYINGSINGLETON: Next Song');
@@ -117,7 +120,7 @@ class PlayingSingleton {
     //avanza iter a sig cancin
     _playlistController.next();
     print('${_playlistController.actualSong.title}');
-    await play(_playlistController.actualSong);
+    await _play(_playlistController.actualSong);
   }
 
   /// Reproducir la cancion anterior
@@ -127,7 +130,7 @@ class PlayingSingleton {
     _playing = false;
     _playlistController.previous();
     print('${_playlistController.actualSong.title}');
-    await play(_playlistController.actualSong);
+    await _play(_playlistController.actualSong);
   }
 
   /// Reproduce el audio en la posicion dada.
