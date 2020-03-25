@@ -59,7 +59,7 @@ class _LoginState extends State<Login> {
                         color: Color.fromRGBO(115, 175, 197, 1),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                         onPressed: () async {
-                          // TODO: meter backend
+                          Navigator.popAndPushNamed(context, '/loginMail');
                         },
                         child: Container(
                           margin: EdgeInsets.fromLTRB(5, 15, 5, 15),
