@@ -27,11 +27,12 @@ class PlaylistScreen extends StatelessWidget {
             Positioned(
               top: 0,
               width: MediaQuery.of(context).size.width,
-              height: 80,
+              height: 120,
               child: Container(
                 padding: EdgeInsets.only(top: 15),
                 decoration: BoxDecoration(
                   image: DecorationImage(
+                    // TODO: Change this dinamically
                     image: NetworkImage(
                         'https://image.shutterstock.com/image-photo/serious-computer-hacker-dark-clothing-600w-1557297230.jpg'),
                     fit: BoxFit.cover,

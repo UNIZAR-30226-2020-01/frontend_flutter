@@ -72,8 +72,9 @@ class _PlayingScreenState extends State<PlayingScreen> {
             Positioned(
               top: 0,
               width: MediaQuery.of(context).size.width,
-              height: 80,
+              height: 120,
               child: Container(
+                padding: EdgeInsets.fromLTRB(MediaQuery.of(context).size.width/5, 30, MediaQuery.of(context).size.width/5, 0),
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     // TODO: Change this dinamically (playlist photo?)
@@ -82,16 +83,14 @@ class _PlayingScreenState extends State<PlayingScreen> {
                     fit: BoxFit.cover,
                   ),
                 ),
-                child: Center(
-                  child: Text(
-                    '${_player.playlist.title}',
-                    style: TextStyle(
-                      // TODO: Poner la fuentes
-                      color: Colors.white,
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 3,
-                    ),
+                child: Text(
+                  '${_player.playlist.title}',
+                  style: TextStyle(
+                    // TODO: Poner la fuentes
+                    color: Colors.white,
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 3,
                   ),
                 ),
               ),
