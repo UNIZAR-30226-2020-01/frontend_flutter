@@ -14,27 +14,68 @@ class PlaylistScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final double border_radius = 45;
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        centerTitle: true,
-        // TODO: Change this color
-        backgroundColor: Color(0xff9ad1e5),
-        title: Text('${playlist.title}'),
-      ),
-      body: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(border_radius),
-              topRight: Radius.circular(border_radius)),
-          color: Color(0xff9ad1e5),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          // TODO: Change this
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: playlist.playlist
-              .map((Song s) => buildSongPreview(s, playlist))
-              .toList(),
+//      appBar: AppBar(
+//        elevation: 0,
+//        centerTitle: true,
+//        // TODO: Change this color
+//        backgroundColor: Color(0xff9ad1e5),
+//        title: Text('${playlist.title}'),
+//      ),
+      body: SafeArea(
+        child: Stack(
+          children: <Widget>[
+            Positioned(
+              top: 0,
+              width: MediaQuery.of(context).size.width,
+              height: 80,
+              child: Container(
+                padding: EdgeInsets.only(top: 15),
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: NetworkImage(
+                        'https://image.shutterstock.com/image-photo/serious-computer-hacker-dark-clothing-600w-1557297230.jpg'),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      '${playlist.title}',
+                      style: TextStyle(
+                        // TODO: Poner la fuentes
+                        color: Colors.white,
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 3,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Positioned(
+              top: 80,
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(border_radius),
+                      topRight: Radius.circular(border_radius)),
+                  color: Color(0xff9ad1e5),
+                ),
+                child: ListView.builder(
+                  itemCount: playlist.playlist.length,
+                  itemBuilder: (context, index) {
+                    return buildSongPreview(playlist.playlist[index], playlist);
+                  },
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
