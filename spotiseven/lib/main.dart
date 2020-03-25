@@ -10,7 +10,7 @@ void main() => runApp(MaterialApp(
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        initialRoute: '/login',// '/home',
+        initialRoute: '/login',
         routes: {
           '/login': (context) => Login(),
           '/entry': (context) => EntryActivity(),

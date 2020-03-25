@@ -115,6 +115,11 @@ class _LoginState extends State<Login> {
                           ),
                         ),
                       ),
+                      // TODO: Quitar, es para pruebas
+                      RaisedButton(
+                        onPressed: () => Navigator.popAndPushNamed(context, '/home'),
+                        child: Text('ENTRAR A LA PANTALLA PRINCIPAL'),
+                      ),
                     ],
                   ),
                 ),
