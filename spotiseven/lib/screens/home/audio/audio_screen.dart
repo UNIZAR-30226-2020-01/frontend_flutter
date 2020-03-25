@@ -9,6 +9,7 @@ import 'package:spotiseven/audio/playingSingleton.dart';
 import 'package:spotiseven/audio/utils/song.dart';
 // Fuentes de Google
 import 'package:google_fonts/google_fonts.dart';
+import 'package:spotiseven/screens/playlist/playlist_screen.dart';
 
 class PlayingScreen extends StatefulWidget {
   @override
@@ -70,7 +71,7 @@ class _PlayingScreenState extends State<PlayingScreen> {
     return Scaffold(
       body: SafeArea(
         child: Stack(
-          children: [
+          children: <Widget> [
             Positioned(
               top: 0,
               width: MediaQuery.of(context).size.width,
@@ -83,7 +84,7 @@ class _PlayingScreenState extends State<PlayingScreen> {
                     0),
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    // TODO: Change this dinamically (playlist photo?)
+                    // TODO: Change this dinamically (playlist photo)
                     image: NetworkImage(
                         'https://image.shutterstock.com/image-photo/serious-computer-hacker-dark-clothing-600w-1557297230.jpg'),
                     fit: BoxFit.cover,
@@ -236,7 +237,10 @@ class _PlayingScreenState extends State<PlayingScreen> {
       alignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         buildIconButton(Icons.subtitles, () => print('subtitles')),
-        buildIconButton(Icons.playlist_add, () => print('playlist_add')),
+        buildIconButton(Icons.playlist_add, () {
+          print('playlist_add');
+          Navigator.push(context, MaterialPageRoute(builder: (context) => PlaylistScreen(playlist: _player.playlist,)));
+        }),
       ],
     );
   }

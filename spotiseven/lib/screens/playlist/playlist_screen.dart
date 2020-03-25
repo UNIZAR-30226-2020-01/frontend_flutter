@@ -16,13 +16,6 @@ class PlaylistScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final double border_radius = 45;
     return Scaffold(
-//      appBar: AppBar(
-//        elevation: 0,
-//        centerTitle: true,
-//        // TODO: Change this color
-//        backgroundColor: Color(0xff9ad1e5),
-//        title: Text('${playlist.title}'),
-//      ),
       body: SafeArea(
         child: Stack(
           children: <Widget>[
@@ -34,7 +27,7 @@ class PlaylistScreen extends StatelessWidget {
                 padding: EdgeInsets.only(top: 15),
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    // TODO: Change this dinamically
+                    // TODO: Change this dinamically (Playlist Photo)
                     image: NetworkImage(
                         'https://image.shutterstock.com/image-photo/serious-computer-hacker-dark-clothing-600w-1557297230.jpg'),
                     fit: BoxFit.cover,
@@ -64,6 +57,7 @@ class PlaylistScreen extends StatelessWidget {
               left: 0,
               right: 0,
               child: Container(
+                padding: EdgeInsets.only(top: 20),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(border_radius),
