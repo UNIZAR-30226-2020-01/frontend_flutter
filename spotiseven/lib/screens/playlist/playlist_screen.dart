@@ -4,6 +4,8 @@ import 'package:spotiseven/audio/playingSingleton.dart';
 import 'package:spotiseven/audio/utils/playlist.dart';
 // Clase Song
 import 'package:spotiseven/audio/utils/song.dart';
+// Fuentes de Google
+import 'package:google_fonts/google_fonts.dart';
 
 class PlaylistScreen extends StatelessWidget {
   final Playlist playlist;
@@ -44,12 +46,12 @@ class PlaylistScreen extends StatelessWidget {
                   children: <Widget>[
                     Text(
                       '${playlist.title}',
-                      style: TextStyle(
-                        // TODO: Poner la fuentes
+                      style: GoogleFonts.roboto(
+                        fontWeight: FontWeight.w300,
                         color: Colors.white,
-                        fontSize: 25,
-                        fontWeight: FontWeight.bold,
+                        fontSize: 30,
                         letterSpacing: 3,
+                        wordSpacing: 3,
                       ),
                     ),
                   ],

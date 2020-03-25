@@ -25,6 +25,8 @@ dependencies:
   cupertino_icons: ^0.1.2
   # To play audio via URL
   flutter_exoplayer: ^0.5.4
+  # Fuentes
+  google_fonts: ^0.3.9
 
 dev_dependencies:
   flutter_test:

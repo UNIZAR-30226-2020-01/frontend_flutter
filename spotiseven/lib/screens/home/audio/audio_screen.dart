@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:spotiseven/audio/playingSingleton.dart';
 // Clase Song
 import 'package:spotiseven/audio/utils/song.dart';
+// Fuentes de Google
+import 'package:google_fonts/google_fonts.dart';
 
 class PlayingScreen extends StatefulWidget {
   @override
@@ -85,12 +87,12 @@ class _PlayingScreenState extends State<PlayingScreen> {
                 ),
                 child: Text(
                   '${_player.playlist.title}',
-                  style: TextStyle(
-                    // TODO: Poner la fuentes
+                  style: GoogleFonts.roboto(
+                    fontWeight: FontWeight.w300,
                     color: Colors.white,
                     fontSize: 25,
-                    fontWeight: FontWeight.bold,
                     letterSpacing: 3,
+                    wordSpacing: 3,
                   ),
                 ),
               ),
