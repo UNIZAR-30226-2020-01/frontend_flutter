@@ -4,9 +4,8 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 // To play audio from URL
-import 'package:flutter_exoplayer/audioplayer.dart';
 import 'package:spotiseven/audio/playingSingleton.dart';
-import 'package:spotiseven/audio/utils/playlist.dart';
+// Clase Song
 import 'package:spotiseven/audio/utils/song.dart';
 
 class PlayingScreen extends StatefulWidget {
@@ -175,6 +174,7 @@ class _PlayingScreenState extends State<PlayingScreen> {
                                       );
                                     } else {
                                       return Slider(
+                                        onChanged: (value) => null,
                                         min: 0,
                                         max: 0,
                                         value: 0,

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'package:flutter_exoplayer/audioplayer.dart';
 // Clase PlaylistController
 import 'package:spotiseven/audio/playlistController.dart';
@@ -12,9 +11,6 @@ class PlayingSingleton {
   // Singleton attribute
   static final PlayingSingleton _instance = PlayingSingleton._internal();
   // Player attributes
-  // TODO: Change this to playlist or something else
-  final String _url =
-      'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Yung_Kartz/August_2019/Yung_Kartz_-_04_-_One_Way.mp3';
   // Player
   AudioPlayer _audioPlayer = AudioPlayer();
   // Reproduction control
