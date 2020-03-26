@@ -147,13 +147,15 @@ class _LoginMailState extends State<LoginEmail> {
   }
 
   _elements() {
-    return ListView(
-      //mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        _header(),
-        _form(),
-        _submit(),
-      ],
+    return Container(
+      child: ListView(
+        //mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          _header(),
+          _form(),
+          _submit(),
+        ],
+      ),
     );
   }
 

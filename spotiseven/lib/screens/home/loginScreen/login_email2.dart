@@ -145,32 +145,44 @@ class _LoginMailState extends State<LoginEmail2> {
   }
 
   _elements() {
-    return Column(
-      //mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        _header(),
-        _form(),
-        _submit(),
-      ],
+    return SingleChildScrollView(
+      child: Container(
+        child: Column(
+          //mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            _header(),
+            _form(),
+            _submit(),
+          ],
+        ),
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    var _blankFocusNode =new FocusNode();
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        decoration: BoxDecoration(
-          image: DecorationImage(image: AssetImage('assets/images/background.jpg'),
-          fit: BoxFit.cover),
-        ),
-        child: ListView(
-          children: <Widget>[
-            //_background(),
-            _elements(),
-          ],
+      body: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: (){
+          FocusScope.of(context).requestFocus(_blankFocusNode);
+        },
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          decoration: BoxDecoration(
+            image: DecorationImage(image: AssetImage('assets/images/background.jpg'),
+                fit: BoxFit.cover),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              //_background(),
+              _elements(),
+            ],
+          ),
         ),
       ),
     );
