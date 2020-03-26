@@ -13,7 +13,7 @@ void main() => runApp(MaterialApp(
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        initialRoute: '/login',
+        initialRoute: '/loginMail',
         routes: {
           '/login': (context) => Login(),
           '/loginMail': (context) => LoginEmail(),
