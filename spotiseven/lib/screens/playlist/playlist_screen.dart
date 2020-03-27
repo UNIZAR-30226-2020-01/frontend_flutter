@@ -18,71 +18,75 @@ class PlaylistScreen extends StatelessWidget {
     // Version alternativa dinamica
 //    return Container(
 //      color: Color(0xff9ad1e5),
-//      child: CustomScrollView(
-//        physics: const BouncingScrollPhysics(),
-//        slivers: <Widget>[
-//          SliverAppBar(
-//            backgroundColor: Colors.cyan,
-//            elevation: 0,
-//            floating: true,
-//            snap: false,
-//            pinned: false,
-//            // Efectos
-//            stretch: true,
-//            onStretchTrigger: () =>
-//                Future.delayed(
-//                    Duration(microseconds: 1), () => print('stretch')),
-//            expandedHeight: 300.0,
-//            flexibleSpace: FlexibleSpaceBar(
+//      child: RefreshIndicator(
+//        onRefresh: () => Future.delayed(Duration(microseconds: 1), () =>
+//            print('recargando')),
+//        child: CustomScrollView(
+//          physics: const BouncingScrollPhysics(),
+//          slivers: <Widget>[
+//            SliverAppBar(
+//              backgroundColor: Colors.cyan,
+//              elevation: 0,
+//              floating: true,
+//              snap: false,
+//              pinned: false,
 //              // Efectos
-//              stretchModes: [
-//                StretchMode.zoomBackground,
-//                StretchMode.blurBackground,
-//                StretchMode.fadeTitle,
-//              ],
-//              title: Text(
-//                '${playlist.title}',
-//                style: GoogleFonts.roboto(
-//                  fontWeight: FontWeight.w300,
-//                  color: Colors.white,
-//                  fontSize: 25,
-//                  letterSpacing: 3,
-//                  wordSpacing: 3,
-//                ),
-//              ),
-//              centerTitle: true,
-//              background: Stack(
-//                fit: StackFit.expand,
-//                children: <Widget>[
-//                  Image.network(
-//                    '${playlist.photoUrl}',
-//                    fit: BoxFit.cover,
+//              stretch: true,
+//              onStretchTrigger: () =>
+//                  Future.delayed(
+//                      Duration(microseconds: 1), () => print('stretch')),
+//              expandedHeight: 300.0,
+//              flexibleSpace: FlexibleSpaceBar(
+//                // Efectos
+//                stretchModes: [
+//                  StretchMode.zoomBackground,
+//                  StretchMode.blurBackground,
+//                  StretchMode.fadeTitle,
+//                ],
+//                title: Text(
+//                  '${playlist.title}',
+//                  style: GoogleFonts.roboto(
+//                    fontWeight: FontWeight.w300,
+//                    color: Colors.white,
+//                    fontSize: 25,
+//                    letterSpacing: 3,
+//                    wordSpacing: 3,
 //                  ),
-//                  const DecoratedBox(
-//                    decoration: BoxDecoration(
-//                      gradient: LinearGradient(
-//                        begin: Alignment(0.0, 0.5),
-//                        end: Alignment(0.0, 0.0),
-//                        colors: <Color>[
-//                          Color(0x60000000),
-//                          Color(0x00000000),
-//                        ],
+//                ),
+//                centerTitle: true,
+//                background: Stack(
+//                  fit: StackFit.expand,
+//                  children: <Widget>[
+//                    Image.network(
+//                      '${playlist.photoUrl}',
+//                      fit: BoxFit.cover,
+//                    ),
+//                    const DecoratedBox(
+//                      decoration: BoxDecoration(
+//                        gradient: LinearGradient(
+//                          begin: Alignment(0.0, 0.5),
+//                          end: Alignment(0.0, 0.0),
+//                          colors: <Color>[
+//                            Color(0x60000000),
+//                            Color(0x00000000),
+//                          ],
+//                        ),
 //                      ),
 //                    ),
-//                  ),
-//                ],
+//                  ],
+//                ),
 //              ),
 //            ),
-//          ),
-//          SliverList(
-//            delegate: SliverChildBuilderDelegate(
-//                  (BuildContext context, int index) {
-//                return buildSongPreview(playlist.playlist[index], playlist);
-//              },
-//              childCount: playlist.playlist.length,
+//            SliverList(
+//              delegate: SliverChildBuilderDelegate(
+//                    (BuildContext context, int index) {
+//                  return buildSongPreview(playlist.playlist[index], playlist);
+//                },
+//                childCount: playlist.playlist.length,
+//              ),
 //            ),
-//          ),
-//        ],
+//          ],
+//        ),
 //      ),
 //    );
     return Scaffold(
@@ -225,7 +229,7 @@ class PlaylistScreen extends StatelessWidget {
         Container(
             margin: EdgeInsets.symmetric(horizontal: 10),
             child: Divider(
-              color: Colors.black,
+              color: Colors.grey[750],
               thickness: 1.5,
             )),
       ],
