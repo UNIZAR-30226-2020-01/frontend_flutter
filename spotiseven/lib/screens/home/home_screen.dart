@@ -44,6 +44,11 @@ class _HomeScreenWrapperState extends State<HomeScreenWrapper> {
       artista: 'Pedro No Tonto',
       photoUrl:
           'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQvQbsbqx_j5eyjnzdzHER7bO77o7XUedQ-Pv-JJLXkodOIrRmn');
+  static Album _pruebaAlbum5 = Album(
+      titulo: 'El Dubstep',
+      artista: 'Pedro No Tonto',
+      photoUrl:
+      'https://image.shutterstock.com/image-photo/serious-computer-hacker-dark-clothing-600w-1557297230.jpg');
 
   // TODO: Quitar. Es para hacer pruebas
   Playlist _pruebaPlaylist = Playlist(
@@ -60,6 +65,9 @@ class _HomeScreenWrapperState extends State<HomeScreenWrapper> {
       Song.fromJSON(jsonDecode(
           '{"title": "Pop? de Internet", "url": "https://files.freemusicarchive.org/storage-freemusicarchive-org/music/Music_for_Video/Blue_Dot_Sessions/Banana_Cream/Blue_Dot_Sessions_-_Popism.mp3"}'))
         ..album = _pruebaAlbum4,
+      Song.fromJSON(jsonDecode(
+          '{"title": "Dubstep de Internet", "url": "https://files.freemusicarchive.org/storage-freemusicarchive-org/music/blocSonic/DJ_Spooky/Of_Water_and_Ice/DJ_Spooky_-_11_-_Of_Water_and_Ice_feat_Jin-Xiang_JX_Yu_Dubstep_Remix_-_Bonus_Track.mp3"}'))
+        ..album = _pruebaAlbum5,
     ],
     title: 'Prueba de playlist',
     user: 'Pedro El Listo',

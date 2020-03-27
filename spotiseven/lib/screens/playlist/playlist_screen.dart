@@ -15,6 +15,76 @@ class PlaylistScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double border_radius = 45;
+    // Version alternativa dinamica
+//    return Container(
+//      color: Color(0xff9ad1e5),
+//      child: CustomScrollView(
+//        physics: const BouncingScrollPhysics(),
+//        slivers: <Widget>[
+//          SliverAppBar(
+//            backgroundColor: Colors.cyan,
+//            elevation: 0,
+//            floating: true,
+//            snap: false,
+//            pinned: false,
+//            // Efectos
+//            stretch: true,
+//            onStretchTrigger: () =>
+//                Future.delayed(
+//                    Duration(microseconds: 1), () => print('stretch')),
+//            expandedHeight: 300.0,
+//            flexibleSpace: FlexibleSpaceBar(
+//              // Efectos
+//              stretchModes: [
+//                StretchMode.zoomBackground,
+//                StretchMode.blurBackground,
+//                StretchMode.fadeTitle,
+//              ],
+//              title: Text(
+//                '${playlist.title}',
+//                style: GoogleFonts.roboto(
+//                  fontWeight: FontWeight.w300,
+//                  color: Colors.white,
+//                  fontSize: 25,
+//                  letterSpacing: 3,
+//                  wordSpacing: 3,
+//                ),
+//              ),
+//              centerTitle: true,
+//              background: Stack(
+//                fit: StackFit.expand,
+//                children: <Widget>[
+//                  Image.network(
+//                    '${playlist.photoUrl}',
+//                    fit: BoxFit.cover,
+//                  ),
+//                  const DecoratedBox(
+//                    decoration: BoxDecoration(
+//                      gradient: LinearGradient(
+//                        begin: Alignment(0.0, 0.5),
+//                        end: Alignment(0.0, 0.0),
+//                        colors: <Color>[
+//                          Color(0x60000000),
+//                          Color(0x00000000),
+//                        ],
+//                      ),
+//                    ),
+//                  ),
+//                ],
+//              ),
+//            ),
+//          ),
+//          SliverList(
+//            delegate: SliverChildBuilderDelegate(
+//                  (BuildContext context, int index) {
+//                return buildSongPreview(playlist.playlist[index], playlist);
+//              },
+//              childCount: playlist.playlist.length,
+//            ),
+//          ),
+//        ],
+//      ),
+//    );
     return Scaffold(
       body: SafeArea(
         child: Stack(
@@ -110,6 +180,55 @@ class PlaylistScreen extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Widget buildSongPreviewTambo(Song s, Playlist p) {
+    return Column(
+      children: <Widget>[
+        FlatButton(
+          onPressed: () async {
+            var playingSingleton = PlayingSingleton();
+            playingSingleton.setPlayList(p);
+            await playingSingleton.play(s);
+            print('Reproduciendo ${playingSingleton.song.title}');
+          },
+          child: Container(
+            margin: EdgeInsets.fromLTRB(15, 15, 0, 15),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  height: 80,
+                  width: 80,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: NetworkImage(s.photoUrl),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 30,
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text('${s.title}'),
+                    Text('${s.album.artista}'),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+        Container(
+            margin: EdgeInsets.symmetric(horizontal: 10),
+            child: Divider(
+              color: Colors.black,
+              thickness: 1.5,
+            )),
+      ],
     );
   }
 }

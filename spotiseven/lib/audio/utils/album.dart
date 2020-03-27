@@ -6,8 +6,11 @@ class Album {
   // Titulo
   String titulo;
 
-  // Artista
+  // Artista principal
   String artista;
+
+  // TODO: Artistas colaboradores (relacion 1:N)
+  List<String> colaboradores;
 
   // TODO: Comprobar la eficiencia de no tener esto siempre cargado en memoria.
   // Lista de canciones
@@ -17,7 +20,7 @@ class Album {
   String photoUrl;
 
   // Constructor
-  Album({this.titulo, this.artista, this.photoUrl});
+  Album({this.titulo, this.artista, this.photoUrl, this.colaboradores});
 
   // TODO: Cambiar esto para que coincida con la API REST
   factory Album.fromJSON(Map<String, Object> json) {
