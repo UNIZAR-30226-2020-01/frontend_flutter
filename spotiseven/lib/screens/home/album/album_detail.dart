@@ -15,7 +15,7 @@ class AlbumCardWidget extends StatelessWidget {
     List<Widget> lista_widget = getStrings().map((String s) => Text(s)).toList();
     return GenericCardWidget(
       // TODO: Imagen del album
-      imageUrl: 'https://antitrustlair.files.wordpress.com/2012/09/work-in-progress.png',
+      imageUrl: '${album.photoUrl}',
       args: lista_widget,
       // TODO: Integrar con la pantalla de album
       onPressedFunction: () => print('Mostrar pantalla de album'),
@@ -23,6 +23,7 @@ class AlbumCardWidget extends StatelessWidget {
   }
 
   List<String> getStrings() {
-    return ['${album.titulo}', '${album.artista}', '${album.lista} songs'];
+    // TODO: Obtener el numero de canciones de un album
+    return ['${album.titulo}', '${album.artista}', 'xx songs'];
   }
 }
