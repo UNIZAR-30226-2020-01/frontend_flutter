@@ -64,7 +64,7 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
         type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.black,
         // TODO: Change this color
-        fixedColor: Colors.cyan,
+        fixedColor: Colors.yellow,
         unselectedItemColor: Colors.white,
         currentIndex: _currentIndex,
         items: [

@@ -81,27 +81,33 @@ class _HomeScreenWrapperState extends State<HomeScreenWrapper> {
       length: 5,
       child: Scaffold(
         // TODO: Change this color
-        backgroundColor: Color(0xff73afc5),
+        backgroundColor: Colors.white,
         body: SafeArea(
           child: Stack(
             children: <Widget>[
-              TabBar(
-                // TODO: Use <indicator> property to change indicator
-                isScrollable: true,
-                indicatorColor: Colors.black,
-                // TODO: change labelStyle -> By the moment changed in tab's text
-                labelStyle: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
+              Container(
+                color: Colors.black,
+                child: TabBar(
+                  isScrollable: true,
+                  // TODO: Use <indicator> property to change indicator
+                  indicatorPadding: EdgeInsets.symmetric(horizontal: 30, vertical: 5),
+                  indicatorColor: Colors.yellow[800],
+                  indicatorWeight: 7,
+                  indicatorSize: TabBarIndicatorSize.tab,
+                  // TODO: change labelStyle -> By the moment changed in tab's text
+                  labelStyle: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  onTap: (value) => setState(() => _currentIndex = value),
+                  tabs: <Widget>[
+                    buildTextTab('Following'),
+                    buildTextTab('Your playlists'),
+                    buildTextTab('Genres'),
+                    buildTextTab('Albums'),
+                    buildTextTab('Artists'),
+                  ],
                 ),
-                onTap: (value) => setState(() => _currentIndex = value),
-                tabs: <Widget>[
-                  buildTextTab('Following'),
-                  buildTextTab('Your playlists'),
-                  buildTextTab('Genres'),
-                  buildTextTab('Albums'),
-                  buildTextTab('Artists'),
-                ],
               ),
               // Contenido principal de la pantalla
               // TODO: Cambiar a ListView (Hacer en otro widget)
@@ -127,5 +133,5 @@ class _HomeScreenWrapperState extends State<HomeScreenWrapper> {
   }
 
   Tab buildTextTab(String text) =>
-      Tab(child: Text(text, style: TextStyle(color: Colors.black)));
+      Tab(child: Text(text, style: TextStyle(color: Colors.white)));
 }
