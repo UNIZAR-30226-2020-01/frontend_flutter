@@ -19,8 +19,8 @@ class PlaylistScreen extends StatelessWidget {
     return Container(
       color: Color(0xff9ad1e5),
       child: RefreshIndicator(
-        onRefresh: () => Future.delayed(Duration(microseconds: 1), () =>
-            print('recargando')),
+        onRefresh: () => Future.delayed(
+            Duration(microseconds: 1), () => print('recargando')),
         child: CustomScrollView(
           physics: const BouncingScrollPhysics(),
           slivers: <Widget>[
@@ -32,9 +32,8 @@ class PlaylistScreen extends StatelessWidget {
               pinned: false,
               // Efectos
               stretch: true,
-              onStretchTrigger: () =>
-                  Future.delayed(
-                      Duration(microseconds: 1), () => print('stretch')),
+              onStretchTrigger: () => Future.delayed(
+                  Duration(microseconds: 1), () => print('stretch')),
               expandedHeight: 300.0,
               flexibleSpace: FlexibleSpaceBar(
                 // Efectos
@@ -78,8 +77,20 @@ class PlaylistScreen extends StatelessWidget {
               ),
             ),
             SliverList(
+              delegate: SliverChildListDelegate([
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 100),
+                  // TODO: Aplicar estilo
+                  child: RaisedButton(
+                    onPressed: () => PlayingSingleton()..setPlayList(playlist)..play(playlist.playlist.first),
+                    child: Text('PLAY'),
+                  ),
+                )
+              ]),
+            ),
+            SliverList(
               delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) {
+                (BuildContext context, int index) {
                   return buildSongPreview(playlist.playlist[index], playlist);
                 },
                 childCount: playlist.playlist.length,
