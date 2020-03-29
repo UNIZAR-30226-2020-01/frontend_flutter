@@ -9,9 +9,12 @@ import 'package:spotiseven/audio/utils/album.dart';
 // Clase Playlist
 import 'package:spotiseven/audio/utils/playlist.dart';
 
+class PlaylistsScreen extends StatefulWidget {
+    @override
+  _PlaylistsScreenState createState() => _PlaylistsScreenState();
+}
 
-
-class PlaylistsScreen extends StatelessWidget {
+class _PlaylistsScreenState extends State<PlaylistsScreen> {
 
   // TODO: Quitar. Es para hacer pruebas
   static Album _pruebaAlbum1 = Album(
@@ -41,7 +44,7 @@ class PlaylistsScreen extends StatelessWidget {
       'https://image.shutterstock.com/image-photo/serious-computer-hacker-dark-clothing-600w-1557297230.jpg');
 
   // TODO: Quitar. Es para hacer pruebas
-  Playlist _pruebaPlaylist = Playlist(
+  static Playlist _pruebaPlaylist = Playlist(
     playlist: [
       Song.fromJSON(jsonDecode(
           '{"title": "Rap chungo de Internet", "url": "https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Yung_Kartz/August_2019/Yung_Kartz_-_04_-_One_Way.mp3"}'))
@@ -65,15 +68,43 @@ class PlaylistsScreen extends StatelessWidget {
     'https://m.media-amazon.com/images/M/MV5BYmQ0ZTY2Y2YtZWZmNy00M2EwLThhZDAtOTM3ZmIxZTQ5ZWY1XkEyXkFqcGdeQXVyNTU2NzcwMTQ@._V1_.jpg',
   );
 
+  var _listPlaylist = [
+    _pruebaPlaylist,
+    _pruebaPlaylist,
+    _pruebaPlaylist,
+    _pruebaPlaylist,
+    _pruebaPlaylist,
+    _pruebaPlaylist,
+    _pruebaPlaylist,
+    _pruebaPlaylist,
+  ];
+
+  ScrollController _scrollController;
+
+  @override
+  void initState() {
+    _scrollController = ScrollController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Row(
-          children: <Widget>[
-            PlaylistCardWidget(playlist: _pruebaPlaylist,),
-          ],
+    return CustomScrollView(
+      controller: _scrollController,
+      slivers: <Widget>[
+        SliverGrid.count(
+          crossAxisCount: 2,
+          children: _listPlaylist
+              .map((el) => PlaylistCardWidget(
+                    playlist: el,
+                  ))
+              .toList(),
         ),
       ],
     );
