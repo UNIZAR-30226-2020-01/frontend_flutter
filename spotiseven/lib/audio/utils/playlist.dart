@@ -31,4 +31,17 @@ class Playlist {
       user: json['user'],
     );
   }
+
+  factory Playlist.copy(Playlist p){
+    List<Song> songs = List();
+    for(Song s in p.playlist){
+      songs.add(s);
+    }
+    return Playlist(
+      title: p.title,
+      playlist: songs,
+      photoUrl: p.photoUrl,
+      user: p.user,
+    );
+  }
 }

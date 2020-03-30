@@ -77,7 +77,7 @@ class PlayingSingleton {
     _audioPlayer.stop();
     _playing = false;
     // Cambiamos el PlaylistController con la nueva lista de reproduccion
-    _playlistController = PlaylistController(p);
+    _playlistController = PlaylistController(Playlist.copy(p));
     // Actualizamos la reproduccion
     _play(_playlistController.actualSong);
   }
