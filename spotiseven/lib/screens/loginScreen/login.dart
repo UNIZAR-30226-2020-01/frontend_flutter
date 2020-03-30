@@ -24,111 +24,119 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
-      body: Stack(
-        children: <Widget>[
-          //children: SafeArea(
-          Container(
-            child: Opacity(
-              opacity: 0.6,
-              child: Container(
-
-                decoration: BoxDecoration(
-                  image: DecorationImage(image: AssetImage('assets/images/photo1.png')),
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/background.png'),
+            fit: BoxFit.fitHeight,
+          ),
+        ),
+        child: Column(
+          children: <Widget>[
+            SizedBox(height: MediaQuery.of(context).size.height*0.03 ,),
+            Container(
+              height: MediaQuery.of(context).size.height*0.3 ,
+              decoration: BoxDecoration(
+                image: DecorationImage(image: AssetImage('assets/images/all_logo.png')),
+              ),
+            ),
+            SizedBox(height: MediaQuery.of(context).size.height*0.2 ,),
+            Padding(
+              padding:const EdgeInsets.fromLTRB(45, 0, 45, 20),
+              child: RaisedButton(
+                color: Color.fromRGBO(255, 255, 255, 0.6),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(70)),
+                onPressed: () async {
+                  Navigator.popAndPushNamed(context, '/loginMail');
+                },
+                child: Row(
+                  children: <Widget>[
+                    Icon(Icons.email),
+                    Container(
+                      margin: EdgeInsets.fromLTRB(5, 15, 5, 15),
+                      child: Center(
+                        child: Text(
+                          'LOG IN WITH EMAIL',
+                          style: GoogleFonts.roboto(
+                            fontWeight: FontWeight.w300,
+                            color: Colors.black,
+                            fontSize: 20,
+                            letterSpacing: 3,
+                            wordSpacing: 3,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
-          ),
-          Column(
-            children: <Widget>[
-              Expanded(
-                flex: 2,
+            Padding(
+              padding: const EdgeInsets.fromLTRB(45, 0, 45, 20),
+              child: RaisedButton(
+                color: Color.fromRGBO(255, 255, 255, 0.6),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(70)),
+                onPressed: () async {
+                  // TODO: meter backend
+                },
                 child: Container(
-                  decoration: BoxDecoration(
-                    image: DecorationImage(image: AssetImage('assets/images/welcome.png')),
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: 2,
-                child: Container(
-                  color: Colors.transparent,
-                  margin: EdgeInsets.all(30),
-                  child: Column(
-                    children: <Widget>[
-                      //Spacer(),
-                      RaisedButton(
-                        color: Color.fromRGBO(115, 175, 197, 1),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-                        onPressed: () async {
-                          Navigator.popAndPushNamed(context, '/loginMail');
-                        },
-                        child: Container(
-                          margin: EdgeInsets.fromLTRB(5, 15, 5, 15),
-                          child: Center(
-                            child: Text(
-                              'LOG IN WITH EMAIL',
-                              style: GoogleFonts.roboto(
-                                fontWeight: FontWeight.w300,
-                                color: Colors.black,
-                                fontSize: 20,
-                                letterSpacing: 3,
-                                wordSpacing: 3,
-                              ),
+                  margin: EdgeInsets.fromLTRB(5, 15, 5, 15),
+                  child: Center(
+                    child: Row(
+                      children: <Widget>[
+                        Container(
+                          height: 20,
+                            child: Image.asset(
+                                'assets/images/google.png'
+                            )
+                        ),
+                        SizedBox(width: 10,),
+                        /*Container(
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: AssetImage('assets/images/google.png'),
                             ),
                           ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      RaisedButton(
-                        color: Color.fromRGBO(115, 175, 197, 1),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-                        onPressed: () async {
-                          // TODO: meter backedn
-                        },
-                        child: Container(
-                          margin: EdgeInsets.fromLTRB(5, 15, 5, 15),
-                          child: Center(
-                            child: Text(
-                              'LOG IN WITH GOOGLE',
-                              style: GoogleFonts.roboto(
-                                fontWeight: FontWeight.w300,
-                                color: Colors.black,
-                                fontSize: 20,
-                                letterSpacing: 3,
-                                wordSpacing: 3,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Center(
-                        child: Text(
-                          'NO ACCOUNT? SIGN IN NOW!',
+                        ),*/
+                        Text(
+                          'LOG IN WITH GOOGLE',
                           style: GoogleFonts.roboto(
-                            fontWeight: FontWeight.w600,
+                            fontWeight: FontWeight.w300,
                             color: Colors.black,
-                            fontSize: 15,
+                            fontSize: 18,
+                            letterSpacing: 3,
+                            wordSpacing: 3,
                           ),
                         ),
-                      ),
-                      // TODO: Quitar, es para pruebas
-                      /*RaisedButton(
-                        onPressed: () => Navigator.popAndPushNamed(context, '/home'),
-                        child: Text('ENTRAR A LA PANTALLA PRINCIPAL'),
-                      ),*/
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ],
-          ),
-        ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Center(
+              child: Text(
+                'NO ACCOUNT? SIGN IN NOW!',
+                style: GoogleFonts.roboto(
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black,
+                  fontSize: 15,
+                ),
+              ),
+            ),
+            // TODO: Quitar, es para pruebas
+            RaisedButton(
+                          onPressed: () => Navigator.popAndPushNamed(context, '/home'),
+                          child: Text('ENTRAR A LA PANTALLA PRINCIPAL'),
+                        ),
+          ],
+        ),
+
+
       ),
     );
   }
