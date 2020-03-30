@@ -28,7 +28,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<bool> _mockCheckForSession() async{
     //TODO: check de si el usuario está logeado
-    await Future.delayed(Duration(milliseconds: 1800), () {});
+    await Future.delayed(Duration(milliseconds: 2000), () {});
     /*if(FirebaseAuth.instance.currentUser() != null) return true;
     else return false;*/
     return false;
@@ -38,14 +38,14 @@ class _SplashScreenState extends State<SplashScreen> {
      /* Navigator.of(context).pushReplacement(MaterialPageRoute(
           builder: (context) => MainScreenWrapper()
         ));*/
-    Navigator.pushNamed(context, '/home');
+    Navigator.popAndPushNamed(context, '/home');
   }
 
   void _navigateToLogin(){
     /*Navigator.of(context).pushReplacement(MaterialPageRoute(
         builder: (context) => Login()
     ));*/
-    Navigator.pushNamed(context, '/login');
+    Navigator.popAndPushNamed(context, '/home');
   }
 
 

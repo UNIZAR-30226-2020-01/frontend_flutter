@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_exoplayer/audioplayer.dart';
 // Clase PlaylistController
 import 'package:spotiseven/audio/playlistController.dart';
@@ -83,6 +84,23 @@ class PlayingSingleton {
 
   // Funciones de control de la reproduccion
 
+  // Reorder de la playlist en reproduccion
+  void reorderPlaylist(Song s, int newIndex) {
+    Song actual = this.song;
+    // Introducimos la Song <s> con -2 porque eliminaremos 2 elementos.
+    // <actual> y <s> para reinsertarlos
+    _playlistController.playlist = _playlistController.actualPlaylist.playlist
+        .where((Song song) => s != song && song != actual)
+        .toList()
+          ..insert(
+              newIndex > _playlistController.actualPlaylist.playlist.length - 2
+                  ? _playlistController.actualPlaylist.playlist.length - 2
+                  : newIndex,
+              s)
+          ..insert(0, actual);
+    _playlistController.setIteratorOn(actual);
+  }
+
   /// Reproducir una nueva cancion
   Future<void> play(Song song) async {
     _playlistController.setIteratorOn(song);
@@ -110,7 +128,6 @@ class PlayingSingleton {
     _time = 0;
     _playing = true;
   }
-
 
   /// Reproducir la siguiente cancion
   Future<void> next() async {

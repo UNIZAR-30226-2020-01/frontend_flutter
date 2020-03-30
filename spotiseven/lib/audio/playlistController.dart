@@ -58,6 +58,8 @@ class PlaylistController {
     }
   }
 
+  set playlist(List<Song> list) => this.actualPlaylist.playlist = list;
+
   // Pasar a la siguiente cancion
   void next() {
     _index = (_index + 1) % _numSongs;
