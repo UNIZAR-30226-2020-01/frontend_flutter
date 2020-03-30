@@ -2,18 +2,21 @@
 
 import 'package:flutter/material.dart';
 import 'package:spotiseven/screens/EntryActivity.dart';
-import 'package:spotiseven/screens/home/loginScreen/login_email3.dart';
-import 'package:spotiseven/screens/home/main_screen.dart';
-import 'package:spotiseven/screens/home/audio/audio_screen.dart';
-import 'package:spotiseven/screens/home/loginScreen/login.dart';
-
+import 'package:spotiseven/screens/loginScreen/login_email3.dart';
+import 'package:spotiseven/screens/main_screen.dart';
+import 'package:spotiseven/screens/audio/audio_screen.dart';
+import 'package:spotiseven/screens/loginScreen/login.dart';
+import 'package:spotiseven/screens/splashScreen/splash_screen.dart';
 
 void main() => runApp(MaterialApp(
         title: 'Proyecto SW',
         theme: ThemeData(
           primarySwatch: Colors.blue,
+         // accentColor: Colors.black,
         ),
-        initialRoute: '/loginMail',
+        debugShowCheckedModeBanner: false,
+        //initialRoute: '/login',
+        home: SplashScreen(),
         routes: {
           '/login': (context) => Login(),
           '/loginMail': (context) => LoginEmail3(),
