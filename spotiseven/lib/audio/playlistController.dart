@@ -76,6 +76,30 @@ class PlaylistController {
 
   set playlist(List<Song> list) => this.actualPlaylist.playlist = list;
 
+  void moveSong(Song s, int to){
+//    print('ANTES: ${_queue.map((Song s) => s.title).toList()}');
+    List<Song> _list = _queue.toList();
+    int index = _list.indexOf(s);
+    if(index == -1){
+      throw Exception('Esa cancion no pertenece a la cola de reproduccion!');
+    }else{
+      // Movemos la cancion
+      _list..removeAt(index);
+      if(to >= _list.length){
+        // Lo insertamos en la posicion final
+        _list.insert(_list.length, s);
+      }else if(to == 0){
+        // Lo insertamos despues de la cancion actual (posicion 0)
+        _list.insert(1, s);
+      }else{
+        // En cualquier otro caso lo insertamos en to + 1(teniendo en cuenta que la cancion actual es la 0)
+        _list.insert(to+1, s);
+      }
+      _queue = Queue.from(_list);
+//      print('DESPUES: ${_queue.map((Song s) => s.title).toList()}');
+    }
+  }
+
   // Pasar a la siguiente cancion
   void next() {
 //    _index = (_index + 1) % _numSongs;
