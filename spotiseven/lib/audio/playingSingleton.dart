@@ -22,6 +22,10 @@ class PlayingSingleton {
   // Para controlar el estado de la reproduccion
   bool _playing;
 
+  // Variable de reproducir en bucle la cancion actual
+  bool _repeatActual;
+
+
   // Para notificar los cambios de cancion
   StreamController _songNotifier;
 
@@ -37,6 +41,7 @@ class PlayingSingleton {
     // Valores iniciales por defecto
     _time = 0;
     _playing = false;
+    _repeatActual = false;
     subscribeStreams();
     // Iniciamos el stream de notificacion
     _songNotifier = StreamController<Song>.broadcast();
@@ -50,8 +55,13 @@ class PlayingSingleton {
     _subscriptionFinal =
         _audioPlayer.onPlayerStateChanged.listen((playerState) {
       if (playerState == PlayerState.COMPLETED) {
-        // Se ha completado la cancion. Pasamos a la siguiente.
-        this.next();
+        if (this.repeatActual) {
+          // Repetimos la cancion actual
+          this.play(this.song);
+        } else {
+          // Se ha completado la cancion. Pasamos a la siguiente.
+          this.next();
+        }
       }
     });
   }
@@ -68,7 +78,16 @@ class PlayingSingleton {
   Playlist get playlist => _playlistController.actualPlaylist;
   Song get song => _playlistController.actualSong;
 
+  bool get repeatActual => _repeatActual;
+
+
   // Setters de valores especificos
+  // Reproduccion en bucle la cancion actual
+  set repeatActual(bool value){
+    _repeatActual = value;
+  }
+
+
   void randomize() {
     _playlistController.random();
   }

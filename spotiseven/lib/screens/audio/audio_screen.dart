@@ -251,7 +251,12 @@ class _PlayingScreenState extends State<PlayingScreen> {
     return ButtonBar(
       alignment: MainAxisAlignment.center,
       children: <Widget>[
-        buildIconButton(Icons.repeat, () => print('Repeat')),
+        buildIconButton(_player.repeatActual? Icons.repeat_one : Icons.repeat, () {
+          setState(() {
+            _player.repeatActual = !_player.repeatActual;
+          });
+          print('Repeat');
+        }),
         buildIconButton(Icons.skip_previous, () async {
           print('skip_previous');
           // Si han pasado menos de 2 segundos desde el inicio de una cancion, pasamos a la anterior

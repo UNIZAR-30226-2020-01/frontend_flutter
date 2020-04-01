@@ -16,9 +16,6 @@ class PlaylistController {
   // Variable interna de la cuenta
   int _index;
 
-  // TODO: Reproduccion en bucle (POR DEFECTO SE EJECUTA ESTA)
-
-
   // Nueva Playlist a reproducir
   PlaylistController(Playlist p) {
     this._playlist = p;
