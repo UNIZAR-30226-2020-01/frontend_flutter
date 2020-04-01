@@ -9,6 +9,7 @@ import 'package:spotiseven/audio/utils/playlist.dart';
 import 'package:spotiseven/audio/utils/song.dart';
 // Fuentes de Google
 import 'package:google_fonts/google_fonts.dart';
+import 'package:spotiseven/screens/playlist/playlist_screen_options.dart';
 
 class PlaylistScreen extends StatefulWidget {
   final Playlist playlist;
@@ -52,7 +53,7 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
                   SliverAppBar(
                     backgroundColor: Colors.black,
                     leading: IconButton(
-                      onPressed: () => print('Pressed 3 dot button'),
+                      onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => PlaylistScreenOptions(playlist: this.widget.playlist,))),
                       icon: Icon(Icons.more_vert),
                       color: Colors.white,
                     ),
@@ -82,7 +83,7 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
                             Text(
                               '${widget.playlist.title}',
                               style: GoogleFonts.roboto(
-                                fontWeight: FontWeight.w300,
+                                fontWeight: FontWeight.w600,
                                 color: Colors.white,
                                 fontSize: 25,
                                 letterSpacing: 3,
@@ -102,11 +103,9 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
                   ),
                   SliverList(
                     delegate: SliverChildBuilderDelegate(
-                      // TODO: Esto es para hacer pruebas con listas largas
                       (BuildContext context, int index) {
                         return buildSongPreview_v2(
-                            widget.playlist.playlist[
-                                index],
+                            widget.playlist.playlist[index],
                             widget.playlist,
                             context);
                       },
@@ -160,16 +159,16 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
               ..setPlayList(widget.playlist)
               ..randomize()
               ..play(PlayingSingleton().song),
-            child: Text('PLAY', style: GoogleFonts.roboto(
-              color: Colors.black,
-              fontSize: 20,
-              fontWeight: FontWeight.normal,
-            )),
+            child: Text('PLAY',
+                style: GoogleFonts.roboto(
+                  color: Colors.black,
+                  fontSize: 20,
+                  fontWeight: FontWeight.normal,
+                )),
             elevation: 0,
             color: Colors.white,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10))
-            ),
+                borderRadius: BorderRadius.all(Radius.circular(10))),
           ),
         ),
       ),
@@ -180,7 +179,7 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
     return Container(
       margin: EdgeInsets.fromLTRB(30, 15, 30, 15),
       child: GestureDetector(
-        onTap:() async {
+        onTap: () async {
           var playingSingleton = PlayingSingleton();
           playingSingleton.setPlayList(p);
           await playingSingleton.play(s);
