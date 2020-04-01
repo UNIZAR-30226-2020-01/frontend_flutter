@@ -9,6 +9,7 @@ import 'package:spotiseven/audio/playingSingleton.dart';
 import 'package:spotiseven/audio/utils/song.dart';
 // Fuentes de Google
 import 'package:google_fonts/google_fonts.dart';
+import 'package:spotiseven/screens/audio/actual_playlist.dart';
 import 'package:spotiseven/screens/playlist/playlist_screen.dart';
 
 class PlayingScreen extends StatefulWidget {
@@ -240,7 +241,7 @@ class _PlayingScreenState extends State<PlayingScreen> {
         buildIconButton(Icons.subtitles, () => print('subtitles')),
         buildIconButton(Icons.playlist_add, () {
           print('playlist_add');
-          Navigator.push(context, MaterialPageRoute(builder: (context) => PlaylistScreen(playlist: _player.playlist,)));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => ActualPlaylistScreen(playlist: _player.playlist,)));
         }),
       ],
     );
@@ -250,7 +251,12 @@ class _PlayingScreenState extends State<PlayingScreen> {
     return ButtonBar(
       alignment: MainAxisAlignment.center,
       children: <Widget>[
-        buildIconButton(Icons.repeat, () => print('Repeat')),
+        buildIconButton(_player.repeatActual? Icons.repeat_one : Icons.repeat, () {
+          setState(() {
+            _player.repeatActual = !_player.repeatActual;
+          });
+          print('Repeat');
+        }),
         buildIconButton(Icons.skip_previous, () async {
           print('skip_previous');
           // Si han pasado menos de 2 segundos desde el inicio de una cancion, pasamos a la anterior

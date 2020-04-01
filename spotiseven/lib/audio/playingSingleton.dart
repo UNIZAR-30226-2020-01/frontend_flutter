@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_exoplayer/audioplayer.dart';
 // Clase PlaylistController
 import 'package:spotiseven/audio/playlistController.dart';
@@ -21,6 +22,10 @@ class PlayingSingleton {
   // Para controlar el estado de la reproduccion
   bool _playing;
 
+  // Variable de reproducir en bucle la cancion actual
+  bool _repeatActual;
+
+
   // Para notificar los cambios de cancion
   StreamController _songNotifier;
 
@@ -36,8 +41,8 @@ class PlayingSingleton {
     // Valores iniciales por defecto
     _time = 0;
     _playing = false;
+    _repeatActual = false;
     subscribeStreams();
-    // TODO: Cuando se acabe una cancion cambiar a la siguiente
     // Iniciamos el stream de notificacion
     _songNotifier = StreamController<Song>.broadcast();
     // Iniciamos el PlaylistController con una lista vacia (null)
@@ -50,8 +55,13 @@ class PlayingSingleton {
     _subscriptionFinal =
         _audioPlayer.onPlayerStateChanged.listen((playerState) {
       if (playerState == PlayerState.COMPLETED) {
-        // Se ha completado la cancion. Pasamos a la siguiente.
-        this.next();
+        if (this.repeatActual) {
+          // Repetimos la cancion actual
+          this.play(this.song);
+        } else {
+          // Se ha completado la cancion. Pasamos a la siguiente.
+          this.next();
+        }
       }
     });
   }
@@ -66,9 +76,22 @@ class PlayingSingleton {
   get time => _time;
   get duration async => (await _audioPlayer.getDuration()).inSeconds;
   Playlist get playlist => _playlistController.actualPlaylist;
+  List<Song> get reproductionQueue => _playlistController.queue;
   Song get song => _playlistController.actualSong;
 
+  bool get repeatActual => _repeatActual;
+
+
   // Setters de valores especificos
+  // Reproduccion en bucle la cancion actual
+  set repeatActual(bool value){
+    _repeatActual = value;
+  }
+
+
+  void randomize() {
+    _playlistController.random();
+  }
 
   // Setter de playlist a reproducir
   void setPlayList(Playlist p) {
@@ -76,12 +99,17 @@ class PlayingSingleton {
     _audioPlayer.stop();
     _playing = false;
     // Cambiamos el PlaylistController con la nueva lista de reproduccion
-    _playlistController = PlaylistController(p);
+    _playlistController = PlaylistController(Playlist.copy(p));
     // Actualizamos la reproduccion
     _play(_playlistController.actualSong);
   }
 
   // Funciones de control de la reproduccion
+
+  // Reorder de la playlist en reproduccion
+  void reorderPlaylist(Song s, int newIndex) {
+    _playlistController.moveSong(s, newIndex);
+  }
 
   /// Reproducir una nueva cancion
   Future<void> play(Song song) async {
@@ -110,7 +138,6 @@ class PlayingSingleton {
     _time = 0;
     _playing = true;
   }
-
 
   /// Reproducir la siguiente cancion
   Future<void> next() async {
