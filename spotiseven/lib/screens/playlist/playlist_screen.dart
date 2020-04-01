@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:spotiseven/audio/playingSingleton.dart';
 // Clase Playlist
@@ -82,8 +84,12 @@ class PlaylistScreen extends StatelessWidget {
                   margin: EdgeInsets.symmetric(horizontal: 100),
                   // TODO: Aplicar estilo
                   child: RaisedButton(
-                    onPressed: () => PlayingSingleton()..setPlayList(playlist)..play(playlist.playlist.first),
-                    child: Text('PLAY'),
+                    onPressed: () => PlayingSingleton()
+                      ..setPlayList(playlist)
+                      ..randomize()
+                      ..play(playlist.playlist[
+                          Random().nextInt(playlist.playlist.length)]),
+                    child: Text('PLAY RANDOM'),
                   ),
                 )
               ]),

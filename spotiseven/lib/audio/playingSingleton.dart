@@ -38,7 +38,6 @@ class PlayingSingleton {
     _time = 0;
     _playing = false;
     subscribeStreams();
-    // TODO: Cuando se acabe una cancion cambiar a la siguiente
     // Iniciamos el stream de notificacion
     _songNotifier = StreamController<Song>.broadcast();
     // Iniciamos el PlaylistController con una lista vacia (null)
@@ -70,6 +69,9 @@ class PlayingSingleton {
   Song get song => _playlistController.actualSong;
 
   // Setters de valores especificos
+  void randomize() {
+    _playlistController.random();
+  }
 
   // Setter de playlist a reproducir
   void setPlayList(Playlist p) {

@@ -1,4 +1,6 @@
 // Clase Playlist
+import 'dart:math';
+
 import 'package:spotiseven/audio/utils/playlist.dart';
 // Clase Song
 import 'package:spotiseven/audio/utils/song.dart';
@@ -15,8 +17,7 @@ class PlaylistController {
   int _index;
 
   // TODO: Reproduccion en bucle (POR DEFECTO SE EJECUTA ESTA)
-  // TODO: Reproduccion aleatoria
-  // TODO: Encapsular comportamientos extraños con excepciones?
+
 
   // Nueva Playlist a reproducir
   PlaylistController(Playlist p) {
@@ -29,6 +30,12 @@ class PlaylistController {
   }
 
   // Control de la lista de reproduccion
+
+  // Reproduccion aleatoria
+  void random(){
+    // Hacemos un shuffle de la lista en reproduccion
+    _playlist.playlist.shuffle(Random());
+  }
 
   // Cancion actual
   Song get actualSong {
