@@ -2,7 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:spotiseven/audio/playingSingleton.dart';
 import 'package:spotiseven/screens/home/albums.dart';
-import 'package:spotiseven/screens/artist/artist_screen.dart';
+import 'package:spotiseven/screens/artist/artist_discography.dart';
+import 'package:spotiseven/screens/home/artist_home.dart';
 import 'package:spotiseven/screens/home/following.dart';
 import 'package:spotiseven/screens/home/genres.dart';
 import 'package:spotiseven/screens/home/your_playlists.dart';
@@ -58,12 +59,17 @@ class _HomeScreenWrapperState extends State<HomeScreenWrapper>
               child: PreferredSize(
                 preferredSize: Size.fromHeight(50),
                 child: TabBar(
+                  /*indicator: UnderlineTabIndicator(
+                    borderSide: BorderSide(width: 10, color: Colors.yellow,),
+                    insets: EdgeInsets.all(5),
+                  ),*/
                   controller: _tabController,
                   isScrollable: true,
                   // TODO: Use <indicator> property to change indicator
                   indicatorPadding:
                       EdgeInsets.symmetric(horizontal: 30, vertical: 5),
-                  indicatorColor: Colors.yellow[800],
+//                  indicatorColor: Colors.yellow[800],
+                  indicatorColor: Colors.white,
                   indicatorWeight: 7,
                   indicatorSize: TabBarIndicatorSize.tab,
                   // TODO: change labelStyle -> By the moment changed in tab's text

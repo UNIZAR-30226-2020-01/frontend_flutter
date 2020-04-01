@@ -21,7 +21,6 @@ class Artist {
   factory Artist.fromJSON(Map<String, Object> json) {
     return Artist(
       name: json['name'],
-      // TODO: Comprobar si esto devuelve un List
       numAlbums: json['numAlbums'],
       totalTracks: json['totalTracks'],
       photoUrl: json['user'],

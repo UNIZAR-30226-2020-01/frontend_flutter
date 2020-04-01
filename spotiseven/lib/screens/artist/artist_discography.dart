@@ -5,14 +5,16 @@ import 'package:spotiseven/audio/utils/artist.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:spotiseven/audio/utils/artist.dart';
 
-class ArtistScreen extends StatelessWidget {
+class ArtistDiscography extends StatelessWidget {
   final Artist artista;
 
 
-  ArtistScreen({this.artista});
+  ArtistDiscography({this.artista});
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Container(
+      color: Color.fromRGBO(34, 34, 34, 1),
+    );
   }
 }
