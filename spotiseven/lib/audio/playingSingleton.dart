@@ -76,6 +76,7 @@ class PlayingSingleton {
   get time => _time;
   get duration async => (await _audioPlayer.getDuration()).inSeconds;
   Playlist get playlist => _playlistController.actualPlaylist;
+  List<Song> get reproductionQueue => _playlistController.queue;
   Song get song => _playlistController.actualSong;
 
   bool get repeatActual => _repeatActual;

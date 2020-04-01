@@ -87,8 +87,7 @@ class PlaylistScreen extends StatelessWidget {
                     onPressed: () => PlayingSingleton()
                       ..setPlayList(playlist)
                       ..randomize()
-                      ..play(playlist.playlist[
-                          Random().nextInt(playlist.playlist.length)]),
+                      ..play(PlayingSingleton().song),
                     child: Text('PLAY RANDOM'),
                   ),
                 )

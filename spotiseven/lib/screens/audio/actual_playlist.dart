@@ -98,12 +98,6 @@ class _ActualPlaylistScreenState extends State<ActualPlaylistScreen> {
   }
 
   List<Song> _remainingSongs() {
-    List<Song> list = [];
-    for (Song s in _playingSingleton.playlist.playlist) {
-      if (s != _playingSingleton.song) {
-        list += [s];
-      }
-    }
-    return list;
+    return _playingSingleton.reproductionQueue..removeAt(0);
   }
 }
