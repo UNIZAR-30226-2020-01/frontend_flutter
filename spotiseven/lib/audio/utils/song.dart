@@ -20,7 +20,7 @@ class Song {
         title: json['title'],
         url: json['url'],
         // TODO: Comprobar si lo que devuelve esto es un Map
-//        album: Album.fromJSON(json['album']),
+        album: json['album'] != null ? Album.fromJSON(json['album']) : null,
     );
   }
 }
