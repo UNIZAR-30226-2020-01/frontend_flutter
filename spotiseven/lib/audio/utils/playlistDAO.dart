@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:http/http.dart';
 // Clase Playlist
 import 'package:spotiseven/audio/utils/playlist.dart';
@@ -80,7 +79,9 @@ class PlaylistDAO {
   
   static Future<List<Playlist>> getAllPlaylists() async {
 //    Response response = await _client.get('$_url/playlist');
-//    return (jsonDecode(response.body) as List<dynamic>).map((d) => Playlist.fromJSON(d)).toList();
+//    // Convertimos los json a playlist
+//    // TODO: Comprobar el campo de las playlist
+//    return (jsonDecode(response.body) as List<dynamic>).map((d) => Playlist.fromJSON(d)..playlist = d['playlist'] ).toList();
     return Future.delayed(Duration(seconds: 3), () => _listPlaylist);
   }
 
