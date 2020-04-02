@@ -37,14 +37,16 @@ class Album {
   // TODO: Cambiar esto para que coincida con la API REST
   factory Album.fromJSON(Map<String, Object> json) {
 //    print('ARTISTA: ${((json['artists'] as List)[0] as Map)['name']}');
-    return Album(
+    Album a = Album(
         url: json['url'],
         titulo: json['title'],
         // TODO: Esto es una modificacion para mostrar solo el nombre de un artista
         artista: ((json['artists'] as List)[0] as Map)['name'],
         photoUrl: json['icon'],
         numberSongs: json['number_songs'],
-    )..list = json['list'] ?? List();
+    )..list = json['songs'] != null ? (json['songs'] as  List).map((j) => Song.fromJSON(j)).toList() : List();
+    a.list = a.list.map((Song s) => s..album = a).toList();
+    return a;
   }
 
   Future<void> fetchRemote() async {
