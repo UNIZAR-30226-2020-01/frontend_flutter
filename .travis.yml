@@ -1,6 +1,6 @@
 os:
   - linux
-sudo: false
+sudo: required
 addons:
   apt:
     # Flutter depends on /usr/lib/x86_64-linux-gnu/libstdc++.so.6 version GLIBCXX_3.4.18
@@ -9,6 +9,9 @@ addons:
     packages:
       - libstdc++6
       - fonts-droid
+      - lib32stdc++6
+      - curl
+
 before_script:
   - git clone https://github.com/flutter/flutter.git -b beta
   - ./flutter/bin/flutter doctor
