@@ -18,6 +18,7 @@ class Song {
   factory Song.fromJSON(Map<String, Object> json) {
     return Song(
         title: json['title'],
+        // El servidor es https, no http
         url: json['file'].toString().replaceAll('http://', 'https://'),
         // TODO: Comprobar si lo que devuelve esto es un Map
 //        album: json['album'] != null ? Album.fromJSON(json['album']) : null,

@@ -106,7 +106,6 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
                       ),
                     ),
                   ),
-                  // TODO: Añadir lista de canciones
                   SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (BuildContext context, int index) {
@@ -115,7 +114,7 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
                             widget.album,
                             context);
                       },
-                      childCount:/* widget.album.list != null ? */widget.album.list.length /*: 0*/,
+                      childCount: widget.album.list.length,
                     ),
                   ),
                 ],

@@ -7,7 +7,7 @@ import 'package:spotiseven/audio/utils/song.dart';
 // TODO: Cambiar esto para que coincida con los campos de la BD.
 class Album {
 
-  // URL de peticiones
+  // URL del recurso
   String url;
 
   // Titulo
@@ -16,7 +16,7 @@ class Album {
   // Artista principal
   String artista;
 
-  // TODO: Artistas colaboradores (relacion 1:N)
+  // Artistas colaboradores
   List<String> colaboradores;
 
   // TODO: Comprobar la eficiencia de no tener esto siempre cargado en memoria.
@@ -36,15 +36,21 @@ class Album {
 
   // TODO: Cambiar esto para que coincida con la API REST
   factory Album.fromJSON(Map<String, Object> json) {
-//    print('ARTISTA: ${((json['artists'] as List)[0] as Map)['name']}');
+    List<String> colaborators = List();
+    if(json['other_artists'] != null && (json['other_artists'] as List) != List() ){
+      colaborators = (json['other_artists'] as List).map((d) => ((d as Map)['name'] as String)).toList();
+//      print(colaborators);
+    }
     Album a = Album(
         url: json['url'],
         titulo: json['title'],
         // TODO: Esto es una modificacion para mostrar solo el nombre de un artista
-        artista: ((json['artists'] as List)[0] as Map)['name'],
+        artista: (json['artist'] as Map)['name'],
+        colaboradores: colaborators,
         photoUrl: json['icon'],
         numberSongs: json['number_songs'],
     )..list = json['songs'] != null ? (json['songs'] as  List).map((j) => Song.fromJSON(j)).toList() : List();
+    // Mapeamos el album para cancion actual
     a.list = a.list.map((Song s) => s..album = a).toList();
     return a;
   }

@@ -21,9 +21,11 @@ class Artist {
   factory Artist.fromJSON(Map<String, Object> json) {
     return Artist(
       name: json['name'],
+      // TODO: Numero de albums?
       numAlbums: json['numAlbums'],
+      // TODO: Numero total de tracks?
       totalTracks: json['totalTracks'],
-      photoUrl: json['user'],
+      photoUrl: json['image'],
     );
   }
 }
