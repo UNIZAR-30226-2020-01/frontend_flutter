@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_exoplayer/audioplayer.dart';
 import 'package:spotiseven/audio/playingSingleton.dart';
 import 'package:spotiseven/screens/home/home_screen.dart';
+import 'package:spotiseven/screens/podcast/podcastscreen.dart';
 
 class MainScreenWrapper extends StatefulWidget {
   @override
@@ -16,7 +17,7 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
   // Children to wrap
   List<Widget> _children = [
     HomeScreenWrapper(),
-    HomeScreenWrapper(),
+    PodcastScreenWrapper(),
     HomeScreenWrapper(),
     HomeScreenWrapper(),
   ];
@@ -64,13 +65,13 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
         type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.black,
         // TODO: Change this color
-        fixedColor: Colors.yellow[800],
+        fixedColor: Color.fromRGBO(255, 242, 0, 1),
         unselectedItemColor: Colors.white,
         currentIndex: _currentIndex,
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), title: Text('')),
           // TODO: Change 'hearing' icon to podcast
-          BottomNavigationBarItem(icon: Icon(Icons.hearing), title: Text('')),
+          BottomNavigationBarItem(icon: Icon(Icons.cast), title: Text('')),
           BottomNavigationBarItem(icon: Icon(Icons.search), title: Text('')),
           BottomNavigationBarItem(icon: Icon(Icons.person), title: Text('')),
         ],
@@ -132,7 +133,8 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
             print('La suscripcion NO es null');
             _subscriptionState.cancel();
           }
-          await Navigator.pushNamed(context, '/playing');
+          // TODO: mirar si quitar este await está bien
+         // await Navigator.pushNamed(context, '/playing');
           _subscriptionState.cancel();
           _subscriptionState = subscribeStateEvents();
           // TODO: Recargar el estado a la vuelta para cambios.
