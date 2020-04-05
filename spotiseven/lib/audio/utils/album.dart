@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/cupertino.dart';
 import 'package:spotiseven/audio/utils/DAO/albumDAO.dart';
 // Clase Song
 import 'package:spotiseven/audio/utils/song.dart';
@@ -54,8 +55,20 @@ class Album {
     return a;
   }
 
+  static Album fromJSONListedWithArtist(Map<String, Object> json, Artist artist) {
+    Album a = Album(
+      url: json['url'],
+      titulo: json['title'],
+      // TODO: Comprobar si funciona
+      artista: artist,
+      photoUrl: json['icon'],
+      numberSongs: json['number_songs'],
+    );
+    return a;
+  }
+
   // TODO: Cambiar esto para que coincida con la API REST
-  static Album fromJSONDetail(Map<String, Object> json) {
+  static Album fromJSONDetailWithArtist(Map<String, Object> json, Artist artist) {
     List<String> colaborators = List();
     if (json['other_artists'] != null &&
         (json['other_artists'] as List) != List()) {
@@ -67,7 +80,7 @@ class Album {
       url: json['url'],
       titulo: json['title'],
       // TODO: Comprobar si funciona
-      artista: Artist.fromJSONListed(json['artist']),
+      artista: artist,
       colaboradores: colaborators,
       photoUrl: json['icon'],
       numberSongs: json['number_songs'],
@@ -83,7 +96,7 @@ class Album {
   }
 
   Future<void> fetchRemote() async {
-    var album = await AlbumDAO.getByURL(url);
+    var album = await AlbumDAO.getByURL(url, artista);
     print(album.titulo);
     // Actualizamos los campos
     titulo = album.titulo;

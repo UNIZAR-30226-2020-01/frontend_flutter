@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart';
+import 'package:spotiseven/audio/utils/artist.dart';
 // Clase Playlist
 import 'package:spotiseven/audio/utils/playlist.dart';
 // Clase Album
@@ -23,10 +24,10 @@ class AlbumDAO {
     return response.map((d) => Album.fromJSONListed(d)).toList();
   }
 
-  static Future<Album> getByURL(String url) async {
+  static Future<Album> getByURL(String url, Artist artist) async {
     return await _client.get('$url').then((Response response) {
       if(response.statusCode == 200){
-        return Album.fromJSONDetail(jsonDecode(response.body));
+        return Album.fromJSONDetailWithArtist(jsonDecode(response.body), artist);
       }else{
         throw Exception('No tienes permisos para acceder a este recurso');
       }

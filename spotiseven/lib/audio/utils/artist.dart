@@ -60,17 +60,9 @@ class Artist {
     if(json.containsKey('albums')){
       // El JSON tiene una lista de las URL de los albumes
 //      _setAlbums(a, json['albums']);
-      a.albums = (json['albums'] as List).map((d) => Album.fromJSONListed(d)).toList();
+      a.albums = (json['albums'] as List).map((d) => Album.fromJSONListedWithArtist(d, a)).toList();
     }
     return a;
-  }
-
-  static _setAlbums(Artist a, List albums) async {
-    List<Album> list = [];
-    for(String url in albums){
-      list.add(await AlbumDAO.getByURL(url));
-    }
-    a.albums = list;
   }
 
   Future<void> fetchRemote() async {

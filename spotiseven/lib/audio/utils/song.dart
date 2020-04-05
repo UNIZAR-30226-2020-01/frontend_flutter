@@ -15,13 +15,22 @@ class Song {
   String get photoUrl => album.photoUrl;
 
   // TODO: Cambiar esto para que coincida con la API REST
-  factory Song.fromJSON(Map<String, Object> json) {
+  static Song fromJSONWithAlbum(Map<String, Object> json, Album album) {
     return Song(
-        title: json['title'],
-        // El servidor es https, no http
-        url: json['file'].toString().replaceAll('http://', 'https://'),
-        // TODO: Comprobar si lo que devuelve esto es un Map
-        album: json['album'] != null ? Album.fromJSONListed(json['album']) : null,
+      title: json['title'],
+      // El servidor es https, no http
+      url: json['file'].toString().replaceAll('http://', 'https://'),
+      album: album,
+    );
+  }
+
+  static Song fromJSON(Map<String, Object> json) {
+    return Song(
+      title: json['title'],
+      // El servidor es https, no http
+      url: json['file'].toString().replaceAll('http://', 'https://'),
+      // TODO: Comprobar si lo que devuelve esto es un Map -> Ahora es una URL MAL
+//      album: Album.fromJSONListed(json['album']),
     );
   }
 }

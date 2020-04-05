@@ -26,6 +26,6 @@ class AlbumCardWidget extends StatelessWidget {
 
   List<String> getStrings() {
     // TODO: Obtener el numero de canciones de un album
-    return ['${album.titulo}', '${album.artista}', '${album.numberSongs} songs'];
+    return ['${album.titulo}', '${album.artista.name}', '${album.numberSongs} songs'];
   }
 }
