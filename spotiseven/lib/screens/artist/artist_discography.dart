@@ -8,6 +8,7 @@ import 'package:spotiseven/audio/utils/album.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:spotiseven/audio/utils/artist.dart';
 import 'package:spotiseven/generic_components/GenericHorizontalWidget.dart';
+import 'package:spotiseven/screens/album/album_screen.dart';
 
 class ArtistDiscography extends StatefulWidget {
   final Artist artista;
@@ -215,14 +216,13 @@ class _ArtistDiscographyState extends State<ArtistDiscography> {
                   _appBar(context),
                   SliverList(
                     delegate: SliverChildListDelegate(
-                      widget.artista.albums.isNotEmpty ?
                       widget.artista.albums
                           .map((Album album) => GenericHorizontalWidget(
-                                args: [album.titulo],
+                                args: ['${album.titulo}', '${album.numberSongs} songs', 'p2'],
                                 imageUrl: album.photoUrl,
-                                onPressedFunction: () {},
+                                onPressedFunction: () => Navigator.push(context, MaterialPageRoute(builder: (context) => AlbumDetailScreen(album: album,))),
                               ))
-                          .toList() : [],
+                          .toList(),
                     ),
                   ),
                 ],
