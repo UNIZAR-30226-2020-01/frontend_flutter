@@ -3,33 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:spotiseven/audio/utils/podcastChapter.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:spotiseven/screens/podcast/podcast_info.dart';
+import 'package:spotiseven/screens/podcast/podcast_chapter_info.dart';
+import 'package:spotiseven/usefullMethods.dart';
+import 'package:spotiseven/screens/podcast/newpodcast.dart';
+
 
 class GenericNewPodcast extends StatelessWidget {
-  PodcastChapter podcastChapter;
+  final PodcastChapter podcastChapter;
 
-  GenericNewPodcast({@required this.podcastChapter});
+  GenericNewPodcast({this.podcastChapter});
 
-
-  _text(id, size, letterspace) {
-    return FittedBox(
-      fit: BoxFit.fitWidth,
-      child: Text(
-        id.toUpperCase(),
-        textAlign: TextAlign.end,
-        style: GoogleFonts.roboto(
-          fontWeight: FontWeight.w400,
-          fontSize: size,
-          letterSpacing: letterspace,
-          color: Colors.white,
-        ),
-      ),
-    );
-  }
-
-  _durationDate(){
-
-  }
 
   _description(context){
     return Container(
@@ -78,9 +61,9 @@ class GenericNewPodcast extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          _text(podcastChapter.parentPod, 20.0, 3.0),
+          UsefulMethods.text(podcastChapter.title, 20.0, 3.0, 255,255,255,1.0),
           SizedBox(height: 5,),
-          _text(podcastChapter.title, 14.0, 0.0)
+          UsefulMethods.text(podcastChapter.title, 14.0, 0.0, 255,255,255,1.0)
         ],
       ),
     );
@@ -118,8 +101,8 @@ class GenericNewPodcast extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    _text('Duration: ${podcastChapter.duration}', 10.0, 0.0),
-                    _text(podcastChapter.date, 10.0, 0.0),
+                    UsefulMethods.text('Duration: ${podcastChapter.duration}', 10.0, 0.0,  255,255,255,1.0),
+                    UsefulMethods.text(podcastChapter.date, 10.0, 0.0,  255,255,255,1.0),
                   ],
                 ),
               ),
@@ -133,7 +116,7 @@ class GenericNewPodcast extends StatelessWidget {
     return GestureDetector(
       onTap: (){
         print('Pulsado en un new chapter');
-        Navigator.push(context, MaterialPageRoute(builder: (context) => PodcastChapterInfo(podcastChapter: this.podcastChapter,)));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => PodcastChapterInfo(podcastChapter: podcastChapter,)));
       },
       child: _elementoPodcastChapter(context),
     );

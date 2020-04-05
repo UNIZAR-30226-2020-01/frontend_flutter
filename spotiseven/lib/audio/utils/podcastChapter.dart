@@ -1,10 +1,14 @@
-//Clase podcast
+//Clase capitulo de un programa de x podcast
+
+import 'package:flutter/cupertino.dart';
+import 'package:spotiseven/audio/utils/canalPodcast.dart';
+import 'package:spotiseven/audio/utils/podcastProgram.dart';
 
 class PodcastChapter {
   //Nombre del capitulo
   String title;
   //Podcast al que pertenece
-  String parentPod;
+  Podcast podcast;
   //Descripción
   String description;
   String duration;
@@ -12,16 +16,11 @@ class PodcastChapter {
   String photoUrl;
 
   PodcastChapter({
-    this.title,
-    this.parentPod,
-    this.description,
-    this.duration,
-    this.date,
-    this.photoUrl
+    @required this.title,
+    this.podcast,
+    @required this.description,
+    @required this.duration,
+    @required this.date,
+    @required this.photoUrl,
 });
-  factory PodcastChapter.fromJSON(Map<String, Object> json) {
-    return PodcastChapter(
-      //TODO: completar cuando este claro el backend
-    );
-  }
 }

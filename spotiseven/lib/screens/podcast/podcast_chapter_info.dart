@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:spotiseven/audio/utils/PodcastChapter.dart';
+import 'package:spotiseven/audio/utils/podcastChapter.dart';
 
+//info cuando cliques en cuando clicas en un capitulo
 
 class PodcastChapterInfo extends StatefulWidget {
   final PodcastChapter podcastChapter;
@@ -62,9 +63,9 @@ class _PodcastChapterInfoState extends State<PodcastChapterInfo> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          _text(context, '${widget.podcastChapter.parentPod}', 25.0, 0, 0, 0, 1.0),
+          _text(context, '${widget.podcastChapter.title}', 25.0, 0, 0, 0, 1.0),
           SizedBox(height: 10,),
-          _text(context, '${widget.podcastChapter.title} Albums', 15.0, 0, 0, 0, 1.0),
+          _text(context, '${widget.podcastChapter.title} ', 15.0, 0, 0, 0, 1.0),
           SizedBox(height: 10,),
         ],
       ),

@@ -134,7 +134,7 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
             _subscriptionState.cancel();
           }
           // TODO: mirar si quitar este await está bien
-         // await Navigator.pushNamed(context, '/playing');
+          await Navigator.pushNamed(context, '/playing');
           _subscriptionState.cancel();
           _subscriptionState = subscribeStateEvents();
           // TODO: Recargar el estado a la vuelta para cambios.
