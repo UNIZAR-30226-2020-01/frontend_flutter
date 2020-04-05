@@ -14,7 +14,6 @@ class GenericHorizontalWidget extends StatelessWidget {
 
   _image(context) {
     final String url = args[2].toString();
-    print('AJAJJAJA' + url);
     return Image(
       fit: BoxFit.cover,
       alignment: Alignment.center,
