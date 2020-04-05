@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:spotiseven/generic_components/GenericCardWidget.dart';
 // Clase Album
 import 'package:spotiseven/audio/utils/album.dart';
+import 'package:spotiseven/screens/album/album_screen.dart';
+import 'package:spotiseven/screens/home/albums.dart';
 
 class AlbumCardWidget extends StatelessWidget {
 
@@ -18,12 +20,12 @@ class AlbumCardWidget extends StatelessWidget {
       imageUrl: '${album.photoUrl}',
       args: lista_widget,
       // TODO: Integrar con la pantalla de album
-      onPressedFunction: () => print('Mostrar pantalla de album'),
+      onPressedFunction: () => Navigator.push(context, MaterialPageRoute(builder: (context) => AlbumDetailScreen(album: album,))),
     );
   }
 
   List<String> getStrings() {
     // TODO: Obtener el numero de canciones de un album
-    return ['${album.titulo}', '${album.artista}', 'xx songs'];
+    return ['${album.titulo}', '${album.artista}', '${album.numberSongs} songs'];
   }
 }
