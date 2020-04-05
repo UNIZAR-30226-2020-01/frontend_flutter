@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 // Clase Artista
 import 'package:spotiseven/audio/utils/artist.dart';
+// Clase Album
+import 'package:spotiseven/audio/utils/album.dart';
 // Fuentes de Google
 import 'package:google_fonts/google_fonts.dart';
 import 'package:spotiseven/audio/utils/artist.dart';
 import 'package:spotiseven/generic_components/GenericHorizontalWidget.dart';
 
-
 class ArtistDiscography extends StatefulWidget {
   final Artist artista;
-
 
   ArtistDiscography({this.artista});
 
@@ -19,13 +19,12 @@ class ArtistDiscography extends StatefulWidget {
 }
 
 class _ArtistDiscographyState extends State<ArtistDiscography> {
-
-
   ScrollController _scrollController;
 
   @override
   void initState() {
     _scrollController = ScrollController()..addListener(() => setState(() {}));
+    widget.artista.fetchRemote().whenComplete(() => setState(() {}));
     super.initState();
   }
 
@@ -34,6 +33,7 @@ class _ArtistDiscographyState extends State<ArtistDiscography> {
     _scrollController.dispose();
     super.dispose();
   }
+
   _text(context, id, size, r, g, b, op) {
     return FittedBox(
       fit: BoxFit.fitWidth,
@@ -51,7 +51,6 @@ class _ArtistDiscographyState extends State<ArtistDiscography> {
     );
   }
 
-
   _image(context, url) {
     return Image(
       fit: BoxFit.cover,
@@ -60,22 +59,21 @@ class _ArtistDiscographyState extends State<ArtistDiscography> {
     );
   }
 
-
-  _border(){
+  _border() {
     return const BoxDecoration(
       borderRadius: BorderRadius.all(Radius.circular(30)),
       color: Colors.white,
     );
   }
 
-  _borderBlack(){
+  _borderBlack() {
     return const BoxDecoration(
       borderRadius: BorderRadius.all(Radius.circular(30)),
       color: Colors.black,
     );
   }
 
-  _imageContainer(){
+  _imageContainer() {
     return Container(
       margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
       width: MediaQuery.of(context).size.width * 0.35,
@@ -86,9 +84,10 @@ class _ArtistDiscographyState extends State<ArtistDiscography> {
       ),
     );
   }
-  _textContainer(){
+
+  _textContainer() {
     return Container(
-      margin:EdgeInsets.fromLTRB(10, 0, 0, 0),
+      margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
       width: MediaQuery.of(context).size.width * 0.6,
       height: MediaQuery.of(context).size.height * 0.2,
       decoration: _border(),
@@ -101,22 +100,33 @@ class _ArtistDiscographyState extends State<ArtistDiscography> {
             children: <Widget>[
               _text(context, '${widget.artista.name}', 25.0, 0, 0, 0, 1.0),
               IconButton(
-                      onPressed: (){print('presionado boton info del artista');},
-                icon: Icon(Icons.info, color: Colors.black,),
+                onPressed: () {
+                  print('presionado boton info del artista');
+                },
+                icon: Icon(
+                  Icons.info,
+                  color: Colors.black,
+                ),
                 color: Colors.black,
               ),
             ],
           ),
-          SizedBox(height: 10,),
-          _text(context, '${widget.artista.numAlbums} Albums', 15.0, 0, 0, 0, 1.0),
-          SizedBox(height: 10,),
-          _text(context, '${widget.artista.totalTracks} Tracks', 15.0,  0, 0, 0, 1.0),
+          SizedBox(
+            height: 10,
+          ),
+          _text(context, '${widget.artista.numAlbums} Albums', 15.0, 0, 0, 0,
+              1.0),
+          SizedBox(
+            height: 10,
+          ),
+          _text(context, '${widget.artista.totalTracks} Tracks', 15.0, 0, 0, 0,
+              1.0),
         ],
       ),
     );
   }
 
-  _botonFollow(){
+  _botonFollow() {
     return FlatButton(
       child: Container(
         height: 30,
@@ -124,70 +134,69 @@ class _ArtistDiscographyState extends State<ArtistDiscography> {
         padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
 //        margin: EdgeInsets.all(),
         decoration: _borderBlack(),
-        child: _text(context, '+FOLLOW', 20.0,  255, 255, 255, 1.0),
+        child: _text(context, '+FOLLOW', 20.0, 255, 255, 255, 1.0),
       ),
       onPressed: () => Navigator.of(context).pop(),
     );
   }
-  _appBar(context){
+
+  _appBar(context) {
     return SliverAppBar(
-      backgroundColor: Colors.white,
-      elevation: 0,
-      // Propiedades sliverappbar
-      floating: true,
-      snap: true,
-      pinned: true,
-      // Efectos
-      leading: SizedBox(),
-      stretch: true,
-      onStretchTrigger: () => Future.delayed(
-          Duration(microseconds: 1), () => print('stretch')),
-      expandedHeight: 300,
-      flexibleSpace: FlexibleSpaceBar(
-        stretchModes: [
-          StretchMode.zoomBackground,
-          StretchMode.blurBackground,
-          StretchMode.fadeTitle,
-        ],
-        background: Container(
-          width: MediaQuery.of(context).size.width*0.2,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  _imageContainer(),
-                  _textContainer(),
-                ],
-              ),
-              Container(
-                margin: EdgeInsets.fromLTRB(20, 0, 0, 0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        backgroundColor: Colors.white,
+        elevation: 0,
+        // Propiedades sliverappbar
+        floating: true,
+        snap: true,
+        pinned: true,
+        // Efectos
+        leading: SizedBox(),
+        stretch: true,
+        onStretchTrigger: () =>
+            Future.delayed(Duration(microseconds: 1), () => print('stretch')),
+        expandedHeight: 300,
+        flexibleSpace: FlexibleSpaceBar(
+          stretchModes: [
+            StretchMode.zoomBackground,
+            StretchMode.blurBackground,
+            StretchMode.fadeTitle,
+          ],
+          background: Container(
+            width: MediaQuery.of(context).size.width * 0.2,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                      child: _text(context, 'ALBUMS', 15.0,  0, 0, 0, 1.0),
-                    ),
-                    _botonFollow(),
+                    _imageContainer(),
+                    _textContainer(),
                   ],
                 ),
-              ),
-              Divider(
-                color: Colors.black,
-                indent: 20,
-                endIndent: 20,
-                thickness: 4.0,
-              ),
-            ],
+                Container(
+                  margin: EdgeInsets.fromLTRB(20, 0, 0, 0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Container(
+                        padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                        child: _text(context, 'ALBUMS', 15.0, 0, 0, 0, 1.0),
+                      ),
+                      _botonFollow(),
+                    ],
+                  ),
+                ),
+                Divider(
+                  color: Colors.black,
+                  indent: 20,
+                  endIndent: 20,
+                  thickness: 4.0,
+                ),
+              ],
+            ),
           ),
-        ),
-      )
-    );
+        ));
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -204,27 +213,16 @@ class _ArtistDiscographyState extends State<ArtistDiscography> {
                 physics: const BouncingScrollPhysics(),
                 slivers: <Widget>[
                   _appBar(context),
-
                   SliverList(
                     delegate: SliverChildListDelegate(
-                      [
-                        Container(
-                        child: GenericHorizontalWidget(args: ['name','no se que', 'no se que 2'],imageUrl: widget.artista.photoUrl, onPressedFunction: (){},)),
-                        Container(
-                            child: GenericHorizontalWidget(args: ['name','no se que', 'no se que 2'],imageUrl: widget.artista.photoUrl, onPressedFunction: (){},)),
-                        Container(
-                            child: GenericHorizontalWidget(args: ['name','no se que', 'no se que 2'],imageUrl: widget.artista.photoUrl, onPressedFunction: (){},)),
-                        Container(
-                          child: GenericHorizontalWidget(args: ['name','no se que', 'no se que 2'],imageUrl: widget.artista.photoUrl, onPressedFunction: (){},)),
-                        Container(
-                            child: GenericHorizontalWidget(args: ['name','no se que', 'no se que 2'],imageUrl: widget.artista.photoUrl, onPressedFunction: (){},)),
-                        Container(
-                            child: GenericHorizontalWidget(args: ['name','no se que', 'no se que 2'],imageUrl: widget.artista.photoUrl, onPressedFunction: (){},)),
-                        Container(
-                            child: GenericHorizontalWidget(args: ['name','no se que', 'no se que 2'],imageUrl: widget.artista.photoUrl, onPressedFunction: (){},)),
-                        Container(
-                            child: GenericHorizontalWidget(args: ['name','no se que', 'no se que 2'],imageUrl: widget.artista.photoUrl, onPressedFunction: (){},)),
-                      ],
+                      widget.artista.albums.isNotEmpty ?
+                      widget.artista.albums
+                          .map((Album album) => GenericHorizontalWidget(
+                                args: [album.titulo],
+                                imageUrl: album.photoUrl,
+                                onPressedFunction: () {},
+                              ))
+                          .toList() : [],
                     ),
                   ),
                 ],
@@ -236,5 +234,3 @@ class _ArtistDiscographyState extends State<ArtistDiscography> {
     );
   }
 }
-
-

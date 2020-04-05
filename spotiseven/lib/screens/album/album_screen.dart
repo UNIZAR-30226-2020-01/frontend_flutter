@@ -237,7 +237,7 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
                         ),
                       ),
                       Text(
-                        '${s.album.artista}',
+                        '${s.album.artista.name}',
                         style: TextStyle(
                           color: Colors.white,
                         ),

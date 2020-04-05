@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart';
+import 'package:spotiseven/audio/utils/artist.dart';
 // Clase Playlist
 import 'package:spotiseven/audio/utils/playlist.dart';
 // Clase Album
@@ -12,27 +13,27 @@ class PlaylistDAO {
   // TODO: Quitar. Es para hacer pruebas
   static Album _pruebaAlbum1 = Album(
       titulo: 'El Rap',
-      artista: 'Pedro No Tonto',
+      artista: Artist(name: 'Pedro No Tonto'),
       photoUrl:
       'https://yt3.ggpht.com/a/AATXAJzgtF2V2m4KsP1ZHU12UcqzoDBEL4GH4e_CmQ=s288-c-k-c0xffffffff-no-rj-mo');
   static Album _pruebaAlbum2 = Album(
       titulo: 'El Rock',
-      artista: 'Pedro No Tonto',
+      artista: Artist(name: 'Pedro No Tonto'),
       photoUrl:
       'https://images-na.ssl-images-amazon.com/images/I/919JyJJiTtL._SL1500_.jpg');
   static Album _pruebaAlbum3 = Album(
       titulo: 'El Reggae',
-      artista: 'Pedro No Tonto',
+      artista: Artist(name: 'Pedro No Tonto'),
       photoUrl:
       'https://images-na.ssl-images-amazon.com/images/I/81AEst8HUtL._SL1422_.jpg');
   static Album _pruebaAlbum4 = Album(
       titulo: 'El Pop?',
-      artista: 'Pedro No Tonto',
+      artista: Artist(name: 'Pedro No Tonto'),
       photoUrl:
       'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQvQbsbqx_j5eyjnzdzHER7bO77o7XUedQ-Pv-JJLXkodOIrRmn');
   static Album _pruebaAlbum5 = Album(
       titulo: 'El Dubstep',
-      artista: 'Pedro No Tonto',
+      artista: Artist(name: 'Pedro No Tonto'),
       photoUrl:
       'https://image.shutterstock.com/image-photo/serious-computer-hacker-dark-clothing-600w-1557297230.jpg');
 
@@ -81,7 +82,7 @@ class PlaylistDAO {
 //    Response response = await _client.get('$_url/playlist');
 //    // Convertimos los json a playlist
 //    // TODO: Comprobar el campo de las playlist
-//    return (jsonDecode(response.body) as List<dynamic>).map((d) => Playlist.fromJSON(d)..playlist = d['playlist'] ).toList();
+//    return (jsonDecode(response.body) as List<dynamic>).map((d) => Playlist.fromJSONListed(d)..playlist = d['playlist'] ).toList();
     return Future.delayed(Duration(seconds: 3), () => _listPlaylist);
   }
 

@@ -4,7 +4,8 @@
 // TODO: Falta el usuario
 // TODO: Imagen de playlist
 // Clase ArtistDAO
-import 'package:spotiseven/audio/utils/artistDAO.dart';
+import 'package:spotiseven/audio/utils/DAO/albumDAO.dart';
+import 'package:spotiseven/audio/utils/DAO/artistDAO.dart';
 // Clase Album
 import 'package:spotiseven/audio/utils/album.dart';
 
@@ -33,7 +34,20 @@ class Artist {
     albums = List();
   }
 
-  factory Artist.fromJSON(Map<String, Object> json) {
+  static Artist fromJSONListed(Map<String, Object> json){
+//    print('listed: ${json['url']}');
+    var a = Artist(
+      url: json['url'],
+      name: json['name'],
+      photoUrl: json['image'],
+      numAlbums: json['number_albums'],
+      totalTracks: json['number_songs'],
+    );
+    return a;
+  }
+
+  static Artist fromJSONDetail(Map<String, Object> json) {
+    print('detail: ${json['url']}');
     var a = Artist(
       url: json['url'],
       name: json['name'],
@@ -43,16 +57,26 @@ class Artist {
       totalTracks: json['totalTracks'],
       photoUrl: json['image'],
     );
-    if(json['albums'] != null){
-      // El JSON tiene los albumes
-      a.albums =  (json['albums'] as List).map((d) => Album.fromJSON(d)).toList();
+    if(json.containsKey('albums')){
+      // El JSON tiene una lista de las URL de los albumes
+//      _setAlbums(a, json['albums']);
+      a.albums = (json['albums'] as List).map((d) => Album.fromJSONListed(d)).toList();
     }
     return a;
   }
 
-  void fetchRemote() async {
+  static _setAlbums(Artist a, List albums) async {
+    List<Album> list = [];
+    for(String url in albums){
+      list.add(await AlbumDAO.getByURL(url));
+    }
+    a.albums = list;
+  }
+
+  Future<void> fetchRemote() async {
     var artist = await ArtistDAO.getByURL(url);
     // Adjuntamos los datos necesarios
+    // Parseamos las URL de los albumes del artista
     this.albums = artist.albums;
   }
 }

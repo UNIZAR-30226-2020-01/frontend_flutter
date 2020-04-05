@@ -94,7 +94,7 @@ class PlaylistScreenOptions extends StatelessWidget {
                 _buildFlatButton(
                     'ORDER BY ARTIST', () {
                       print('ORDER BY ARTIST');
-                      playlist.playlist.sort((Song s1, Song s2) => s1.album.artista.compareTo(s2.album.artista));
+                      playlist.playlist.sort((Song s1, Song s2) => s1.album.artista.name.compareTo(s2.album.artista.name));
                     }),
                 _buildFlatButton(
                     'ALPHABETICAL ORDER', () {

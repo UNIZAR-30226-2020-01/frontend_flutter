@@ -1,12 +1,14 @@
-
 import 'dart:convert';
-import 'package:spotiseven/audio/utils/albumDAO.dart';
+import 'package:spotiseven/audio/utils/DAO/albumDAO.dart';
 // Clase Song
 import 'package:spotiseven/audio/utils/song.dart';
+// Clase Artist
+import 'package:spotiseven/audio/utils/artist.dart';
+// Clase ArtistDAO
+import 'package:spotiseven/audio/utils/DAO/artistDAO.dart';
 
 // TODO: Cambiar esto para que coincida con los campos de la BD.
 class Album {
-
   // URL del recurso
   String url;
 
@@ -14,7 +16,7 @@ class Album {
   String titulo;
 
   // Artista principal
-  String artista;
+  Artist artista;
 
   // Artistas colaboradores
   List<String> colaboradores;
@@ -30,28 +32,53 @@ class Album {
   String photoUrl;
 
   // Constructor
-  Album({this.url, this.titulo, this.artista, this.photoUrl, this.colaboradores, this.numberSongs}){
+  Album(
+      {this.url,
+      this.titulo,
+      this.artista,
+      this.photoUrl,
+      this.colaboradores,
+      this.numberSongs}) {
     list = List();
   }
 
+  static Album fromJSONListed(Map<String, Object> json) {
+    Album a = Album(
+      url: json['url'],
+      titulo: json['title'],
+      // TODO: Comprobar si funciona
+      artista: Artist.fromJSONListed(json['artist']),
+      photoUrl: json['icon'],
+      numberSongs: json['number_songs'],
+    );
+    return a;
+  }
+
   // TODO: Cambiar esto para que coincida con la API REST
-  factory Album.fromJSON(Map<String, Object> json) {
+  static Album fromJSONDetail(Map<String, Object> json) {
     List<String> colaborators = List();
-    if(json['other_artists'] != null && (json['other_artists'] as List) != List() ){
-      colaborators = (json['other_artists'] as List).map((d) => ((d as Map)['name'] as String)).toList();
-//      print(colaborators);
+    if (json['other_artists'] != null &&
+        (json['other_artists'] as List) != List()) {
+      colaborators = (json['other_artists'] as List)
+          .map((d) => ((d as Map)['name'] as String))
+          .toList();
     }
     Album a = Album(
-        url: json['url'],
-        titulo: json['title'],
-        // TODO: Esto es una modificacion para mostrar solo el nombre de un artista
-        artista: (json['artist'] as Map)['name'],
-        colaboradores: colaborators,
-        photoUrl: json['icon'],
-        numberSongs: json['number_songs'],
-    )..list = json['songs'] != null ? (json['songs'] as  List).map((j) => Song.fromJSON(j)).toList() : List();
-    // Mapeamos el album para cancion actual
-    a.list = a.list.map((Song s) => s..album = a).toList();
+      url: json['url'],
+      titulo: json['title'],
+      // TODO: Comprobar si funciona
+      artista: Artist.fromJSONListed(json['artist']),
+      colaboradores: colaborators,
+      photoUrl: json['icon'],
+      numberSongs: json['number_songs'],
+    );
+    if (json.containsKey('songs')) {
+      a.list = (json['songs'] as List).map((j) => Song.fromJSON(j)).toList();
+      // Mapeamos el album para las canciones
+      a.list = a.list.map((Song s) => s..album = a).toList();
+    } else {
+      a.list = List();
+    }
     return a;
   }
 
@@ -62,4 +89,5 @@ class Album {
     titulo = album.titulo;
     list = album.list;
   }
+
 }

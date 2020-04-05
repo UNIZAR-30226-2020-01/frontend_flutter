@@ -21,7 +21,7 @@ class Song {
         // El servidor es https, no http
         url: json['file'].toString().replaceAll('http://', 'https://'),
         // TODO: Comprobar si lo que devuelve esto es un Map
-//        album: json['album'] != null ? Album.fromJSON(json['album']) : null,
+        album: json['album'] != null ? Album.fromJSONListed(json['album']) : null,
     );
   }
 }

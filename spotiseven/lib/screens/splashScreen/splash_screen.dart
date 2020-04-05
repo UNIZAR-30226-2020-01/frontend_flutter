@@ -45,6 +45,7 @@ class _SplashScreenState extends State<SplashScreen> {
     /*Navigator.of(context).pushReplacement(MaterialPageRoute(
         builder: (context) => Login()
     ));*/
+    // TODO: Cambiar a login cuando este implementada la funcionalidad
     Navigator.popAndPushNamed(context, '/home');
   }
 

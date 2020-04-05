@@ -20,13 +20,13 @@ class AlbumDAO {
       }
     });
 //    print(response);
-    return response.map((d) => Album.fromJSON(d)).toList();
+    return response.map((d) => Album.fromJSONListed(d)).toList();
   }
 
   static Future<Album> getByURL(String url) async {
     return await _client.get('$url').then((Response response) {
       if(response.statusCode == 200){
-        return Album.fromJSON(jsonDecode(response.body));
+        return Album.fromJSONDetail(jsonDecode(response.body));
       }else{
         throw Exception('No tienes permisos para acceder a este recurso');
       }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:spotiseven/audio/utils/playlistDAO.dart';
+import 'package:spotiseven/audio/utils/DAO/playlistDAO.dart';
 import 'dart:convert';
 // Clase PlaylistCardWidget
 import 'package:spotiseven/screens/home/details/playlist_detail.dart';
