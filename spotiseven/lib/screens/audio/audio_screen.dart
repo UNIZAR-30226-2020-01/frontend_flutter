@@ -94,6 +94,7 @@ class _PlayingScreenState extends State<PlayingScreen> {
                 ),
                 child: Text(
                   '${_player.playlist.title}',
+                  textAlign: TextAlign.center,
                   style: GoogleFonts.roboto(
                     fontWeight: FontWeight.w300,
                     color: Colors.white,
@@ -115,7 +116,7 @@ class _PlayingScreenState extends State<PlayingScreen> {
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(border_radius),
                       topRight: Radius.circular(border_radius)),
-                  color: Color(0xff9ad1e5),
+                  color: Colors.white,
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -157,7 +158,7 @@ class _PlayingScreenState extends State<PlayingScreen> {
                               return Slider(
                                 // TODO: Change this color and style if needed
                                 activeColor: Colors.black,
-                                inactiveColor: Color(0xff73afc5),
+                                inactiveColor: Colors.black12,
                                 min: 0,
                                 max: (snapshot.data as Duration)
                                     .inSeconds
