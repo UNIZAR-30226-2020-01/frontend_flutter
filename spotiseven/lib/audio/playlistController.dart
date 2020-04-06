@@ -65,7 +65,8 @@ class PlaylistController {
   // Playlist actual
   Playlist get actualPlaylist {
     if (_playlist == null) {
-      return Playlist()..title = '';
+      return null;
+//      return Playlist()..title = '';
     } else {
       // TODO: Si eliminamos la lista de canciones de la playlist -> Añadir
       return _playlist;
@@ -98,6 +99,11 @@ class PlaylistController {
       _queue = Queue.from(_list);
 //      print('DESPUES: ${_queue.map((Song s) => s.title).toList()}');
     }
+  }
+
+  void addNext(Song s) {
+    List<Song> list = _queue.toList();
+    _queue = Queue.from(list..insert(1, s));
   }
 
   // Pasar a la siguiente cancion

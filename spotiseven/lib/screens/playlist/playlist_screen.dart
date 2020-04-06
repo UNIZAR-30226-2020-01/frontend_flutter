@@ -237,11 +237,25 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
                       ),
                     ],
                   ),
-                  IconButton(
-                    icon: Icon(Icons.more_vert),
+                  PopupMenuButton<String>(
+                    icon: Icon(Icons.more_vert, color: Colors.white,),
                     color: Colors.white,
-                    onPressed: () => print('Presed ${s.title} options'),
-                  )
+                    itemBuilder: (context) => <PopupMenuEntry<String>>[
+                      PopupMenuItem<String>(
+                        value: 'add_next',
+                        child: Text('Play Next'),
+                      ),
+                    ],
+                    onSelected: (String value) {
+                      switch(value){
+                        case 'add_next':
+                          PlayingSingleton().addSongNext(s);
+                          break;
+                        default:
+                          print('No action?');
+                      }
+                    },
+                  ),
                 ],
               ),
             ),

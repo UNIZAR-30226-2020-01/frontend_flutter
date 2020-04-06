@@ -58,7 +58,12 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
                   SliverAppBar(
                     backgroundColor: Colors.black,
                     leading: IconButton(
-                      onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => AlbumScreenOptions(album: this.widget.album,))),
+                      onPressed: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AlbumScreenOptions(
+                                    album: this.widget.album,
+                                  ))),
                       icon: Icon(Icons.more_vert),
                       color: Colors.white,
                     ),
@@ -110,9 +115,7 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
                     delegate: SliverChildBuilderDelegate(
                       (BuildContext context, int index) {
                         return buildSongPreview_v2(
-                            widget.album.list[index],
-                            widget.album,
-                            context);
+                            widget.album.list[index], widget.album, context);
                       },
                       childCount: widget.album.list.length,
                     ),
@@ -162,7 +165,10 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
           child: RaisedButton(
             onPressed: () => PlayingSingleton()
               // TODO: Integrar la reproduccion de un album como playlist (poner como lista de canciones las del album)
-              ..setPlayList(Playlist(title: widget.album.titulo, photoUrl: widget.album.photoUrl, playlist: widget.album.list))
+              ..setPlayList(Playlist(
+                  title: widget.album.titulo,
+                  photoUrl: widget.album.photoUrl,
+                  playlist: widget.album.list))
               ..randomize()
               ..play(PlayingSingleton().song),
             child: Text('PLAY',
@@ -188,7 +194,10 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
         onTap: () async {
           var playingSingleton = PlayingSingleton();
           // TODO: Integrar la reproduccion de un album como playlist (poner como lista de canciones las del album)
-          playingSingleton.setPlayList(Playlist(title: widget.album.titulo, photoUrl: widget.album.photoUrl, playlist: widget.album.list));
+          playingSingleton.setPlayList(Playlist(
+              title: widget.album.titulo,
+              photoUrl: widget.album.photoUrl,
+              playlist: widget.album.list));
           await playingSingleton.play(s);
           print('Reproduciendo ${playingSingleton.song.title}');
         },
@@ -244,11 +253,28 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
                       ),
                     ],
                   ),
-                  IconButton(
-                    icon: Icon(Icons.more_vert),
+                  PopupMenuButton<String>(
+                    icon: Icon(
+                      Icons.more_vert,
+                      color: Colors.white,
+                    ),
                     color: Colors.white,
-                    onPressed: () => print('Presed ${s.title} options'),
-                  )
+                    itemBuilder: (context) => <PopupMenuEntry<String>>[
+                      PopupMenuItem<String>(
+                        value: 'add_next',
+                        child: Text('Play Next'),
+                      ),
+                    ],
+                    onSelected: (String value) {
+                      switch (value) {
+                        case 'add_next':
+                          PlayingSingleton().addSongNext(s);
+                          break;
+                        default:
+                          print('No action?');
+                      }
+                    },
+                  ),
                 ],
               ),
             ),

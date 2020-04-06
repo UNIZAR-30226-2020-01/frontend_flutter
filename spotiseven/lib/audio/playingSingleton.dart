@@ -93,6 +93,20 @@ class PlayingSingleton {
     _playlistController.random();
   }
 
+  void addSongNext(Song s){
+    if(_playlistController.actualPlaylist == null){
+      // Reproduciremos la cancion como una playlist en si misma.
+      setPlayList(Playlist(
+        playlist: <Song>[s],
+        photoUrl: s.album.photoUrl,
+        title: s.album.titulo,
+      ));
+    }else{
+      // Añadimos a la cola
+      _playlistController.addNext(s);
+    }
+  }
+
   // Setter de playlist a reproducir
   void setPlayList(Playlist p) {
     // Paramos cualquier cancion que estuviera reproduciendose
