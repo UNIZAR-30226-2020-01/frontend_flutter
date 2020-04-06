@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:spotiseven/audio/utils/canalPodcast.dart';
 import 'package:spotiseven/audio/utils/podcastProgram.dart';
 import 'package:spotiseven/generic_components/GenericSmallPodcast.dart';
+import 'package:spotiseven/generic_components/GenericHorizontalListView.dart';
 import 'package:spotiseven/usefullMethods.dart';
 
 class SubscriptionPodcast extends StatefulWidget {
@@ -15,7 +16,6 @@ class _SubscriptionPodcastState extends State<SubscriptionPodcast> {
   _mysubsBar() {
     return Container(
       color: Colors.black,
-      margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
       padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
       height: MediaQuery.of(context).size.width * 0.08,
       child: Row(
@@ -47,59 +47,111 @@ class _SubscriptionPodcastState extends State<SubscriptionPodcast> {
     mySubs.add(ninos);
   }
   _mysubsItems() {
+    return GenericHorizontalListView(lista: mySubs,);
+  }
+
+
+
+  static Podcast pod = Podcast(
+      title: 'RTVE',
+      canal: null,
+      photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Logo_RTVE.svg/1200px-Logo_RTVE.svg.png',
+      numChapters: 1,
+      chapters: null);
+
+  static Podcast pod1 = Podcast(
+      title: 'RNE',
+      canal: null,
+      photoUrl: 'https://blob.todoexpertos.com/uploads/md/43d7f49ff9c3ee8c34b5a9c222929a05.jpg',
+      numChapters: 1,
+      chapters: null);
+
+  static Podcast pod2 = Podcast(
+      title: 'COPE',
+      canal: null,
+      photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Logo_RTVE.svg/1200px-Logo_RTVE.svg.png',
+      numChapters: 1,
+      chapters: null);
+
+  static Podcast pod3 = Podcast(
+      title: 'CADENA SER',
+      canal: null,
+      photoUrl: 'https://blob.todoexpertos.com/uploads/md/43d7f49ff9c3ee8c34b5a9c222929a05.jpg',
+      numChapters: 1,
+      chapters: null);
+  List<Podcast> liveList = [pod, pod1, pod2, pod3, pod, pod1, pod2, pod3];
+
+  _liveBar() {
     return Container(
-      height: 300,
-      width: MediaQuery.of(context).size.width,
-      margin: EdgeInsets.fromLTRB(0, 10, 10, 0),
-      child: ListView.builder(
-          itemCount: mySubs.length,
-          scrollDirection: Axis.horizontal,
-          itemBuilder: (context, index){
-            return GenericSmallPodcast(podcast: mySubs[index],);
-          }
+      color: Colors.black,
+      padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+      height: MediaQuery.of(context).size.width * 0.08,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          UsefulMethods.text('LIVE', 14.0, 0.0, 255,255,255,1.0),
+        ],
       ),
     );
   }
 
-  _liveBar() {
-    return Container(
-      height: 10,
-    );
-  }
 
   _liveBarItems() {
-    return Container(
-      height: 10,
-    );
+    return GenericHorizontalListView(lista: liveList,);
   }
 
   _popularBar() {
     return Container(
-      height: 10,
+      color: Colors.black,
+      padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+      height: MediaQuery.of(context).size.width * 0.08,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          UsefulMethods.text('POPULAR', 14.0, 0.0, 255,255,255,1.0),
+        ],
+      ),
     );
   }
 
   _popularItems() {
-    return Container(
-      height: 10,
-    );
+    return GenericHorizontalListView(lista: liveList,);
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: EdgeInsets.fromLTRB(15, 0, 15, 0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          _mysubsBar(),
-          _mysubsItems(),
           SizedBox(
-            height: 10,
+            height: 20,
           ),
-          _liveBar(),
-          _liveBarItems(),
-          _popularBar(),
-          _popularItems(),
+          Expanded(
+            flex: 1,
+            child: _mysubsBar(),
+          ),
+          Expanded(
+            flex: 5,
+            child: _mysubsItems(),
+          ),
+
+          Expanded(
+              flex: 1,
+              child:_liveBar(),
+          ),
+          Expanded(
+              flex: 5,
+              child: _liveBarItems(),
+          ),
+          Expanded(
+              flex: 1,
+              child:_popularBar(),
+          ),Expanded(
+              flex: 5,
+              child:_popularItems(),
+          ),
         ],
       ),
     );

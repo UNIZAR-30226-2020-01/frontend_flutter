@@ -36,6 +36,21 @@ class UsefulMethods {
       ),
     );
   }
+  static Widget suggestionImage(context, url, fw, fh){
+    return Container(
+      margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+      width: MediaQuery.of(context).size.width * fw,
+      height: MediaQuery.of(context).size.width * fh,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: Image(
+          fit: BoxFit.cover,
+          alignment: Alignment.center,
+          image: NetworkImage(url),
+        ),
+      ),
+    );
+  }
 }
 
 class Items {
@@ -95,6 +110,23 @@ class Items {
     l.add(p);
     return l;
   }
+
+  static List<Podcast> devoListsPodcasts(){
+    List<Podcast> a = [];
+    a.add(pod1(null, 'discover', 12, 'https://i.ytimg.com/vi/3tNrCV9aNVM/maxresdefault.jpg'));
+    a.add(pod1(null, 'discover', 12, 'https://i.ytimg.com/vi/3tNrCV9aNVM/maxresdefault.jpg'));
+    a.add(pod1(null, 'discover', 12, 'https://i.ytimg.com/vi/3tNrCV9aNVM/maxresdefault.jpg'));
+    a.add(pod1(null, 'discover', 12, 'https://i.ytimg.com/vi/3tNrCV9aNVM/maxresdefault.jpg'));
+    a.add(pod1(null, 'discover', 12, 'https://i.ytimg.com/vi/3tNrCV9aNVM/maxresdefault.jpg'));
+    a.add(pod1(null, 'discover', 12, 'https://i.ytimg.com/vi/3tNrCV9aNVM/maxresdefault.jpg'));
+    a.add(pod1(null, 'discover', 12, 'https://i.ytimg.com/vi/3tNrCV9aNVM/maxresdefault.jpg'));
+    a.add(pod1(null, 'discover', 12, 'https://i.ytimg.com/vi/3tNrCV9aNVM/maxresdefault.jpg'));
+    a.add(pod1(null, 'discover', 12, 'https://i.ytimg.com/vi/3tNrCV9aNVM/maxresdefault.jpg'));
+    a.add(pod1(null, 'discover', 12, 'https://i.ytimg.com/vi/3tNrCV9aNVM/maxresdefault.jpg'));
+    a.add(pod1(null, 'discover', 12, 'https://i.ytimg.com/vi/3tNrCV9aNVM/maxresdefault.jpg'));
+    return a;
+  }
+
   static List<PodcastChapter> devoLists(Podcast p){
     List<PodcastChapter> a = [];
     a.add(ch1(p));

@@ -75,7 +75,7 @@ class GenericNewPodcast extends StatelessWidget {
         margin: EdgeInsets.all(10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
-          color: Colors.black,
+          color: Color.fromRGBO(0, 0, 0, 0.86),
         ),
         child: Column(
           children: <Widget>[
