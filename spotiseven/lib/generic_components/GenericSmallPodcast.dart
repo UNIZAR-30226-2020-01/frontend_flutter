@@ -8,11 +8,12 @@ import 'package:spotiseven/usefullMethods.dart';
 
 class GenericSmallPodcast extends StatelessWidget {
   final Podcast podcast;
-  Function onPressed;
+ 
   GenericSmallPodcast({@required this.podcast});
 
   @override
   Widget build(BuildContext context) {
+    print('Desde small podcast ${podcast.title}');
     return GestureDetector(
       onTap: () {
         Navigator.push(context,MaterialPageRoute(builder: (context) =>

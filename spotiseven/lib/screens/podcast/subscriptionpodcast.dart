@@ -60,30 +60,30 @@ class _SubscriptionPodcastState extends State<SubscriptionPodcast> {
 
   static Podcast pod = Podcast(
       title: 'RTVE',
-      canal: null,
+      canal: canal1,
       photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Logo_RTVE.svg/1200px-Logo_RTVE.svg.png',
-      numChapters: 1,
-      chapters: null);
+      numChapters: 0,
+      chapters: []);
 
   static Podcast pod1 = Podcast(
       title: 'RNE',
-      canal: null,
+      canal: canal1,
       photoUrl: 'https://blob.todoexpertos.com/uploads/md/43d7f49ff9c3ee8c34b5a9c222929a05.jpg',
-      numChapters: 1,
+      numChapters: 0,
       chapters: null);
 
   static Podcast pod2 = Podcast(
       title: 'COPE',
-      canal: null,
+      canal: canal1,
       photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Logo_RTVE.svg/1200px-Logo_RTVE.svg.png',
-      numChapters: 1,
+      numChapters: 0,
       chapters: null);
 
   static Podcast pod3 = Podcast(
       title: 'CADENA SER',
-      canal: null,
+      canal: canal1,
       photoUrl: 'https://blob.todoexpertos.com/uploads/md/43d7f49ff9c3ee8c34b5a9c222929a05.jpg',
-      numChapters: 1,
+      numChapters: 0,
       chapters: null);
   List<Podcast> liveList = [pod, pod1, pod2, pod3, pod, pod1, pod2, pod3];
 
@@ -103,6 +103,11 @@ class _SubscriptionPodcastState extends State<SubscriptionPodcast> {
 
 
   _liveBarItems() {
+    pod.chapters = [Items.ch1(pod)];
+    pod1.chapters = [Items.ch1(pod1)];
+    pod2.chapters = [Items.ch1(pod2)];
+    pod3.chapters = [Items.ch1(pod3)];
+
     return GenericHorizontalListView(lista: liveList,);
   }
 

@@ -17,6 +17,7 @@ class GenericHorizontalListView extends StatelessWidget {
           itemCount: lista.length,
           scrollDirection: Axis.horizontal,
           itemBuilder: (context, index){
+            print('Desde generichorizontallistview podcast es ${lista.first}');
             return GenericSmallPodcast(podcast: lista[index],);
           }
       ),
