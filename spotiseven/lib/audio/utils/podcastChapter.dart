@@ -2,7 +2,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:spotiseven/audio/utils/canalPodcast.dart';
-import 'package:spotiseven/audio/utils/podcastProgram.dart';
+import 'package:spotiseven/audio/utils/podcast.dart';
 
 class PodcastChapter {
   //Nombre del capitulo

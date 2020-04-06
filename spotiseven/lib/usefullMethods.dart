@@ -2,9 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:spotiseven/audio/utils/canalPodcast.dart';
 import 'package:spotiseven/audio/utils/podcastChapter.dart';
-import 'package:spotiseven/audio/utils/podcastProgram.dart';
+import 'package:spotiseven/audio/utils/podcast.dart';
 
 class UsefulMethods {
+
+  static gradient(){
+    return LinearGradient(
+        stops: [ 0.05, 0.2, 0.35,0.55,0.8, 0.9],
+        begin: Alignment.bottomCenter,
+        end: Alignment.topCenter,
+        colors: [Color.fromRGBO(0, 0, 0, 1),
+          Color.fromRGBO(0, 0, 0, 0.8),
+          Color.fromRGBO(0, 0, 0, 0.6),
+          Color.fromRGBO(0, 0, 0, 0.3),
+          Color.fromRGBO(0, 0, 0, 0.1),
+          Color.fromRGBO(0, 0, 0, 0)]
+    );
+  }
   static Widget text(id, size, letterspace, r,g,b,op) {
     return FittedBox(
       fit: BoxFit.fitWidth,
@@ -88,59 +102,66 @@ class Items {
     );
   }
 
-  static ch1(Podcast p) {
-    return PodcastChapter(
-        title: 'Noticias covid',
-        podcast: p,
-        description: 'noticias de covid y demás noticias de covid y demás'
-            'noticias de covid y demás noticias de covid y demás noticias de covid y demás'
-            'noticias de covid y demás noticias de covid y demás noticias de covid y demás'
-            'noticias de covid y demás noticias de covid y demás noticias de covid y demás'
-            'noticias de covid y demás noticias de covid y demás noticias de covid y demás 1000000'
-            'noticias de covid y demás noticias de covid y demás noticias de covid y demás'
-            'noticias de covid y demás noticias de covid y demás noticias de covid y demás'
-            'noticias de covid y demás noticias de covid y demás noticias de covid y demás',
-        duration: '1h:30',
-        date: '19 de marzo de 2020',
-        photoUrl: 'https://ewscripps.brightspotcdn.com/dims4/default/7671677/2147483647/strip/true/crop/1303x733+15+0/resize/1280x720!/quality/90/?url=https%3A%2F%2Fewscripps.brightspotcdn.com%2F0a%2Ff2%2F72b1b4d94794992a0772cb593ce5%2Fscreen-shot-2020-02-25-at-10.49.27%20AM.png'
-    );
-  }
+  static ch(Podcast p){
+    return PodcastChapter(title: 'chap1', podcast: p, description: 'no hay descriopcion',
+        duration: '1h', date: '4/4/2020', photoUrl: 'https://tarasparlingwrites.files.wordpress.com/2015/03/chapter-one-graphic.png');}
 
-  static List<Podcast> addPodcastToList(Podcast p, List<Podcast> l){
-    l.add(p);
-    return l;
-  }
+    static ch1(Podcast p) {
+      return PodcastChapter(
+          title: 'Noticias covid',
+          podcast: p,
+          description: 'noticias de covid y demás noticias de covid y demás'
+              'noticias de covid y demás noticias de covid y demás noticias de covid y demás'
+              'noticias de covid y demás noticias de covid y demás noticias de covid y demás'
+              'noticias de covid y demás noticias de covid y demás noticias de covid y demás'
+              'noticias de covid y demás noticias de covid y demás noticias de covid y demás 1000000'
+              'noticias de covid y demás noticias de covid y demás noticias de covid y demás'
+              'noticias de covid y demás noticias de covid y demás noticias de covid y demás'
+              'noticias de covid y demás noticias de covid y demás noticias de covid y demás',
+          duration: '1h:30',
+          date: '19 de marzo de 2020',
+          photoUrl: 'https://ewscripps.brightspotcdn.com/dims4/default/7671677/2147483647/strip/true/crop/1303x733+15+0/resize/1280x720!/quality/90/?url=https%3A%2F%2Fewscripps.brightspotcdn.com%2F0a%2Ff2%2F72b1b4d94794992a0772cb593ce5%2Fscreen-shot-2020-02-25-at-10.49.27%20AM.png'
+      );
+    }
 
-  static List<Podcast> devoListsPodcasts(){
-    List<Podcast> a = [];
-    a.add(pod1(null, 'discover', 12, 'https://i.ytimg.com/vi/3tNrCV9aNVM/maxresdefault.jpg'));
-    a.add(pod1(null, 'discover', 12, 'https://i.ytimg.com/vi/3tNrCV9aNVM/maxresdefault.jpg'));
-    a.add(pod1(null, 'discover', 12, 'https://i.ytimg.com/vi/3tNrCV9aNVM/maxresdefault.jpg'));
-    a.add(pod1(null, 'discover', 12, 'https://i.ytimg.com/vi/3tNrCV9aNVM/maxresdefault.jpg'));
-    a.add(pod1(null, 'discover', 12, 'https://i.ytimg.com/vi/3tNrCV9aNVM/maxresdefault.jpg'));
-    a.add(pod1(null, 'discover', 12, 'https://i.ytimg.com/vi/3tNrCV9aNVM/maxresdefault.jpg'));
-    a.add(pod1(null, 'discover', 12, 'https://i.ytimg.com/vi/3tNrCV9aNVM/maxresdefault.jpg'));
-    a.add(pod1(null, 'discover', 12, 'https://i.ytimg.com/vi/3tNrCV9aNVM/maxresdefault.jpg'));
-    a.add(pod1(null, 'discover', 12, 'https://i.ytimg.com/vi/3tNrCV9aNVM/maxresdefault.jpg'));
-    a.add(pod1(null, 'discover', 12, 'https://i.ytimg.com/vi/3tNrCV9aNVM/maxresdefault.jpg'));
-    a.add(pod1(null, 'discover', 12, 'https://i.ytimg.com/vi/3tNrCV9aNVM/maxresdefault.jpg'));
-    return a;
-  }
+    static List<Podcast> addPodcastToList(Podcast p, List<Podcast> l){
+      l.add(p);
+      return l;
+    }
 
-  static List<PodcastChapter> devoLists(Podcast p){
-    List<PodcastChapter> a = [];
-    a.add(ch1(p));
-    a.add(ch1(p));
-    a.add(ch1(p));
-    a.add(ch1(p));
-    a.add(ch1(p));
-    a.add(ch1(p));
-    a.add(ch2(p));
-    a.add(ch2(p));
-    a.add(ch2(p));
-    a.add(ch2(p));
-    a.add(ch2(p));
-    a.add(ch2(p));
-    return a;
+    static List<Podcast> devoListsPodcasts(){
+      List<Podcast> a = [];
+      a.add(pod1(null, 'discover', 12, 'https://i.ytimg.com/vi/3tNrCV9aNVM/maxresdefault.jpg'));
+      a.add(pod1(null, 'discover', 12, 'https://i.ytimg.com/vi/3tNrCV9aNVM/maxresdefault.jpg'));
+      a.add(pod1(null, 'discover', 12, 'https://i.ytimg.com/vi/3tNrCV9aNVM/maxresdefault.jpg'));
+      a.add(pod1(null, 'discover', 12, 'https://i.ytimg.com/vi/3tNrCV9aNVM/maxresdefault.jpg'));
+      a.add(pod1(null, 'discover', 12, 'https://i.ytimg.com/vi/3tNrCV9aNVM/maxresdefault.jpg'));
+      a.add(pod1(null, 'discover', 12, 'https://i.ytimg.com/vi/3tNrCV9aNVM/maxresdefault.jpg'));
+      a.add(pod1(null, 'discover', 12, 'https://i.ytimg.com/vi/3tNrCV9aNVM/maxresdefault.jpg'));
+      a.add(pod1(null, 'discover', 12, 'https://i.ytimg.com/vi/3tNrCV9aNVM/maxresdefault.jpg'));
+      a.add(pod1(null, 'discover', 12, 'https://i.ytimg.com/vi/3tNrCV9aNVM/maxresdefault.jpg'));
+      a.add(pod1(null, 'discover', 12, 'https://i.ytimg.com/vi/3tNrCV9aNVM/maxresdefault.jpg'));
+      a.add(pod1(null, 'discover', 12, 'https://i.ytimg.com/vi/3tNrCV9aNVM/maxresdefault.jpg'));
+      return a;
+    }
+
+    static List<PodcastChapter> devoLists(Podcast p){
+      List<PodcastChapter> a = [];
+      a.add(ch(p));
+      a.add(ch(p));
+      a.add(ch(p));
+      a.add(ch(p));
+      a.add(ch(p));
+      a.add(ch(p));
+      a.add(ch(p));
+      a.add(ch(p));
+      a.add(ch(p));
+      a.add(ch(p));
+      a.add(ch(p));
+      a.add(ch(p));
+      a.add(ch(p));
+      a.add(ch(p));
+
+      return a;
+    }
   }
-}

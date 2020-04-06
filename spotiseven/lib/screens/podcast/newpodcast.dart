@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:spotiseven/audio/utils/canalPodcast.dart';
 import 'package:spotiseven/audio/utils/podcastChapter.dart';
-import 'package:spotiseven/audio/utils/podcastProgram.dart';
-import 'package:spotiseven/generic_components/GenericNewPodcast.dart';
+import 'package:spotiseven/audio/utils/podcast.dart';
+import 'package:spotiseven/generic_components/GenericNewPodChapter.dart';
 import 'package:spotiseven/screens/artist/artist_info.dart';
 import 'package:spotiseven/usefullMethods.dart';
 
@@ -22,9 +22,9 @@ class _NewPodcastState extends State<NewPodcast> {
   PodcastChapter chap1 = Items.ch1(pod);
   PodcastChapter chap2 = Items.ch1(pod);
   PodcastChapter chap3 = Items.ch1(pod);
-  PodcastChapter chap4 = Items.ch1(pod);
-  PodcastChapter chap5 = Items.ch1(pod);
-  PodcastChapter chap6 = Items.ch1(pod);
+  PodcastChapter chap4 = Items.ch2(pod);
+  PodcastChapter chap5 = Items.ch2(pod);
+  PodcastChapter chap6 = Items.ch2(pod);
 
 
    List<PodcastChapter> lista1 = Items.devoLists(pod);
@@ -49,12 +49,13 @@ class _NewPodcastState extends State<NewPodcast> {
 
   @override
   Widget build(BuildContext context) {
+    List<PodcastChapter> lista2 = [chap1,chap2,chap3,chap4,chap5,chap6, chap1,chap2,chap3,chap4,chap5,chap6];
     return CustomScrollView(
       controller: _scrollController,
       slivers: <Widget>[
         SliverList(
           delegate: SliverChildListDelegate(
-          pod2.chapters.map((el) => GenericNewPodcast(
+          lista2.map((el) => GenericNewPodChapter(
             podcastChapter: el,
           ))
               .toList(),

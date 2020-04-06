@@ -7,11 +7,11 @@ import 'package:spotiseven/screens/podcast/podcast_chapter_info.dart';
 import 'package:spotiseven/usefullMethods.dart';
 import 'package:spotiseven/screens/podcast/newpodcast.dart';
 
-
-class GenericNewPodcast extends StatelessWidget {
+//esto solo aparece en NEW PODCAST
+class GenericNewPodChapter extends StatelessWidget {
   final PodcastChapter podcastChapter;
 
-  GenericNewPodcast({this.podcastChapter});
+  GenericNewPodChapter({this.podcastChapter});
 
 
   _description(context){
@@ -113,12 +113,13 @@ class GenericNewPodcast extends StatelessWidget {
   }
   @override
   Widget build(BuildContext context) {
+    print('capitulo del podcast');
     return GestureDetector(
-      onTap: (){
-        print('Pulsado en un new chapter');
-        Navigator.push(context, MaterialPageRoute(builder: (context) => PodcastChapterInfo(podcastChapter: podcastChapter,)));
-      },
-      child: _elementoPodcastChapter(context),
+          onTap: (){
+            print('Pulsado en un new chapter');
+            Navigator.push(context, MaterialPageRoute(builder: (context) => PodcastChapterInfo(podcastChapter: podcastChapter,)));
+          },
+          child: _elementoPodcastChapter(context),
     );
   }
 }

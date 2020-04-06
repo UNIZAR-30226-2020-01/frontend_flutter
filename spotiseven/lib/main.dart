@@ -48,7 +48,7 @@ void main() => runApp(MaterialApp(
           accentColor: Colors.yellow[300],
         ),
         debugShowCheckedModeBanner: false,
-        initialRoute: '/login',
+        //initialRoute: '/login',
         home: SplashScreen(),
         routes: {
           '/login': (context) => Login(),

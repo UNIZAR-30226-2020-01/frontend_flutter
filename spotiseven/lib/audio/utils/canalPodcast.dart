@@ -3,7 +3,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:spotiseven/audio/utils/podcastChapter.dart';
-import 'package:spotiseven/audio/utils/podcastProgram.dart';
+import 'package:spotiseven/audio/utils/podcast.dart';
 
 class CanalPodcast{
   //Nombre del capitulo

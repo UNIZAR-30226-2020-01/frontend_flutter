@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:spotiseven/audio/utils/podcastChapter.dart';
-import 'package:spotiseven/audio/utils/podcastProgram.dart';
+import 'package:spotiseven/audio/utils/podcast.dart';
 import 'package:spotiseven/generic_components/GenericHorizontalListView.dart';
 import 'package:spotiseven/usefullMethods.dart';
 
