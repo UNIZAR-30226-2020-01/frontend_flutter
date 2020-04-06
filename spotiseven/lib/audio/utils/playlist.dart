@@ -25,10 +25,10 @@ class Playlist {
   factory Playlist.fromJSON(Map<String, Object> json) {
     return Playlist(
       title: json['title'],
-      // TODO: Comprobar si esto devuelve un List
       playlist: (json['songs'] as List).map((d) => Song.fromJSON(d)).toList(),
       photoUrl: json['icon'],
-      user: json['user'],
+      // TODO: Comprobar esto cuando existan los usuarios
+      user: (json['user'] as Map)['username'],
     );
   }
 
