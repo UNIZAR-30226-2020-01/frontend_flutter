@@ -1,11 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-// Class Album
-import 'package:spotiseven/audio/utils/album.dart';
-// Class AlbumDAO
 import 'package:spotiseven/audio/utils/DAO/albumDAO.dart';
-// Class AlbumCardWidget
+import 'package:spotiseven/audio/utils/album.dart';
 import 'package:spotiseven/screens/home/details/album_detail.dart';
 
 class AlbumScreen extends StatefulWidget {

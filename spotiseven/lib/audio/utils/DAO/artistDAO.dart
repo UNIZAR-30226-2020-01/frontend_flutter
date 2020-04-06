@@ -1,8 +1,6 @@
-
 import 'dart:convert';
 
 import 'package:http/http.dart';
-// Class Artist
 import 'package:spotiseven/audio/utils/artist.dart';
 
 class ArtistDAO {
@@ -10,11 +8,14 @@ class ArtistDAO {
   static final String _url = 'https://s7-rest.francecentral.cloudapp.azure.com';
 
   static Future<List<Artist>> getAllArtist() async {
-    List<Artist> list = await _client.get('$_url/artists/').then((Response response){
-      if(response.statusCode == 200){
+    List<Artist> list =
+        await _client.get('$_url/artists/').then((Response response) {
+      if (response.statusCode == 200) {
         // TODO: Cambiar esto con la version final (comprobar el fromJSON)
-        return (jsonDecode(response.body) as List).map((d) => Artist.fromJSONListed(d)).toList();
-      }else{
+        return (jsonDecode(response.body) as List)
+            .map((d) => Artist.fromJSONListed(d))
+            .toList();
+      } else {
         throw Exception('No tienes permiso para acceder a este recurso');
       }
     });
@@ -30,12 +31,12 @@ class ArtistDAO {
 //        throw Exception('No tienes permisos para acceder a este recurso');
 //      }
 //    });
-  // TODO: Comprobar que funcione
+    // TODO: Comprobar que funcione
     Response response = await _client.get('$url');
-    if(response.statusCode == 200){
+    if (response.statusCode == 200) {
       var map = jsonDecode(response.body);
       return Artist.fromJSONDetail(map);
-    }else{
+    } else {
       throw Exception('No tienes permisos para acceder a este recurso');
     }
   }

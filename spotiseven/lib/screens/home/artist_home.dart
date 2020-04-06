@@ -1,9 +1,7 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:spotiseven/audio/utils/DAO/artistDAO.dart';
-import 'package:spotiseven/screens/home/details/artist_detail.dart';
 import 'package:spotiseven/audio/utils/artist.dart';
+import 'package:spotiseven/screens/home/details/artist_detail.dart';
 
 class ArtistScreen extends StatefulWidget {
   @override

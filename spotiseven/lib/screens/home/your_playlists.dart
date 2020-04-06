@@ -1,14 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:spotiseven/audio/utils/DAO/playlistDAO.dart';
-import 'dart:convert';
-// Clase PlaylistCardWidget
-import 'package:spotiseven/screens/home/details/playlist_detail.dart';
-// Clase Song
-import 'package:spotiseven/audio/utils/song.dart';
-// Clase Album
-import 'package:spotiseven/audio/utils/album.dart';
-// Clase Playlist
 import 'package:spotiseven/audio/utils/playlist.dart';
+import 'package:spotiseven/screens/home/details/playlist_detail.dart';
 
 class PlaylistsScreen extends StatefulWidget {
     @override

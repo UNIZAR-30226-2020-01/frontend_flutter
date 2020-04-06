@@ -4,13 +4,10 @@
 // TODO: Falta el usuario
 // TODO: Imagen de playlist
 // Clase ArtistDAO
-import 'package:spotiseven/audio/utils/DAO/albumDAO.dart';
 import 'package:spotiseven/audio/utils/DAO/artistDAO.dart';
-// Clase Album
 import 'package:spotiseven/audio/utils/album.dart';
 
 class Artist {
-
   // Url del recurso
   String url;
 
@@ -30,11 +27,12 @@ class Artist {
   String photoUrl;
 
   // Constructor
-  Artist({this.url, this.name, this.numAlbums, this.totalTracks, this.photoUrl}){
+  Artist(
+      {this.url, this.name, this.numAlbums, this.totalTracks, this.photoUrl}) {
     albums = List();
   }
 
-  static Artist fromJSONListed(Map<String, Object> json){
+  static Artist fromJSONListed(Map<String, Object> json) {
 //    print('listed: ${json['url']}');
     var a = Artist(
       url: json['url'],
@@ -57,10 +55,12 @@ class Artist {
       totalTracks: json['totalTracks'],
       photoUrl: json['image'],
     );
-    if(json.containsKey('albums')){
+    if (json.containsKey('albums')) {
       // El JSON tiene una lista de las URL de los albumes
 //      _setAlbums(a, json['albums']);
-      a.albums = (json['albums'] as List).map((d) => Album.fromJSONListedWithArtist(d, a)).toList();
+      a.albums = (json['albums'] as List)
+          .map((d) => Album.fromJSONListedWithArtist(d, a))
+          .toList();
     }
     return a;
   }

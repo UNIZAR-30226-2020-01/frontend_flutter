@@ -1,14 +1,9 @@
-import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:spotiseven/audio/playingSingleton.dart';
-// Clase Playlist
-import 'package:spotiseven/audio/utils/playlist.dart';
-// Clase Song
-import 'package:spotiseven/audio/utils/song.dart';
-// Fuentes de Google
 import 'package:google_fonts/google_fonts.dart';
+import 'package:spotiseven/audio/playingSingleton.dart';
+import 'package:spotiseven/audio/utils/playlist.dart';
+import 'package:spotiseven/audio/utils/song.dart';
 import 'package:spotiseven/screens/playlist/playlist_screen_options.dart';
 
 class PlaylistScreen extends StatefulWidget {

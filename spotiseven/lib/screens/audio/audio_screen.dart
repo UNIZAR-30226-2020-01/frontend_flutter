@@ -3,14 +3,10 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-// To play audio from URL
-import 'package:spotiseven/audio/playingSingleton.dart';
-// Clase Song
-import 'package:spotiseven/audio/utils/song.dart';
-// Fuentes de Google
 import 'package:google_fonts/google_fonts.dart';
+import 'package:spotiseven/audio/playingSingleton.dart';
+import 'package:spotiseven/audio/utils/song.dart';
 import 'package:spotiseven/screens/audio/actual_playlist.dart';
-import 'package:spotiseven/screens/playlist/playlist_screen.dart';
 
 class PlayingScreen extends StatefulWidget {
   @override

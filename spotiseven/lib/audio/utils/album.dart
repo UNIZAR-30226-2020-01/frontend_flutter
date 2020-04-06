@@ -1,12 +1,6 @@
-import 'dart:convert';
-import 'package:flutter/cupertino.dart';
 import 'package:spotiseven/audio/utils/DAO/albumDAO.dart';
-// Clase Song
-import 'package:spotiseven/audio/utils/song.dart';
-// Clase Artist
 import 'package:spotiseven/audio/utils/artist.dart';
-// Clase ArtistDAO
-import 'package:spotiseven/audio/utils/DAO/artistDAO.dart';
+import 'package:spotiseven/audio/utils/song.dart';
 
 // TODO: Cambiar esto para que coincida con los campos de la BD.
 class Album {
@@ -55,7 +49,8 @@ class Album {
     return a;
   }
 
-  static Album fromJSONListedWithArtist(Map<String, Object> json, Artist artist) {
+  static Album fromJSONListedWithArtist(
+      Map<String, Object> json, Artist artist) {
     Album a = Album(
       url: json['url'],
       titulo: json['title'],
@@ -68,7 +63,8 @@ class Album {
   }
 
   // TODO: Cambiar esto para que coincida con la API REST
-  static Album fromJSONDetailWithArtist(Map<String, Object> json, Artist artist) {
+  static Album fromJSONDetailWithArtist(
+      Map<String, Object> json, Artist artist) {
     List<String> colaborators = List();
     if (json['other_artists'] != null &&
         (json['other_artists'] as List) != List()) {
@@ -86,7 +82,9 @@ class Album {
       numberSongs: json['number_songs'],
     );
     if (json.containsKey('songs')) {
-      a.list = (json['songs'] as List).map((j) => Song.fromJSONWithAlbum(j,a)).toList();
+      a.list = (json['songs'] as List)
+          .map((j) => Song.fromJSONWithAlbum(j, a))
+          .toList();
       // Mapeamos el album para las canciones
       a.list = a.list.map((Song s) => s..album = a).toList();
     } else {
@@ -102,5 +100,4 @@ class Album {
     titulo = album.titulo;
     list = album.list;
   }
-
 }

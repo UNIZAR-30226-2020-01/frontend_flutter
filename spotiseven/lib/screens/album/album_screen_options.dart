@@ -1,14 +1,7 @@
-import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:spotiseven/audio/playingSingleton.dart';
-// Clase Album
-import 'package:spotiseven/audio/utils/album.dart';
-// Clase Song
-import 'package:spotiseven/audio/utils/song.dart';
-// Fuentes de Google
 import 'package:google_fonts/google_fonts.dart';
+import 'package:spotiseven/audio/utils/album.dart';
 
 class AlbumScreenOptions extends StatelessWidget {
   final Album album;

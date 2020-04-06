@@ -1,15 +1,10 @@
-import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:spotiseven/audio/playingSingleton.dart';
-// Clase Album
 import 'package:spotiseven/audio/utils/album.dart';
 import 'package:spotiseven/audio/utils/playlist.dart';
-// Clase Song
 import 'package:spotiseven/audio/utils/song.dart';
-// Fuentes de Google
-import 'package:google_fonts/google_fonts.dart';
 import 'package:spotiseven/screens/album/album_screen_options.dart';
 
 class AlbumDetailScreen extends StatefulWidget {

@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:spotiseven/audio/playingSingleton.dart';
 import 'package:spotiseven/screens/home/albums.dart';
-import 'package:spotiseven/screens/artist/artist_discography.dart';
 import 'package:spotiseven/screens/home/artist_home.dart';
 import 'package:spotiseven/screens/home/following.dart';
 import 'package:spotiseven/screens/home/genres.dart';

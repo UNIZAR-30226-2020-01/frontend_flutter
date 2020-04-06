@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
-// Clase Artista
-import 'package:spotiseven/audio/utils/artist.dart';
-// Clase Album
-import 'package:spotiseven/audio/utils/album.dart';
-// Fuentes de Google
 import 'package:google_fonts/google_fonts.dart';
+import 'package:spotiseven/audio/utils/album.dart';
 import 'package:spotiseven/audio/utils/artist.dart';
 import 'package:spotiseven/generic_components/GenericHorizontalWidget.dart';
 import 'package:spotiseven/screens/album/album_screen.dart';
@@ -218,9 +214,20 @@ class _ArtistDiscographyState extends State<ArtistDiscography> {
                     delegate: SliverChildListDelegate(
                       widget.artista.albums
                           .map((Album album) => GenericHorizontalWidget(
-                                args: ['${album.titulo}', '${album.numberSongs} songs', 'p2'],
+                        args: [
+                          '${album.titulo}',
+                          '${album.numberSongs} songs',
+                          'p2'
+                        ],
                                 imageUrl: album.photoUrl,
-                                onPressedFunction: () => Navigator.push(context, MaterialPageRoute(builder: (context) => AlbumDetailScreen(album: album,))),
+                        onPressedFunction: () =>
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        AlbumDetailScreen(
+                                          album: album,
+                                        ))),
                               ))
                           .toList(),
                     ),

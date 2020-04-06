@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-// GenericCardWidget
-import 'package:spotiseven/generic_components/GenericCardWidget.dart';
-// Clase Album
 import 'package:spotiseven/audio/utils/album.dart';
+import 'package:spotiseven/generic_components/GenericCardWidget.dart';
 import 'package:spotiseven/screens/album/album_screen.dart';
-import 'package:spotiseven/screens/home/albums.dart';
 
 class AlbumCardWidget extends StatelessWidget {
 
