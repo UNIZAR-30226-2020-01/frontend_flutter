@@ -27,7 +27,7 @@ class Playlist {
       title: json['title'],
       // TODO: Comprobar si esto devuelve un List
       playlist: (json['songs'] as List).map((d) => Song.fromJSON(d)).toList(),
-      photoUrl: json['photoUrl'],
+      photoUrl: json['icon'],
       user: json['user'],
     );
   }

@@ -86,7 +86,7 @@ class Album {
       numberSongs: json['number_songs'],
     );
     if (json.containsKey('songs')) {
-      a.list = (json['songs'] as List).map((j) => Song.fromJSON(j)).toList();
+      a.list = (json['songs'] as List).map((j) => Song.fromJSONWithAlbum(j,a)).toList();
       // Mapeamos el album para las canciones
       a.list = a.list.map((Song s) => s..album = a).toList();
     } else {

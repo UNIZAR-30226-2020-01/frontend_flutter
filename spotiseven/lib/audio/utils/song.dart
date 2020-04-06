@@ -30,7 +30,7 @@ class Song {
       // El servidor es https, no http
       url: json['file'].toString().replaceAll('http://', 'https://'),
       // TODO: Comprobar si lo que devuelve esto es un Map -> Ahora es una URL MAL
-//      album: Album.fromJSONListed(json['album']),
+      album: Album.fromJSONListed(json['album']),
     );
   }
 }

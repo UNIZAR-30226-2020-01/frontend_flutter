@@ -230,7 +230,7 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
                         ),
                       ),
                       Text(
-                        '${s.album.artista}',
+                        '${s.album.artista.name}',
                         style: TextStyle(
                           color: Colors.white,
                         ),

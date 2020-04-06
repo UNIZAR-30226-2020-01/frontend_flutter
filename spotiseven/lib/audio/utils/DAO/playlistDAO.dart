@@ -78,7 +78,7 @@ class PlaylistDAO {
 
   static Future<List<Playlist>> getAllPlaylists() async {
 //    return Future.delayed(Duration(seconds: 3), () => _listPlaylist);
-    Response response = await _client.get('$_url/playlist');
+    Response response = await _client.get('$_url/playlists');
     // Convertimos los json a playlist
     // TODO: Comprobar el campo de las playlist
     return (jsonDecode(response.body) as List<dynamic>)

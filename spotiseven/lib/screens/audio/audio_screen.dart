@@ -139,7 +139,7 @@ class _PlayingScreenState extends State<PlayingScreen> {
                       ),
                     ),
                     Text(
-                      '${_player.song.album.artista}',
+                      '${_player.song.album.artista.name}',
                       style: TextStyle(
                         fontSize: 18,
                       ),
