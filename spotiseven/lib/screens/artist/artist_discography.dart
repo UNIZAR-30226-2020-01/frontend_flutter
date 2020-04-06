@@ -7,12 +7,12 @@ import 'package:spotiseven/audio/utils/artist.dart';
 // Fuentes de Google
 import 'package:google_fonts/google_fonts.dart';
 import 'package:spotiseven/screens/artist/artist_info.dart';
-import 'package:spotiseven/generic_components/GenericHorizontalWidget.dart';
 
+import 'package:spotiseven/generic_components/GenericHorizontalWidget.dart';
+import 'package:spotiseven/screens/album/album_screen.dart';
 
 class ArtistDiscography extends StatefulWidget {
   final Artist artista;
-
 
   ArtistDiscography({this.artista});
 
@@ -21,13 +21,12 @@ class ArtistDiscography extends StatefulWidget {
 }
 
 class _ArtistDiscographyState extends State<ArtistDiscography> {
-
-
   ScrollController _scrollController;
 
   @override
   void initState() {
     _scrollController = ScrollController()..addListener(() => setState(() {}));
+    widget.artista.fetchRemote().whenComplete(() => setState(() {}));
     super.initState();
   }
 
@@ -36,6 +35,7 @@ class _ArtistDiscographyState extends State<ArtistDiscography> {
     _scrollController.dispose();
     super.dispose();
   }
+
   _text(context, id, size, r, g, b, op) {
     return FittedBox(
       fit: BoxFit.fitWidth,
@@ -53,7 +53,6 @@ class _ArtistDiscographyState extends State<ArtistDiscography> {
     );
   }
 
-
   _image(context, url) {
     return Image(
       fit: BoxFit.cover,
@@ -62,22 +61,21 @@ class _ArtistDiscographyState extends State<ArtistDiscography> {
     );
   }
 
-
-  _border(){
+  _border() {
     return const BoxDecoration(
       borderRadius: BorderRadius.all(Radius.circular(30)),
       color: Colors.white,
     );
   }
 
-  _borderBlack(){
+  _borderBlack() {
     return const BoxDecoration(
       borderRadius: BorderRadius.all(Radius.circular(30)),
       color: Colors.black,
     );
   }
 
-  _imageContainer(){
+  _imageContainer() {
     return Container(
       margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
       width: MediaQuery.of(context).size.width * 0.35,
@@ -88,9 +86,10 @@ class _ArtistDiscographyState extends State<ArtistDiscography> {
       ),
     );
   }
-  _textContainer(){
+
+  _textContainer() {
     return Container(
-      margin:EdgeInsets.fromLTRB(10, 0, 0, 0),
+      margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
       width: MediaQuery.of(context).size.width * 0.6,
       height: MediaQuery.of(context).size.height * 0.2,
       decoration: _border(),
@@ -142,12 +141,23 @@ class _ArtistDiscographyState extends State<ArtistDiscography> {
             width: MediaQuery.of(context).size.width*0.25,
             child: _text(context, '${widget.artista.totalTracks} Tracks', 15.0,  0, 0, 0, 1.0),
           ),
-        ],
-      ),
+              _text(context, '${widget.artista.name}', 25.0, 0, 0, 0, 1.0),
+              IconButton(
+                onPressed: () {
+                  print('presionado boton info del artista');
+                },
+                icon: Icon(
+                  Icons.info,
+                  color: Colors.black,
+                ),
+                color: Colors.black,
+              ),
+            ],
+          ),
     );
   }
 
-  _botonFollow(){
+  _botonFollow() {
     return FlatButton(
       child: Container(
         height: 30,
@@ -155,99 +165,69 @@ class _ArtistDiscographyState extends State<ArtistDiscography> {
         padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
 //        margin: EdgeInsets.all(),
         decoration: _borderBlack(),
-        child: _text(context, '+FOLLOW', 20.0,  255, 255, 255, 1.0),
+        child: _text(context, '+FOLLOW', 20.0, 255, 255, 255, 1.0),
       ),
       onPressed: () => Navigator.of(context).pop(),
     );
   }
-  _appBar(context){
+
+  _appBar(context) {
     return SliverAppBar(
-      backgroundColor: Colors.white,
-      elevation: 0,
-      // Propiedades sliverappbar
-      floating: true,
-      snap: true,
-      pinned: true,
-      // Efectos
-      leading: SizedBox(),
-      stretch: true,
-      onStretchTrigger: () => Future.delayed(
-          Duration(microseconds: 1), () => print('stretch')),
-      expandedHeight: 300,
-      flexibleSpace: FlexibleSpaceBar(
-        stretchModes: [
-          StretchMode.zoomBackground,
-          StretchMode.blurBackground,
-          StretchMode.fadeTitle,
-        ],
-        background: Container(
-          width: MediaQuery.of(context).size.width*0.2,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  _imageContainer(),
-                  _textContainer(),
-                ],
-              ),
-              Container(
-                margin: EdgeInsets.fromLTRB(20, 0, 0, 0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        backgroundColor: Colors.white,
+        elevation: 0,
+        // Propiedades sliverappbar
+        floating: true,
+        snap: true,
+        pinned: true,
+        // Efectos
+        leading: SizedBox(),
+        stretch: true,
+        onStretchTrigger: () =>
+            Future.delayed(Duration(microseconds: 1), () => print('stretch')),
+        expandedHeight: 300,
+        flexibleSpace: FlexibleSpaceBar(
+          stretchModes: [
+            StretchMode.zoomBackground,
+            StretchMode.blurBackground,
+            StretchMode.fadeTitle,
+          ],
+          background: Container(
+            width: MediaQuery.of(context).size.width * 0.2,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                      child: _text(context, 'ALBUMS', 15.0,  0, 0, 0, 1.0),
-                    ),
-                    _botonFollow(),
+                    _imageContainer(),
+                    _textContainer(),
                   ],
                 ),
-              ),
-              Divider(
-                color: Colors.black,
-                indent: 20,
-                endIndent: 20,
-                thickness: 4.0,
-              ),
-            ],
+                Container(
+                  margin: EdgeInsets.fromLTRB(20, 0, 0, 0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Container(
+                        padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                        child: _text(context, 'ALBUMS', 15.0, 0, 0, 0, 1.0),
+                      ),
+                      _botonFollow(),
+                    ],
+                  ),
+                ),
+                Divider(
+                  color: Colors.black,
+                  indent: 20,
+                  endIndent: 20,
+                  thickness: 4.0,
+                ),
+              ],
+            ),
           ),
-        ),
-      )
-    );
+        ));
   }
-
-  static Album eminem1 = Album(
-    titulo: 'Kamikaze',
-    artista: 'Eminem',
-    photoUrl: 'https://upload.wikimedia.org/wikipedia/en/6/62/Eminem_-_Kamikaze.jpg'
-  );
-
-  static Album eminem2 = Album(
-    titulo: 'Curtain call',
-    artista: 'Eminem',
-    photoUrl: 'https://images-na.ssl-images-amazon.com/images/I/81rcmYHadOL._SX425_.jpg'
-  );
-
-  static Album eminem3 = Album(
-    titulo: 'The eminem show',
-    artista: 'Eminem',
-    photoUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/3/35/The_Eminem_Show.jpg/220px-The_Eminem_Show.jpg'
-  );
-
-  static Album eminem4 = Album(
-    titulo: 'Recovery',
-    artista: 'Eminem',
-    photoUrl: 'https://vignette.wikia.nocookie.net/e__/images/c/c1/Eminem_recovery_album_cover_2_big.png/revision/latest/scale-to-width-down/340?cb=20131215190445&path-prefix=eminem'
-  );
-
-  static Album eminem5 = Album(
-    titulo: 'Revival',
-    artista: 'Eminem',
-    photoUrl: 'https://consequenceofsound.net/wp-content/uploads/2017/12/screen-shot-2017-12-07-at-4-20-51-pm.png?w=807',
-  );
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -263,27 +243,27 @@ class _ArtistDiscographyState extends State<ArtistDiscography> {
                 physics: const BouncingScrollPhysics(),
                 slivers: <Widget>[
                   _appBar(context),
-
                   SliverList(
                     delegate: SliverChildListDelegate(
-                      [
-                        Container(
-                        child: GenericHorizontalWidget(args: ['${eminem1.titulo}','${eminem1.artista}', ''],imageUrl: eminem1.photoUrl, onPressedFunction: (){},)),
-                        Container(
-                            child: GenericHorizontalWidget(args: ['${eminem2.titulo}','${eminem2.artista}', ''],imageUrl: eminem2.photoUrl, onPressedFunction: (){},)),
-                        Container(
-                            child: GenericHorizontalWidget(args: ['${eminem3.titulo}','${eminem3.artista}', ''],imageUrl: eminem3.photoUrl, onPressedFunction: (){},)),
-                        Container(
-                            child: GenericHorizontalWidget(args: ['${eminem4.titulo}','${eminem4.artista}', ''],imageUrl: eminem4.photoUrl, onPressedFunction: (){},)),
-                        Container(
-                            child: GenericHorizontalWidget(args: ['${eminem5.titulo}','${eminem5.artista}', ''],imageUrl: eminem5.photoUrl, onPressedFunction: (){},)),
-                        Container(
-                            child: GenericHorizontalWidget(args: ['${eminem1.titulo}','${eminem1.artista}', ''],imageUrl: eminem1.photoUrl, onPressedFunction: (){},)),
-                        Container(
-                            child: GenericHorizontalWidget(args: ['${eminem3.titulo}','${eminem3.artista}', ''],imageUrl: eminem3.photoUrl, onPressedFunction: (){},)),
-                        Container(
-                            child: GenericHorizontalWidget(args: ['${eminem2.titulo}','${eminem2.artista}', ''],imageUrl: eminem2.photoUrl, onPressedFunction: (){},)),
-                      ],
+
+                      widget.artista.albums
+                          .map((Album album) => GenericHorizontalWidget(
+                        args: [
+                          '${album.titulo}',
+                          '${album.numberSongs} songs',
+                          'p2'
+                        ],
+                                imageUrl: album.photoUrl,
+                        onPressedFunction: () =>
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        AlbumDetailScreen(
+                                          album: album,
+                                        ))),
+                              ))
+                          .toList(),
                     ),
                   ),
                 ],
@@ -295,5 +275,3 @@ class _ArtistDiscographyState extends State<ArtistDiscography> {
     );
   }
 }
-
-

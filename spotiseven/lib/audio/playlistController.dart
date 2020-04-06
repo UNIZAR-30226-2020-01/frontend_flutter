@@ -3,7 +3,6 @@ import 'dart:collection';
 import 'dart:math';
 
 import 'package:spotiseven/audio/utils/playlist.dart';
-// Clase Song
 import 'package:spotiseven/audio/utils/song.dart';
 
 // Para controlar la playlist en reproduccion
@@ -58,14 +57,17 @@ class PlaylistController {
       throw Exception(
           'PlaylistController.setInteratorOn: Cancion no encontrada en la playlist');
     } else {
-      _queue = Queue.from(_list..removeAt(index)..insert(0, s));
+      _queue = Queue.from(_list
+        ..removeAt(index)
+        ..insert(0, s));
     }
   }
 
   // Playlist actual
   Playlist get actualPlaylist {
     if (_playlist == null) {
-      return Playlist()..title = '';
+      return null;
+//      return Playlist()..title = '';
     } else {
       // TODO: Si eliminamos la lista de canciones de la playlist -> Añadir
       return _playlist;
@@ -76,28 +78,33 @@ class PlaylistController {
 
   set playlist(List<Song> list) => this.actualPlaylist.playlist = list;
 
-  void moveSong(Song s, int to){
+  void moveSong(Song s, int to) {
 //    print('ANTES: ${_queue.map((Song s) => s.title).toList()}');
     List<Song> _list = _queue.toList();
     int index = _list.indexOf(s);
-    if(index == -1){
+    if (index == -1) {
       throw Exception('Esa cancion no pertenece a la cola de reproduccion!');
-    }else{
+    } else {
       // Movemos la cancion
       _list..removeAt(index);
-      if(to >= _list.length){
+      if (to >= _list.length) {
         // Lo insertamos en la posicion final
         _list.insert(_list.length, s);
-      }else if(to == 0){
+      } else if (to == 0) {
         // Lo insertamos despues de la cancion actual (posicion 0)
         _list.insert(1, s);
-      }else{
+      } else {
         // En cualquier otro caso lo insertamos en to + 1(teniendo en cuenta que la cancion actual es la 0)
-        _list.insert(to+1, s);
+        _list.insert(to + 1, s);
       }
       _queue = Queue.from(_list);
 //      print('DESPUES: ${_queue.map((Song s) => s.title).toList()}');
     }
+  }
+
+  void addNext(Song s) {
+    List<Song> list = _queue.toList();
+    _queue = Queue.from(list..insert(1, s));
   }
 
   // Pasar a la siguiente cancion

@@ -2,26 +2,31 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:spotiseven/audio/playingSingleton.dart';
+import 'package:spotiseven/audio/utils/album.dart';
 import 'package:spotiseven/audio/utils/playlist.dart';
 import 'package:spotiseven/audio/utils/song.dart';
-import 'package:spotiseven/screens/playlist/playlist_screen_options.dart';
+import 'package:spotiseven/screens/album/album_screen_options.dart';
 
-class PlaylistScreen extends StatefulWidget {
-  final Playlist playlist;
+class AlbumDetailScreen extends StatefulWidget {
+  final Album album;
 
-  PlaylistScreen({this.playlist});
+  AlbumDetailScreen({this.album});
 
   @override
-  _PlaylistScreenState createState() => _PlaylistScreenState();
+  _AlbumDetailScreenState createState() => _AlbumDetailScreenState();
 }
 
-class _PlaylistScreenState extends State<PlaylistScreen> {
+class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
   // Control del scroll
   ScrollController _scrollController;
 
   @override
   void initState() {
     _scrollController = ScrollController()..addListener(() => setState(() {}));
+    widget.album.fetchRemote().whenComplete(() {
+      print('${widget.album.photoUrl}');
+      setState(() {});
+    });
     super.initState();
   }
 
@@ -48,7 +53,12 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
                   SliverAppBar(
                     backgroundColor: Colors.black,
                     leading: IconButton(
-                      onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => PlaylistScreenOptions(playlist: this.widget.playlist,))),
+                      onPressed: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AlbumScreenOptions(
+                                    album: this.widget.album,
+                                  ))),
                       icon: Icon(Icons.more_vert),
                       color: Colors.white,
                     ),
@@ -76,7 +86,7 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: <Widget>[
                             Text(
-                              '${widget.playlist.title}',
+                              '${widget.album.titulo}',
                               style: GoogleFonts.roboto(
                                 fontWeight: FontWeight.w600,
                                 color: Colors.white,
@@ -91,7 +101,7 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
                       ),
                       centerTitle: true,
                       background: Image.network(
-                        '${widget.playlist.photoUrl}',
+                        '${widget.album.photoUrl}',
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -100,11 +110,9 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
                     delegate: SliverChildBuilderDelegate(
                       (BuildContext context, int index) {
                         return buildSongPreview_v2(
-                            widget.playlist.playlist[index],
-                            widget.playlist,
-                            context);
+                            widget.album.list[index], widget.album, context);
                       },
-                      childCount: widget.playlist.playlist.length,
+                      childCount: widget.album.list.length,
                     ),
                   ),
                 ],
@@ -151,7 +159,11 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
         child: Container(
           child: RaisedButton(
             onPressed: () => PlayingSingleton()
-              ..setPlayList(widget.playlist)
+              // TODO: Integrar la reproduccion de un album como playlist (poner como lista de canciones las del album)
+              ..setPlayList(Playlist(
+                  title: widget.album.titulo,
+                  photoUrl: widget.album.photoUrl,
+                  playlist: widget.album.list))
               ..randomize()
               ..play(PlayingSingleton().song),
             child: Text('PLAY',
@@ -170,13 +182,17 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
     );
   }
 
-  Widget buildSongPreview_v2(Song s, Playlist p, BuildContext context) {
+  Widget buildSongPreview_v2(Song s, Album a, BuildContext context) {
     return Container(
       margin: EdgeInsets.fromLTRB(30, 15, 30, 15),
       child: GestureDetector(
         onTap: () async {
           var playingSingleton = PlayingSingleton();
-          playingSingleton.setPlayList(p);
+          // TODO: Integrar la reproduccion de un album como playlist (poner como lista de canciones las del album)
+          playingSingleton.setPlayList(Playlist(
+              title: widget.album.titulo,
+              photoUrl: widget.album.photoUrl,
+              playlist: widget.album.list));
           await playingSingleton.play(s);
           print('Reproduciendo ${playingSingleton.song.title}');
         },
@@ -233,7 +249,10 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
                     ],
                   ),
                   PopupMenuButton<String>(
-                    icon: Icon(Icons.more_vert, color: Colors.white,),
+                    icon: Icon(
+                      Icons.more_vert,
+                      color: Colors.white,
+                    ),
                     color: Colors.white,
                     itemBuilder: (context) => <PopupMenuEntry<String>>[
                       PopupMenuItem<String>(
@@ -242,7 +261,7 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
                       ),
                     ],
                     onSelected: (String value) {
-                      switch(value){
+                      switch (value) {
                         case 'add_next':
                           PlayingSingleton().addSongNext(s);
                           break;

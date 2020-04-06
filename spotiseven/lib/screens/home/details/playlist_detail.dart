@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-// Clase playlist
 import 'package:spotiseven/audio/utils/playlist.dart';
-// GenericCardWidget
 import 'package:spotiseven/generic_components/GenericCardWidget.dart';
 import 'package:spotiseven/screens/playlist/playlist_screen.dart';
 

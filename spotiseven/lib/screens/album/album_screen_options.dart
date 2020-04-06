@@ -1,13 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:spotiseven/audio/utils/playlist.dart';
-import 'package:spotiseven/audio/utils/song.dart';
+import 'package:spotiseven/audio/utils/album.dart';
 
-class PlaylistScreenOptions extends StatelessWidget {
-  final Playlist playlist;
+class AlbumScreenOptions extends StatelessWidget {
+  final Album album;
 
-  PlaylistScreenOptions({this.playlist});
+  AlbumScreenOptions({this.album});
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +58,7 @@ class PlaylistScreenOptions extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: <Widget>[
                       Text(
-                        '${playlist.title}',
+                        '${album.titulo}',
                         style: GoogleFonts.roboto(
                           fontWeight: FontWeight.w600,
                           color: Colors.white,
@@ -74,7 +73,7 @@ class PlaylistScreenOptions extends StatelessWidget {
                 ),
                 centerTitle: true,
                 background: Image.network(
-                  '${playlist.photoUrl}',
+                  '${album.photoUrl}',
                   fit: BoxFit.cover,
                 ),
               ),
@@ -88,12 +87,10 @@ class PlaylistScreenOptions extends StatelessWidget {
                 _buildFlatButton(
                     'ORDER BY ARTIST', () {
                       print('ORDER BY ARTIST');
-                      playlist.playlist.sort((Song s1, Song s2) => s1.album.artista.name.compareTo(s2.album.artista.name));
                     }),
                 _buildFlatButton(
                     'ALPHABETICAL ORDER', () {
                       print('ALPHABETICAL ORDER');
-                      playlist.playlist.sort((Song s1, Song s2) => s1.title.compareTo(s2.title));
                 }),
               ]),
             ),

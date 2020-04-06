@@ -1,11 +1,8 @@
 import 'dart:async';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter_exoplayer/audioplayer.dart';
-// Clase PlaylistController
 import 'package:spotiseven/audio/playlistController.dart';
-// Clase Playlist
 import 'package:spotiseven/audio/utils/playlist.dart';
-// Clase Song
 import 'package:spotiseven/audio/utils/song.dart';
 
 class PlayingSingleton {
@@ -24,7 +21,6 @@ class PlayingSingleton {
 
   // Variable de reproducir en bucle la cancion actual
   bool _repeatActual;
-
 
   // Para notificar los cambios de cancion
   StreamController _songNotifier;
@@ -81,16 +77,28 @@ class PlayingSingleton {
 
   bool get repeatActual => _repeatActual;
 
-
   // Setters de valores especificos
   // Reproduccion en bucle la cancion actual
-  set repeatActual(bool value){
+  set repeatActual(bool value) {
     _repeatActual = value;
   }
 
-
   void randomize() {
     _playlistController.random();
+  }
+
+  void addSongNext(Song s) {
+    if (_playlistController.actualPlaylist == null) {
+      // Reproduciremos la cancion como una playlist en si misma.
+      setPlayList(Playlist(
+        playlist: <Song>[s],
+        photoUrl: s.album.photoUrl,
+        title: s.album.titulo,
+      ));
+    } else {
+      // Añadimos a la cola
+      _playlistController.addNext(s);
+    }
   }
 
   // Setter de playlist a reproducir

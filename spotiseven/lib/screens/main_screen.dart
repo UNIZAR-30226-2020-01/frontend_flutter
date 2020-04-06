@@ -158,7 +158,7 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
                 ),
 //              SizedBox(height: 10),
                 Text(
-                  '${_player.song.album.artista}',
+                  '${_player.song.album.artista.name}',
                   style: TextStyle(
                     color: Colors.white,
                   ),

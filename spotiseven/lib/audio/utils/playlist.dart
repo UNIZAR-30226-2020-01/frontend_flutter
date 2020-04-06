@@ -25,16 +25,16 @@ class Playlist {
   factory Playlist.fromJSON(Map<String, Object> json) {
     return Playlist(
       title: json['title'],
-      // TODO: Comprobar si esto devuelve un List
-      playlist: json['playlist'],
-      photoUrl: json['photoUrl'],
-      user: json['user'],
+      playlist: (json['songs'] as List).map((d) => Song.fromJSON(d)).toList(),
+      photoUrl: json['icon'],
+      // TODO: Comprobar esto cuando existan los usuarios
+      user: (json['user'] as Map)['username'],
     );
   }
 
-  factory Playlist.copy(Playlist p){
+  factory Playlist.copy(Playlist p) {
     List<Song> songs = List();
-    for(Song s in p.playlist){
+    for (Song s in p.playlist) {
       songs.add(s);
     }
     return Playlist(

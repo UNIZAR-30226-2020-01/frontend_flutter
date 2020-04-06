@@ -23,19 +23,26 @@ class GenericCardWidget extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            ClipRRect(
-              borderRadius: BorderRadius.circular(40),
-              child: Image.network(
-                imageUrl,
-                width: MediaQuery.of(context).size.width / 2.5,
-                fit: BoxFit.fitWidth,
+            // TODO: Cambiar estos expanded si la cosa va mal
+            Expanded(
+              flex: 2,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(40),
+                child: Image.network(
+                  imageUrl,
+                  width: MediaQuery.of(context).size.width / 2.5,
+                  fit: BoxFit.fitWidth,
+                ),
               ),
             ),
-            Container(
-              padding: EdgeInsets.fromLTRB(15, 20, 15, 15),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: args,
+            Expanded(
+              flex: 2,
+              child: Container(
+                padding: EdgeInsets.fromLTRB(15, 20, 15, 15),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: args,
+                ),
               ),
             ),
           ],

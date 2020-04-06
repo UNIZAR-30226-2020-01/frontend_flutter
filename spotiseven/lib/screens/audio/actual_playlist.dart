@@ -45,7 +45,7 @@ class _ActualPlaylistScreenState extends State<ActualPlaylistScreen> {
               style:
                   TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
             ),
-            subtitle: Text('${_playingSingleton.song.album.artista}'),
+            subtitle: Text('${_playingSingleton.song.album.artista.name}'),
             trailing: Icon(Icons.play_arrow),
             isThreeLine: false,
           ),
@@ -66,7 +66,7 @@ class _ActualPlaylistScreenState extends State<ActualPlaylistScreen> {
               leading: AspectRatio(
                   aspectRatio: 1, child: Image.network('${s.photoUrl}')),
               title: Text('${s.title}'),
-              subtitle: Text('${s.album.artista}'),
+              subtitle: Text('${s.album.artista.name}'),
               isThreeLine: false,
               trailing: Icon(Icons.drag_handle),
               onTap: () => _playingSingleton.play(s),
