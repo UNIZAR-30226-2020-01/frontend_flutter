@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:spotiseven/audio/utils/album.dart';
@@ -100,21 +101,47 @@ class _ArtistDiscographyState extends State<ArtistDiscography> {
         children: <Widget>[
           Row(
             children: <Widget>[
-              _text(context, '${widget.artista.name}', 25.0, 0, 0, 0, 1.0),
-              IconButton(
-                      onPressed: (){
-                        print('presionado boton info del artista');
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => ArtistInfo(artista: widget.artista)));
-                      },
-                icon: Icon(Icons.info, color: Colors.black,),
-                color: Colors.black,
+              Container(
+                width: MediaQuery.of(context).size.width*0.50,
+                child: AutoSizeText(
+                  widget.artista.name,
+                  maxLines: 2,
+//                maxFontSize: 300,
+                 minFontSize: 19,
+                  wrapWords: true,
+                  style: GoogleFonts.roboto(
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 8,
+                    wordSpacing: 2,
+                    color: Color.fromRGBO(0, 0, 0, 1.0),
+                  ),
+                ),
+                //_text(context, '${widget.artista.name} asdas', 15.0, 0, 0, 0, 1.0),
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width * 0.1,
+                child: IconButton(
+                        onPressed: (){
+                          print('presionado boton info del artista');
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => ArtistInfo(artista: widget.artista)));
+                        },
+                  icon: Icon(Icons.info, color: Colors.black,),
+                  color: Colors.black,
+                ),
               ),
             ],
           ),
           SizedBox(height: 10,),
-          _text(context, '${widget.artista.numAlbums} Albums', 15.0, 0, 0, 0, 1.0),
+          Container(
+            width: MediaQuery.of(context).size.width*0.25,
+            child: _text(context, '${widget.artista.numAlbums} Albums', 15.0, 0, 0, 0, 1.0),
+          ),
+
           SizedBox(height: 10,),
-          _text(context, '${widget.artista.totalTracks} Tracks', 15.0,  0, 0, 0, 1.0),
+          Container(
+            width: MediaQuery.of(context).size.width*0.25,
+            child: _text(context, '${widget.artista.totalTracks} Tracks', 15.0,  0, 0, 0, 1.0),
+          ),
         ],
       ),
     );
