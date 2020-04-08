@@ -44,7 +44,7 @@ class TokenSingleton {
     if(_token != null){
       print('GUARDANDO: $_token');
       await _storage.write(key: 'token', value: '$_token');
-      print('${await _storage.read(key: 'token')}');
+//      print('${await _storage.read(key: 'token')}');
     }else{
       throw Exception('SAVETOKEN: El token es NULL');
     }

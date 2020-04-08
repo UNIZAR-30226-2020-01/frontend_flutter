@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:spotiseven/screens/main_screen.dart';
 import 'package:spotiseven/screens/loginScreen/login.dart';
 import 'package:spotiseven/user/tokenSingleton.dart';
+import 'package:spotiseven/user/userDAO.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -35,7 +36,8 @@ class _SplashScreenState extends State<SplashScreen> {
     await Future.delayed(Duration(milliseconds: 2000), () {});
     /*if(FirebaseAuth.instance.currentUser() != null) return true;
     else return false;*/
-    return (_tokenSingleton.token != null);
+    // Comprobamos si existe el token de conexion, y además comprobamos si es valido.
+    return (_tokenSingleton.token != null) && ((await UserDAO.getUserData()) != null);
   }
 
   void _navigateToHome(){
