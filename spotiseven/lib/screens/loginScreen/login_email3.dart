@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:spotiseven/user/user.dart';
+import 'package:spotiseven/user/userDAO.dart';
 
 class LoginEmail3 extends StatefulWidget {
   @override
@@ -12,11 +14,11 @@ class _LoginMailState extends State<LoginEmail3> {
   bool _autovalid = false;
 
   // Para mostrar errores
-  String _error;
+  bool _error = false;
 
   final _formKey = GlobalKey<FormState>();
 
-  String email;
+  String username;
   String password;
 
   _form() {
@@ -34,11 +36,10 @@ class _LoginMailState extends State<LoginEmail3> {
                 TextFormField(
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
-                    labelText: 'EMAIL ADDRESS',
+                    labelText: 'Username',
                   ),
                   validator: (value) {
-                    Pattern pattern =
-                        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+                    Pattern pattern = r'^[^0-9].*$';
                     RegExp regex = new RegExp(pattern);
                     if (value.isEmpty || !regex.hasMatch(value)) {
                       return 'Introduce una dirección de correo valida';
@@ -46,7 +47,7 @@ class _LoginMailState extends State<LoginEmail3> {
                       return null;
                     }
                   },
-                  onChanged: (value) => this.email = value,
+                  onChanged: (value) => this.username = value,
                 ),
                 SizedBox(
                   height: 10,
@@ -71,47 +72,57 @@ class _LoginMailState extends State<LoginEmail3> {
                 SizedBox(
                   height: 10,
                 ),
-                TextFormField(
-                  obscureText: true,
-                  keyboardType: TextInputType.visiblePassword,
-                  decoration: const InputDecoration(
-                    labelText: 'PASSWORD',
+                _showError(),
+                RaisedButton(
+                  child: Text(
+                    'Log in',
+                    style: TextStyle(
+                      fontSize: 20,
+                    ),
                   ),
-                  validator: (String value) {
-                    if (value.isEmpty && value.length < 8) {
-                      return 'Debes introducir una contraseña';
-                    } else if (value.length < 8) {
-                      return 'La contraseña introducida es muy corta';
+                  onPressed: () async {
+                    if (_formKey.currentState.validate()) {
+                      // Es valido -> procedemos al login
+                      print('USER: ${username.trim()}, PASSWORD: $password');
+                      bool auth_ok = await UserDAO.authUserWithPassword(
+                          User(username: this.username.trim()), password);
+                      print('AUTH_OK = $auth_ok');
+                      if(!auth_ok){
+                        // Error en la autentificacion
+                        setState(() {
+                          _error = true;
+                        });
+                      }else{
+                        // No ha habido error. Entramos
+                        Navigator.popAndPushNamed(context, '/home');
+                      }
                     } else {
-                      return null;
+                      // Error -> activamos la autovalidacion
+                      setState(() {
+                        _autovalid = true;
+                      });
                     }
                   },
-                  onChanged: (value) => this.password = value,
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                TextFormField(
-                  obscureText: true,
-                  keyboardType: TextInputType.visiblePassword,
-                  decoration: const InputDecoration(
-                    labelText: 'PASSWORD',
-                  ),
-                  validator: (String value) {
-                    if (value.isEmpty && value.length < 8) {
-                      return 'Debes introducir una contraseña';
-                    } else if (value.length < 8) {
-                      return 'La contraseña introducida es muy corta';
-                    } else {
-                      return null;
-                    }
-                  },
-                  onChanged: (value) => this.password = value,
                 ),
               ]),
         ),
       ),
     );
+  }
+
+  Widget _showError() {
+    if (_error) {
+      return Text(
+        'Usuario o contraseña incorrectos',
+        style: TextStyle(
+          fontSize: 18,
+          color: Colors.red,
+          fontWeight: FontWeight.bold,
+        ),
+      );
+    }else{
+      return SizedBox();
+    }
   }
 
   @override
@@ -120,8 +131,9 @@ class _LoginMailState extends State<LoginEmail3> {
       resizeToAvoidBottomInset: false,
       body: Container(
         decoration: BoxDecoration(
-          image: DecorationImage(image: AssetImage('assets/images/photo1.png'),
-          fit: BoxFit.fill,
+          image: DecorationImage(
+            image: AssetImage('assets/images/photo1.png'),
+            fit: BoxFit.fill,
           ),
         ),
         child: Center(
