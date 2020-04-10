@@ -41,7 +41,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Navigator.popAndPushNamed(context, '/home');
   }
 
-  void _navigateToLogin(){
+  void _navigateToLogin()
     /*Navigator.of(context).pushReplacement(MaterialPageRoute(
         builder: (context) => Login()
     ));*/
