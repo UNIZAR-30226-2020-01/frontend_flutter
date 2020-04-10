@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart';
 import 'package:spotiseven/audio/utils/artist.dart';
+import 'package:spotiseven/user/tokenSingleton.dart';
 
 class ArtistDAO {
   static final Client _client = Client();
@@ -9,7 +10,7 @@ class ArtistDAO {
 
   static Future<List<Artist>> getAllArtist() async {
     List<Artist> list =
-        await _client.get('$_url/artists/').then((Response response) {
+        await _client.get('$_url/artists/', headers: TokenSingleton().authHeader).then((Response response) {
       if (response.statusCode == 200) {
         // TODO: Cambiar esto con la version final (comprobar el fromJSON)
         return (jsonDecode(response.body) as List)
@@ -32,7 +33,7 @@ class ArtistDAO {
 //      }
 //    });
     // TODO: Comprobar que funcione
-    Response response = await _client.get('$url');
+    Response response = await _client.get('$url', headers: TokenSingleton().authHeader);
     if (response.statusCode == 200) {
       var map = jsonDecode(response.body);
       return Artist.fromJSONDetail(map);

@@ -44,14 +44,16 @@ class _SplashScreenState extends State<SplashScreen> {
      /* Navigator.of(context).pushReplacement(MaterialPageRoute(
           builder: (context) => MainScreenWrapper()
         ));*/
-    Navigator.popAndPushNamed(context, '/home');
+//    Navigator.popAndPushNamed(context, '/home');
+      Navigator.pushReplacementNamed(context, '/home');
   }
 
   void _navigateToLogin(){
     /*Navigator.of(context).pushReplacement(MaterialPageRoute(
         builder: (context) => Login()
     ));*/
-    Navigator.popAndPushNamed(context, '/login');
+//    Navigator.popAndPushNamed(context, '/login');
+      Navigator.pushReplacementNamed(context, '/login');
   }
 
 

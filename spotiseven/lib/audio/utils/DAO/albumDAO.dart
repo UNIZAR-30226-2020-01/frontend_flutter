@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart';
 import 'package:spotiseven/audio/utils/album.dart';
 import 'package:spotiseven/audio/utils/artist.dart';
+import 'package:spotiseven/user/tokenSingleton.dart';
 
 class AlbumDAO {
   static final Client _client = Client();
@@ -10,7 +11,7 @@ class AlbumDAO {
 
   static Future<List<Album>> getAllAlbums() async {
     List<dynamic> response =
-        await _client.get('$_url/albums').then((Response resp) {
+        await _client.get('$_url/albums', headers: TokenSingleton().authHeader).then((Response resp) {
       if (resp.statusCode == 200) {
         return jsonDecode(resp.body);
       } else {
@@ -22,7 +23,7 @@ class AlbumDAO {
   }
 
   static Future<Album> getByURL(String url, Artist artist) async {
-    return await _client.get('$url').then((Response response) {
+    return await _client.get('$url', headers: TokenSingleton().authHeader).then((Response response) {
       if (response.statusCode == 200) {
         return Album.fromJSONDetailWithArtist(
             jsonDecode(response.body), artist);

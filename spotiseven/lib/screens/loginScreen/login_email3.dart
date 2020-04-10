@@ -94,7 +94,8 @@ class _LoginMailState extends State<LoginEmail3> {
                         });
                       }else{
                         // No ha habido error. Entramos
-                        Navigator.popAndPushNamed(context, '/home');
+//                        Navigator.popAndPushNamed(context, '/home');
+                          Navigator.pushReplacementNamed(context, '/home');
                       }
                     } else {
                       // Error -> activamos la autovalidacion
