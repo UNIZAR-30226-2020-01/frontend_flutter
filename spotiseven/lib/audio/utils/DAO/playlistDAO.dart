@@ -5,6 +5,7 @@ import 'package:spotiseven/audio/utils/album.dart';
 import 'package:spotiseven/audio/utils/artist.dart';
 import 'package:spotiseven/audio/utils/playlist.dart';
 import 'package:spotiseven/audio/utils/song.dart';
+import 'package:spotiseven/user/tokenSingleton.dart';
 
 class PlaylistDAO {
   // TODO: Quitar. Es para hacer pruebas
@@ -76,11 +77,20 @@ class PlaylistDAO {
 
   static Future<List<Playlist>> getAllPlaylists() async {
 //    return Future.delayed(Duration(seconds: 3), () => _listPlaylist);
-    Response response = await _client.get('$_url/playlists');
+    // TODO: Revisar cual sera la URL final
+//    Response response = await _client.get('$_url/playlists');
+      Response response = await _client.get('$_url/user/playlists', headers: TokenSingleton().authHeader);
     // Convertimos los json a playlist
     // TODO: Comprobar el campo de las playlist
-    return (jsonDecode(response.body) as List<dynamic>)
-        .map((d) => Playlist.fromJSON(d))
-        .toList();
+      if(response.statusCode == 200){
+        print('RESPONSE: ${response.body}');
+        return (jsonDecode(response.body) as List<dynamic>)
+            .map((d) => Playlist.fromJSON(d))
+            .toList();
+      }else{
+        // TODO: Lanzar excepcion si no?
+        return [];
+      }
+
   }
 }
