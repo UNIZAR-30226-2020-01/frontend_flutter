@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter_exoplayer/audio_notification.dart';
 import 'package:flutter_exoplayer/audioplayer.dart';
 import 'package:spotiseven/audio/playlistController.dart';
 import 'package:spotiseven/audio/utils/playlist.dart';
@@ -135,7 +136,18 @@ class PlayingSingleton {
 //    print('dispose1');
     // Creamos un nuevo objeto
     _audioPlayer = AudioPlayer();
-    await _audioPlayer.play(song.url);
+    await _audioPlayer.play(
+      song.url,
+//      playerMode: PlayerMode.FOREGROUND,
+//      audioNotification: AudioNotification(
+//          title: 'pepe',
+//          smallIconFileName: song.photoUrl,
+//          isLocal: false,
+//          largeIconUrl: song.url,
+//          subTitle: 'prepe',
+//          notificationDefaultActions: NotificationDefaultActions.NONE,
+//      ),
+    );
     // Volvemos a activar las suscripciones
     subscribeStreams();
 //    print('STATE: ${_audioPlayer.state.toString()}');
