@@ -200,8 +200,6 @@ class PlayingSingleton {
     }
   }
 
-  // TODO: Añadir a cola de reproduccion
-
   /// Para permitir la actualizacion del slider del tiempo
   Stream<Duration> getStreamedTime() => _audioPlayer.onAudioPositionChanged;
 
