@@ -6,6 +6,7 @@ import 'package:spotiseven/screens/main_screen.dart';
 import 'package:spotiseven/screens/audio/audio_screen.dart';
 import 'package:spotiseven/screens/loginScreen/login.dart';
 import 'package:spotiseven/screens/podcast/newpodcast.dart';
+import 'package:spotiseven/screens/register/register.dart';
 import 'package:spotiseven/screens/splashScreen/splash_screen.dart';
 
 const MaterialColor white = const MaterialColor(
@@ -50,6 +51,7 @@ void main() => runApp(MaterialApp(
         //initialRoute: '/login',
         home: SplashScreen(),
         routes: {
+          '/register': (context) => RegisterScreen(),
           '/login': (context) => Login(),
           '/loginMail': (context) => LoginEmail(),
           '/home': (context) => MainScreenWrapper(),

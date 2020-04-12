@@ -8,6 +8,7 @@ class UserScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: MediaQuery.of(context).size.width,
       child: SafeArea(
         child: Container(
           padding: EdgeInsets.all(20),

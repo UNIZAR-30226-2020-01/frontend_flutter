@@ -24,6 +24,11 @@ class UserDAO {
     return ok && ((await getUserData()) != null);
   }
 
+  static Future<bool> registerUserWithPassword(User user, String password) async {
+    // TODO: Implementar con el backend
+    return true;
+  }
+
   static Future<User> getUserData() async{
     TokenSingleton tokenSingleton = TokenSingleton();
     // TODO: Change this URL

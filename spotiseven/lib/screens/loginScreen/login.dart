@@ -37,7 +37,7 @@ class _LoginState extends State<Login> {
                 color: Color.fromRGBO(255, 255, 255, 0.6),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(70)),
                 onPressed: () async {
-                  Navigator.popAndPushNamed(context, '/loginMail');
+                  Navigator.pushReplacementNamed(context, '/loginMail');
                 },
                 child: Row(
                   children: <Widget>[
@@ -117,12 +117,15 @@ class _LoginState extends State<Login> {
               height: 10,
             ),
             Center(
-              child: Text(
-                'NO ACCOUNT? SIGN IN NOW!',
-                style: GoogleFonts.roboto(
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black,
-                  fontSize: 15,
+              child: FlatButton(
+                onPressed: () => Navigator.pushReplacementNamed(context, '/register'),
+                child: Text(
+                  'NO ACCOUNT? SIGN IN NOW!',
+                  style: GoogleFonts.roboto(
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black,
+                    fontSize: 15,
+                  ),
                 ),
               ),
             ),
