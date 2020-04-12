@@ -9,15 +9,6 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  // Se iniciara la autovalidacion tras el primer intento de submit
-  bool _autovalid = false;
-  // Para mostrar errores
-  String _error;
-
-  final _formKey = GlobalKey<FormState>();
-
-  String email;
-  String password;
 
   @override
   Widget build(BuildContext context) {
