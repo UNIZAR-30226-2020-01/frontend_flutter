@@ -26,9 +26,12 @@ class Artist {
   // Url de la imagen del artista
   String photoUrl;
 
+  // Biografía del artista
+  String biography;
+
   // Constructor
   Artist(
-      {this.url, this.name, this.numAlbums, this.totalTracks, this.photoUrl}) {
+      {this.url, this.name, this.numAlbums, this.totalTracks, this.photoUrl, this.biography}) {
     albums = List();
   }
 
@@ -54,6 +57,7 @@ class Artist {
       // TODO: Numero total de tracks?
       totalTracks: json['totalTracks'],
       photoUrl: json['image'],
+      biography: json['biography'],
     );
     if (json.containsKey('albums')) {
       // El JSON tiene una lista de las URL de los albumes
@@ -70,5 +74,6 @@ class Artist {
     // Adjuntamos los datos necesarios
     // Parseamos las URL de los albumes del artista
     this.albums = artist.albums;
+    this.biography = artist.biography;
   }
 }

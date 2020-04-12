@@ -36,7 +36,7 @@ class GenericCardWidget extends StatelessWidget {
               ),
             ),
             Expanded(
-              flex: 2,
+              flex: 3,
               child: Container(
                 padding: EdgeInsets.fromLTRB(15, 20, 15, 15),
                 child: Column(

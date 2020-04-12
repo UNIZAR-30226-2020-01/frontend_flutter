@@ -101,12 +101,12 @@ class _ArtistDiscographyState extends State<ArtistDiscography> {
           Row(
             children: <Widget>[
               Container(
-                width: MediaQuery.of(context).size.width*0.50,
+                width: MediaQuery.of(context).size.width * 0.50,
                 child: AutoSizeText(
                   widget.artista.name,
                   maxLines: 2,
 //                maxFontSize: 300,
-                 minFontSize: 19,
+                  minFontSize: 19,
                   wrapWords: true,
                   style: GoogleFonts.roboto(
                     fontWeight: FontWeight.w700,
@@ -120,40 +120,52 @@ class _ArtistDiscographyState extends State<ArtistDiscography> {
               Container(
                 width: MediaQuery.of(context).size.width * 0.1,
                 child: IconButton(
-                        onPressed: (){
-                          print('presionado boton info del artista');
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => ArtistInfo(artista: widget.artista)));
-                        },
-                  icon: Icon(Icons.info, color: Colors.black,),
+                  onPressed: () {
+                    print('presionado boton info del artista');
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                ArtistInfo(artista: widget.artista)));
+                  },
+                  icon: Icon(
+                    Icons.info,
+                    color: Colors.black,
+                  ),
                   color: Colors.black,
                 ),
               ),
             ],
           ),
-          SizedBox(height: 10,),
+          SizedBox(
+            height: 10,
+          ),
           Container(
-            width: MediaQuery.of(context).size.width*0.25,
-            child: _text(context, '${widget.artista.numAlbums} Albums', 15.0, 0, 0, 0, 1.0),
+            width: MediaQuery.of(context).size.width * 0.25,
+            child: _text(context, '${widget.artista.numAlbums} Albums', 15.0, 0,
+                0, 0, 1.0),
           ),
-
-          SizedBox(height: 10,),
+          SizedBox(
+            height: 10,
+          ),
           Container(
-            width: MediaQuery.of(context).size.width*0.25,
-            child: _text(context, '${widget.artista.totalTracks} Tracks', 15.0,  0, 0, 0, 1.0),
+            width: MediaQuery.of(context).size.width * 0.25,
+            child: _text(context, '${widget.artista.totalTracks} Tracks', 15.0,
+                0, 0, 0, 1.0),
           ),
-              _text(context, '${widget.artista.name}', 25.0, 0, 0, 0, 1.0),
-              IconButton(
-                onPressed: () {
-                  print('presionado boton info del artista');
-                },
-                icon: Icon(
-                  Icons.info,
-                  color: Colors.black,
-                ),
-                color: Colors.black,
-              ),
-            ],
+          _text(context, '${widget.artista.name}', 25.0, 0, 0, 0, 1.0),
+          IconButton(
+            onPressed: () {
+              print('presionado boton info del artista');
+            },
+            icon: Icon(
+              Icons.info,
+              color: Colors.black,
+            ),
+            color: Colors.black,
           ),
+        ],
+      ),
     );
   }
 
@@ -228,6 +240,7 @@ class _ArtistDiscographyState extends State<ArtistDiscography> {
           ),
         ));
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -245,23 +258,20 @@ class _ArtistDiscographyState extends State<ArtistDiscography> {
                   _appBar(context),
                   SliverList(
                     delegate: SliverChildListDelegate(
-
                       widget.artista.albums
                           .map((Album album) => GenericHorizontalWidget(
-                        args: [
-                          '${album.titulo}',
-                          '${album.numberSongs} songs',
-                          'p2'
-                        ],
+                                args: [
+                                  '${album.titulo}',
+                                  '${album.numberSongs} songs',
+                                  'p2'
+                                ],
                                 imageUrl: album.photoUrl,
-                        onPressedFunction: () =>
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        AlbumDetailScreen(
-                                          album: album,
-                                        ))),
+                                onPressedFunction: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => AlbumDetailScreen(
+                                              album: album,
+                                            ))),
                               ))
                           .toList(),
                     ),
