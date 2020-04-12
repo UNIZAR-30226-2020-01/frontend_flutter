@@ -248,27 +248,39 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
                       ),
                     ],
                   ),
-                  PopupMenuButton<String>(
-                    icon: Icon(
-                      Icons.more_vert,
-                      color: Colors.white,
-                    ),
-                    color: Colors.white,
-                    itemBuilder: (context) => <PopupMenuEntry<String>>[
-                      PopupMenuItem<String>(
-                        value: 'add_next',
-                        child: Text('Play Next'),
+                  SizedBox(width: 10,),
+                  Row(
+                    children: <Widget>[
+                      IconButton(
+                        onPressed: () => setState(() {
+                          s.favorite = !s.favorite;
+                        }),
+                        icon: Icon(s.favorite ? Icons.star : Icons.star_border,
+                          color: s.favorite ? Colors.yellow : Colors.white,),
+                      ),
+                      PopupMenuButton<String>(
+                        icon: Icon(
+                          Icons.more_vert,
+                          color: Colors.white,
+                        ),
+                        color: Colors.white,
+                        itemBuilder: (context) => <PopupMenuEntry<String>>[
+                          PopupMenuItem<String>(
+                            value: 'add_next',
+                            child: Text('Play Next'),
+                          ),
+                        ],
+                        onSelected: (String value) {
+                          switch (value) {
+                            case 'add_next':
+                              PlayingSingleton().addSongNext(s);
+                              break;
+                            default:
+                              print('No action?');
+                          }
+                        },
                       ),
                     ],
-                    onSelected: (String value) {
-                      switch (value) {
-                        case 'add_next':
-                          PlayingSingleton().addSongNext(s);
-                          break;
-                        default:
-                          print('No action?');
-                      }
-                    },
                   ),
                 ],
               ),
