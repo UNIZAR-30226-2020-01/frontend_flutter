@@ -183,90 +183,100 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Container(
-              child: ClipRRect(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-                child: AspectRatio(
-                  aspectRatio: 1,
-                  child: Image.network(
-                    s.photoUrl,
-                    fit: BoxFit.cover,
+            Expanded(
+              flex: 3,
+              child: Container(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  child: AspectRatio(
+                    aspectRatio: 1,
+                    child: Image.network(
+                      s.photoUrl,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
-              ),
-              height: 60,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-                border: Border.all(
-                  width: 1,
-                  color: Colors.black,
+                height: 60,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  border: Border.all(
+                    width: 1,
+                    color: Colors.black,
+                  ),
                 ),
               ),
             ),
-            Container(
-              height: 60,
-              width: MediaQuery.of(context).size.width * 0.7,
-              padding: EdgeInsets.only(left: 30, right: 10),
-              decoration: BoxDecoration(
-                color: Colors.black,
-                borderRadius: BorderRadius.all(Radius.circular(15)),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        '${s.title}',
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                      Text(
-                        '${s.album.artista.name}',
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(width: 10,),
-                  Row(
-                    children: <Widget>[
-                      IconButton(
-                        onPressed: () => setState(() {
-                          s.favorite = !s.favorite;
-                        }),
-                        icon: Icon(s.favorite ? Icons.star : Icons.star_border,
-                          color: s.favorite ? Colors.yellow : Colors.white,),
-                      ),
-                      PopupMenuButton<String>(
-                        icon: Icon(
-                          Icons.more_vert,
-                          color: Colors.white,
-                        ),
-                        color: Colors.white,
-                        itemBuilder: (context) => <PopupMenuEntry<String>>[
-                          PopupMenuItem<String>(
-                            value: 'add_next',
-                            child: Text('Play Next'),
+            Expanded(
+              flex: 1,
+              child: SizedBox(width: 1,),
+            ),
+            Expanded(
+              flex: 13,
+              child: Container(
+                height: 60,
+                width: MediaQuery.of(context).size.width * 0.7,
+                padding: EdgeInsets.only(left: 30, right: 10),
+                decoration: BoxDecoration(
+                  color: Colors.black,
+                  borderRadius: BorderRadius.all(Radius.circular(15)),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          '${s.title}',
+                          style: TextStyle(
+                            color: Colors.white,
                           ),
-                        ],
-                        onSelected: (String value) {
-                          switch (value) {
-                            case 'add_next':
-                              PlayingSingleton().addSongNext(s);
-                              break;
-                            default:
-                              print('No action?');
-                          }
-                        },
-                      ),
-                    ],
-                  ),
-                ],
+                        ),
+                        Text(
+                          '${s.album.artista.name}',
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(width: 10,),
+                    Row(
+                      children: <Widget>[
+                        IconButton(
+                          onPressed: () => setState(() {
+                            s.favorite = !s.favorite;
+                          }),
+                          icon: Icon(s.favorite ? Icons.star : Icons.star_border,
+                            color: s.favorite ? Colors.yellow : Colors.white,),
+                        ),
+                        PopupMenuButton<String>(
+                          icon: Icon(
+                            Icons.more_vert,
+                            color: Colors.white,
+                          ),
+                          color: Colors.white,
+                          itemBuilder: (context) => <PopupMenuEntry<String>>[
+                            PopupMenuItem<String>(
+                              value: 'add_next',
+                              child: Text('Play Next'),
+                            ),
+                          ],
+                          onSelected: (String value) {
+                            switch (value) {
+                              case 'add_next':
+                                PlayingSingleton().addSongNext(s);
+                                break;
+                              default:
+                                print('No action?');
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
