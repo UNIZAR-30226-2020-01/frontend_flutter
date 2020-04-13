@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:spotiseven/audio/playingSingleton.dart';
+import 'package:spotiseven/audio/utils/DAO/songDAO.dart';
 import 'package:spotiseven/audio/utils/playlist.dart';
 import 'package:spotiseven/audio/utils/song.dart';
 import 'package:spotiseven/screens/playlist/playlist_screen_options.dart';
@@ -245,9 +246,12 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
                     Row(
                       children: <Widget>[
                         IconButton(
-                          onPressed: () => setState(() {
+                          onPressed: () async {
+                            await SongDAO.markAs(s.favorite, s);
+                            setState(() {
                             s.favorite = !s.favorite;
-                          }),
+                          });
+                          },
                           icon: Icon(s.favorite ? Icons.star : Icons.star_border,
                             color: s.favorite ? Colors.yellow : Colors.white,),
                         ),

@@ -15,8 +15,8 @@ class SongDAO {
     return response.map((d) => Song.fromJSON(d));
   }
 
-  static Future<void> markAs(bool favorite, User user, Song song) async {
+  static Future<void> markAs(bool favorite, Song song) async {
     // TODO: Cambiar la URL, y el body
-    await _client.post('$url/path', body: {}, headers: TokenSingleton().authHeader);
+    // await _client.post('$url/path', body: {}, headers: TokenSingleton().authHeader);
   }
 }
