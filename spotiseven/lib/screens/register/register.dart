@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:spotiseven/user/tokenSingleton.dart';
 import 'package:spotiseven/user/user.dart';
 import 'package:spotiseven/user/userDAO.dart';
 
@@ -39,7 +40,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
             children: <Widget>[
               Expanded(
                 flex: 7,
-                child: SizedBox(height: 1,),
+                child: SizedBox(
+                  height: 1,
+                ),
               ),
               // Nombre de usuario
               Expanded(
@@ -62,7 +65,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               Expanded(
                 flex: 3,
-                child: SizedBox(height: 1,),
+                child: SizedBox(
+                  height: 1,
+                ),
               ),
               // Email
               Expanded(
@@ -86,7 +91,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               Expanded(
                 flex: 3,
-                child: SizedBox(height: 1,),
+                child: SizedBox(
+                  height: 1,
+                ),
               ),
               // Contraseña
               Expanded(
@@ -109,15 +116,48 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
               ),
               Expanded(
-                flex: 6,
+                flex: 1,
                 child: SizedBox(height: 1,),
+              ),
+              Expanded(
+                flex: 6,
+                child: Container(
+                  decoration: _border(),
+                  child: TextFormField(
+                    validator: (value) {
+                      if (value != _password) {
+                        // Los password no coinciden
+                        return "Las contraseñas deben coincidir";
+                      } else {
+                        return null;
+                      }
+                    },
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.all(10),
+                      labelText: 'REPEAT PASSWORD',
+                      labelStyle: TextStyle(
+                        letterSpacing: 2,
+                      ),
+                    ),
+                    obscureText: true,
+//                    onChanged: (value) => _password = value,
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 6,
+                child: SizedBox(
+                  height: 1,
+                ),
               ),
               _buildErrors(),
               // Botón de submit
               Expanded(
                 flex: 3,
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width/3),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: MediaQuery.of(context).size.width / 3),
                   child: RaisedButton(
                     onPressed: () => _submitForm(context),
                     child: Text('REGISTER NOW'),
@@ -126,7 +166,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               Expanded(
                 flex: 15,
-                child: SizedBox(height: 1,),
+                child: SizedBox(
+                  height: 1,
+                ),
               ),
             ],
           ),
@@ -149,21 +191,32 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   Future<void> _submitForm(BuildContext context) async {
     print('Registrando al usuario');
-    if(_formKey.currentState.validate()){
+    if (_formKey.currentState.validate()) {
       // Los campos han ido bien
-      bool ok = await UserDAO.registerUserWithPassword(User(username: _username.trim()), _password);
-      if(ok){
-        // TODO: Si no tengo el token -> Peticion para obtenerlo
-        // Ha ido bien -> Iniciamos
-        Navigator.pushReplacementNamed(context, '/home');
-      }else{
+      bool ok = await UserDAO.registerUserWithPassword(
+          User(username: _username.trim()), _password);
+      if (ok) {
+        // Pedimos el token al remoto
+        ok = await TokenSingleton()
+            .getTokenFromRemote(_username.trim(), _password.trim());
+        if (ok && (await UserDAO.getUserData() != null)) {
+          // Ha ido bien -> Iniciamos
+          Navigator.pushReplacementNamed(context, '/home');
+        } else {
+          // Error en el inicio de sesion. No deberia ocurrir nunca.
+          setState(() {
+            _error = true;
+            _autovalidate = true;
+          });
+        }
+      } else {
         // Algo ha fallado
         setState(() {
           _error = true;
           _autovalidate = true;
         });
       }
-    }else{
+    } else {
       // Error en los campos
       setState(() {
         _autovalidate = true;
@@ -171,19 +224,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
     }
   }
 
-  Widget _buildErrors(){
+  Widget _buildErrors() {
     // TODO: Implementar con los
-    if(_error){
+    if (_error) {
       return Text('Error. El nombre de usuario no está disponible');
-    }else{
+    } else {
       return SizedBox();
     }
   }
 
   String _validateUsername(String value) {
-    if(value != null && value.isNotEmpty && value.trim().isNotEmpty && value.length > 2){
+    if (value != null &&
+        value.isNotEmpty &&
+        value.trim().isNotEmpty &&
+        value.length > 2) {
       return null;
-    }else{
+    } else {
       return "El nombre de usuario $value no es valido.";
     }
   }
@@ -199,10 +255,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
     }
   }
 
-  String _validatePassword(String value){
-    if(value != null && value.isNotEmpty && !value.contains(r' ') && value.length > 8){
+  String _validatePassword(String value) {
+    if (value != null &&
+        value.isNotEmpty &&
+        !value.contains(r' ') &&
+        value.length > 8) {
       return null;
-    }else{
+    } else {
       return "La contraseña no es válida.";
     }
   }
