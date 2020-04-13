@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:spotiseven/audio/playingSingleton.dart';
 import 'package:spotiseven/audio/utils/song.dart';
+import 'package:spotiseven/screens/audio/actual_lyrics.dart';
 import 'package:spotiseven/screens/audio/actual_playlist.dart';
 
 class PlayingScreen extends StatefulWidget {
@@ -235,7 +236,10 @@ class _PlayingScreenState extends State<PlayingScreen> {
     return ButtonBar(
       alignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        buildIconButton(Icons.subtitles, () => print('subtitles')),
+        buildIconButton(Icons.subtitles, () {
+          print('subtitles');
+          Navigator.push(context, MaterialPageRoute(builder: (context) => LyricsScreen()));
+        }),
         buildIconButton(Icons.playlist_add, () {
           print('playlist_add');
           Navigator.push(context, MaterialPageRoute(builder: (context) => ActualPlaylistScreen(playlist: _player.playlist,)));
