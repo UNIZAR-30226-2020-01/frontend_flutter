@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:spotiseven/screens/home/albums.dart';
 import 'package:spotiseven/screens/home/artist_home.dart';
-import 'package:spotiseven/screens/home/following.dart';
+import 'package:spotiseven/screens/home/followings.dart';
 import 'package:spotiseven/screens/home/genres.dart';
 import 'package:spotiseven/screens/home/your_playlists.dart';
 
@@ -18,8 +18,8 @@ class _HomeScreenWrapperState extends State<HomeScreenWrapper>
 
   // Tabs
   List<Widget> _myTabs = [
-    FollowingScreen(),
     PlaylistsScreen(),
+    MyPlaylists(),
     GenresScreen(),
     AlbumScreen(),
     ArtistScreen(),
