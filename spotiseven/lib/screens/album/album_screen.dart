@@ -23,10 +23,12 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
   @override
   void initState() {
     _scrollController = ScrollController()..addListener(() => setState(() {}));
-    widget.album.fetchRemote().whenComplete(() {
-      print('${widget.album.photoUrl}');
-      setState(() {});
-    });
+    if(widget.album.list.isEmpty) {
+      widget.album.fetchRemote().whenComplete(() {
+        print('${widget.album.photoUrl}');
+        setState(() {});
+      });
+    }
     super.initState();
   }
 
@@ -39,88 +41,89 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          Container(
-            color: Colors.white,
-            child: RefreshIndicator(
-              onRefresh: () => Future.delayed(
-                  Duration(microseconds: 1), () => print('recargando')),
-              child: CustomScrollView(
-                controller: _scrollController,
-                physics: const BouncingScrollPhysics(),
-                slivers: <Widget>[
-                  SliverAppBar(
-                    backgroundColor: Colors.black,
-                    leading: IconButton(
-                      onPressed: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => AlbumScreenOptions(
-                                    album: this.widget.album,
-                                  ))),
-                      icon: Icon(Icons.more_vert),
-                      color: Colors.white,
-                    ),
-                    elevation: 0,
-                    // Propiedades sliverappbar
-                    floating: false,
-                    snap: false,
-                    pinned: true,
-                    // Efectos
-                    stretch: true,
-                    onStretchTrigger: () => Future.delayed(
-                        Duration(microseconds: 1), () => print('stretch')),
-                    expandedHeight: 300,
-                    flexibleSpace: FlexibleSpaceBar(
+      body: SafeArea(
+        child: RefreshIndicator(
+          onRefresh: () => widget.album.fetchRemote(),
+          child: Stack(
+            children: <Widget>[
+              Container(
+                color: Colors.white,
+                child: CustomScrollView(
+                  controller: _scrollController,
+                  physics: const BouncingScrollPhysics(),
+                  slivers: <Widget>[
+                    SliverAppBar(
+                      backgroundColor: Colors.black,
+                      leading: IconButton(
+                        onPressed: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => AlbumScreenOptions(
+                                      album: this.widget.album,
+                                    ))),
+                        icon: Icon(Icons.more_vert),
+                        color: Colors.white,
+                      ),
+                      elevation: 0,
+                      // Propiedades sliverappbar
+                      floating: false,
+                      snap: false,
+                      pinned: true,
                       // Efectos
-                      stretchModes: [
-                        StretchMode.zoomBackground,
-                        StretchMode.blurBackground,
-                        StretchMode.fadeTitle,
-                      ],
-                      title: SizedBox(
-                        height: 200,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: <Widget>[
-                            Text(
-                              '${widget.album.titulo}',
-                              style: GoogleFonts.roboto(
-                                fontWeight: FontWeight.w600,
-                                color: Colors.white,
-                                fontSize: 25,
-                                letterSpacing: 3,
-                                wordSpacing: 3,
+                      stretch: true,
+                      onStretchTrigger: () => Future.delayed(
+                          Duration(microseconds: 1), () => print('stretch')),
+                      expandedHeight: 300,
+                      flexibleSpace: FlexibleSpaceBar(
+                        // Efectos
+                        stretchModes: [
+                          StretchMode.zoomBackground,
+                          StretchMode.blurBackground,
+                          StretchMode.fadeTitle,
+                        ],
+                        title: SizedBox(
+                          height: 200,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: <Widget>[
+                              Text(
+                                '${widget.album.titulo}',
+                                style: GoogleFonts.roboto(
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.white,
+                                  fontSize: 25,
+                                  letterSpacing: 3,
+                                  wordSpacing: 3,
+                                ),
+                                textAlign: TextAlign.end,
                               ),
-                              textAlign: TextAlign.end,
-                            ),
-                          ],
+                            ],
+                          ),
+                        ),
+                        centerTitle: true,
+                        background: Image.network(
+                          '${widget.album.photoUrl}',
+                          fit: BoxFit.cover,
                         ),
                       ),
-                      centerTitle: true,
-                      background: Image.network(
-                        '${widget.album.photoUrl}',
-                        fit: BoxFit.cover,
+                    ),
+                    SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (BuildContext context, int index) {
+                          return buildSongPreview_v2(
+                              widget.album.list[index], widget.album, context);
+                        },
+                        childCount: widget.album.list.length,
                       ),
                     ),
-                  ),
-                  SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (BuildContext context, int index) {
-                        return buildSongPreview_v2(
-                            widget.album.list[index], widget.album, context);
-                      },
-                      childCount: widget.album.list.length,
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
+              _fabReproduction(),
+            ],
           ),
-          _fabReproduction(),
-        ],
+        ),
       ),
     );
   }
