@@ -6,6 +6,7 @@ import 'package:spotiseven/audio/utils/album.dart';
 import 'package:spotiseven/audio/utils/playlist.dart';
 import 'package:spotiseven/audio/utils/song.dart';
 import 'package:spotiseven/screens/album/album_screen_options.dart';
+import 'package:spotiseven/usefullMethods.dart';
 
 class AlbumDetailScreen extends StatefulWidget {
   final Album album;
@@ -79,26 +80,6 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
                         StretchMode.blurBackground,
                         StretchMode.fadeTitle,
                       ],
-                      title: SizedBox(
-                        height: 200,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: <Widget>[
-                            Text(
-                              '${widget.album.titulo}',
-                              style: GoogleFonts.roboto(
-                                fontWeight: FontWeight.w600,
-                                color: Colors.white,
-                                fontSize: 25,
-                                letterSpacing: 3,
-                                wordSpacing: 3,
-                              ),
-                              textAlign: TextAlign.end,
-                            ),
-                          ],
-                        ),
-                      ),
                       centerTitle: true,
                       background: Image.network(
                         '${widget.album.photoUrl}',
@@ -120,7 +101,27 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
             ),
           ),
           _fabReproduction(),
+          _name(),
         ],
+      ),
+    );
+  }
+
+  _name(){
+    final double defaultTopMargin = 271 - 0.0;
+        double top = defaultTopMargin;
+    return Positioned(
+      top: top,
+      left: 10,
+      child: Container(
+//          margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+          padding: EdgeInsets.fromLTRB(2, 2, 2, 2),
+          height: MediaQuery.of(context).size.width*0.085,
+          decoration: BoxDecoration(
+              color:  Colors.white,
+              borderRadius: BorderRadius.circular(10)
+          ),
+          child: UsefulMethods.text(widget.album.titulo, 25.0, 0.0, 0, 0, 0, 1.0)
       ),
     );
   }
@@ -156,27 +157,36 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
       right: 16,
       child: Transform(
         transform: new Matrix4.identity()..scale(scale),
-        child: Container(
-          child: RaisedButton(
-            onPressed: () => PlayingSingleton()
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            /*Container(
+              margin: EdgeInsets.fromLTRB(0, 0, 90, 0),
+              padding: EdgeInsets.fromLTRB(2, 2, 2, 2),
+              height: MediaQuery.of(context).size.width*0.08,
+              decoration: BoxDecoration(
+                color:  Colors.white,
+                borderRadius: BorderRadius.circular(10)
+              ),
+              child: UsefulMethods.text(widget.album.titulo, 20.0, 0.0, 0, 0, 0, 1.0)
+            ),*/
+            RaisedButton(
+              onPressed: () => PlayingSingleton()
               // TODO: Integrar la reproduccion de un album como playlist (poner como lista de canciones las del album)
-              ..setPlayList(Playlist(
-                  title: widget.album.titulo,
-                  photoUrl: widget.album.photoUrl,
-                  playlist: widget.album.list))
-              ..randomize()
-              ..play(PlayingSingleton().song),
-            child: Text('PLAY',
-                style: GoogleFonts.roboto(
-                  color: Colors.black,
-                  fontSize: 20,
-                  fontWeight: FontWeight.normal,
-                )),
-            elevation: 0,
-            color: Colors.white,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10))),
-          ),
+                ..setPlayList(Playlist(
+                    title: widget.album.titulo,
+                    photoUrl: widget.album.photoUrl,
+                    playlist: widget.album.list))
+                ..randomize()
+                ..play(PlayingSingleton().song),
+              child: UsefulMethods.text('PLAY', 25.0, 0.0, 0, 0, 0, 1.0),
+              elevation: 0,
+              color: Colors.white,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10))),
+            ),
+
+          ],
         ),
       ),
     );
@@ -184,6 +194,7 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
 
   Widget buildSongPreview_v2(Song s, Album a, BuildContext context) {
     return Container(
+      width: MediaQuery.of(context).size.width*0.2,
       margin: EdgeInsets.fromLTRB(30, 15, 30, 15),
       child: GestureDetector(
         onTap: () async {

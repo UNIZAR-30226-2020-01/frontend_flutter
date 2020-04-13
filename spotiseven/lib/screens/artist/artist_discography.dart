@@ -7,9 +7,9 @@ import 'package:spotiseven/audio/utils/artist.dart';
 // Fuentes de Google
 import 'package:google_fonts/google_fonts.dart';
 import 'package:spotiseven/screens/artist/artist_info.dart';
-
 import 'package:spotiseven/generic_components/GenericHorizontalWidget.dart';
 import 'package:spotiseven/screens/album/album_screen.dart';
+
 
 class ArtistDiscography extends StatefulWidget {
   final Artist artista;
@@ -105,7 +105,6 @@ class _ArtistDiscographyState extends State<ArtistDiscography> {
                 child: AutoSizeText(
                   widget.artista.name,
                   maxLines: 2,
-//                maxFontSize: 300,
                   minFontSize: 19,
                   wrapWords: true,
                   style: GoogleFonts.roboto(
@@ -115,7 +114,6 @@ class _ArtistDiscographyState extends State<ArtistDiscography> {
                     color: Color.fromRGBO(0, 0, 0, 1.0),
                   ),
                 ),
-                //_text(context, '${widget.artista.name} asdas', 15.0, 0, 0, 0, 1.0),
               ),
               Container(
                 width: MediaQuery.of(context).size.width * 0.1,
@@ -154,7 +152,7 @@ class _ArtistDiscographyState extends State<ArtistDiscography> {
                 0, 0, 0, 1.0),
           ),
           _text(context, '${widget.artista.name}', 25.0, 0, 0, 0, 1.0),
-          IconButton(
+          /*IconButton(
             onPressed: () {
               print('presionado boton info del artista');
             },
@@ -163,7 +161,7 @@ class _ArtistDiscographyState extends State<ArtistDiscography> {
               color: Colors.black,
             ),
             color: Colors.black,
-          ),
+          ),*/
         ],
       ),
     );

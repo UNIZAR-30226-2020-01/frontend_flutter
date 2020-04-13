@@ -5,6 +5,7 @@ import 'package:flutter_exoplayer/audioplayer.dart';
 import 'package:spotiseven/audio/playingSingleton.dart';
 import 'package:spotiseven/screens/home/home_screen.dart';
 import 'package:spotiseven/screens/podcast/podcastscreen.dart';
+import 'package:spotiseven/screens/search/searchBar.dart';
 import 'package:spotiseven/screens/user/user_screen.dart';
 
 class MainScreenWrapper extends StatefulWidget {
@@ -19,7 +20,7 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
   List<Widget> _children = [
     HomeScreenWrapper(),
     PodcastScreenWrapper(),
-    HomeScreenWrapper(),
+    SearchBarScreen(),
     UserScreen(),
   ];
   // To show reproductor bar
