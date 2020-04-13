@@ -1,6 +1,4 @@
-// TODO: Remove this import
 import 'package:flutter/material.dart';
-import 'package:spotiseven/audio/playingSingleton.dart';
 import 'package:spotiseven/screens/home/albums.dart';
 import 'package:spotiseven/screens/home/artist_home.dart';
 import 'package:spotiseven/screens/home/following.dart';
@@ -14,11 +12,6 @@ class HomeScreenWrapper extends StatefulWidget {
 
 class _HomeScreenWrapperState extends State<HomeScreenWrapper>
     with SingleTickerProviderStateMixin {
-  // Control de la reproduccion
-  PlayingSingleton _playingSingleton = PlayingSingleton();
-
-  // To control index
-  int _currentIndex = 0;
 
   // To control TabBar
   TabController _tabController;

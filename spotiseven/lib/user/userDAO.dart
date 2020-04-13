@@ -24,13 +24,18 @@ class UserDAO {
     return ok && ((await getUserData()) != null);
   }
 
+  static Future<bool> registerUserWithPassword(User user, String password) async {
+    // TODO: Implementar con el backend
+    return true;
+  }
+
   static Future<User> getUserData() async{
     TokenSingleton tokenSingleton = TokenSingleton();
     // TODO: Change this URL
 //    print('ESTO SE EJECUTA');
     Response response = await _client.get('$_url/debug_auth/', headers: tokenSingleton.authHeader);
     if(response.statusCode == 200){
-      print('GETUSERDATA: ${response.body}');
+//      print('GETUSERDATA: ${response.body}');
       // TODO: Cuidado que esto esta devolviendo una lista.
       return User.fromJSON((jsonDecode(response.body) as List)[0]);
     }else{

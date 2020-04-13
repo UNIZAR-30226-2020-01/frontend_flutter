@@ -9,18 +9,21 @@ class Song {
   String url;
   // Album al que pertenece
   Album album;
+  // Es favorita para el usuario
+  bool favorite;
 
-  Song({this.title, this.url, this.album});
+  Song({this.title, this.url, this.album, this.favorite});
 
   String get photoUrl => album.photoUrl;
 
-  // TODO: Cambiar esto para que coincida con la API REST
   static Song fromJSONWithAlbum(Map<String, Object> json, Album album) {
     return Song(
       title: json['title'],
       // El servidor es https, no http
       url: json['file'].toString().replaceAll('http://', 'https://'),
       album: album,
+      // TODO: Cambiar esto para que coincida con la API REST
+      favorite: json['favorite'] ?? false,
     );
   }
 
@@ -29,8 +32,9 @@ class Song {
       title: json['title'],
       // El servidor es https, no http
       url: json['file'].toString().replaceAll('http://', 'https://'),
-      // TODO: Comprobar si lo que devuelve esto es un Map -> Ahora es una URL MAL
       album: Album.fromJSONListed(json['album']),
+      // TODO: Cambiar esto para que coincida con la API REST
+      favorite: json['favorite'] ?? false,
     );
   }
 }

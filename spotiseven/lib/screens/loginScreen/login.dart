@@ -9,15 +9,6 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  // Se iniciara la autovalidacion tras el primer intento de submit
-  bool _autovalid = false;
-  // Para mostrar errores
-  String _error;
-
-  final _formKey = GlobalKey<FormState>();
-
-  String email;
-  String password;
 
   @override
   Widget build(BuildContext context) {
@@ -46,22 +37,25 @@ class _LoginState extends State<Login> {
                 color: Color.fromRGBO(255, 255, 255, 0.6),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(70)),
                 onPressed: () async {
-                  Navigator.popAndPushNamed(context, '/loginMail');
+                  Navigator.pushReplacementNamed(context, '/loginMail');
                 },
                 child: Row(
                   children: <Widget>[
-                    Icon(Icons.email),
-                    Container(
-                      margin: EdgeInsets.fromLTRB(5, 15, 5, 15),
-                      child: Center(
-                        child: Text(
-                          'LOG IN WITH EMAIL',
-                          style: GoogleFonts.roboto(
-                            fontWeight: FontWeight.w300,
-                            color: Colors.black,
-                            fontSize: 20,
-                            letterSpacing: 3,
-                            wordSpacing: 3,
+                    Expanded(flex:1, child: Icon(Icons.email)),
+                    Expanded(
+                      flex: 12,
+                      child: Container(
+                        margin: EdgeInsets.fromLTRB(5, 15, 5, 15),
+                        child: Center(
+                          child: Text(
+                            'LOG IN WITH EMAIL',
+                            style: GoogleFonts.roboto(
+                              fontWeight: FontWeight.w300,
+                              color: Colors.black,
+                              fontSize: 20,
+                              letterSpacing: 3,
+                              wordSpacing: 3,
+                            ),
                           ),
                         ),
                       ),
@@ -83,13 +77,16 @@ class _LoginState extends State<Login> {
                   child: Center(
                     child: Row(
                       children: <Widget>[
-                        Container(
-                          height: 20,
-                            child: Image.asset(
-                                'assets/images/google.png'
-                            )
+                        Expanded(
+                          flex: 1,
+                          child: Container(
+                            height: 20,
+                              child: Image.asset(
+                                  'assets/images/google.png'
+                              )
+                          ),
                         ),
-                        SizedBox(width: 10,),
+//                        SizedBox(width: 10,),
                         /*Container(
                           decoration: BoxDecoration(
                             image: DecorationImage(
@@ -97,14 +94,17 @@ class _LoginState extends State<Login> {
                             ),
                           ),
                         ),*/
-                        Text(
-                          'LOG IN WITH GOOGLE',
-                          style: GoogleFonts.roboto(
-                            fontWeight: FontWeight.w300,
-                            color: Colors.black,
-                            fontSize: 18,
-                            letterSpacing: 3,
-                            wordSpacing: 3,
+                        Expanded(
+                          flex: 12,
+                          child: Text(
+                            'LOG IN WITH GOOGLE',
+                            style: GoogleFonts.roboto(
+                              fontWeight: FontWeight.w300,
+                              color: Colors.black,
+                              fontSize: 18,
+                              letterSpacing: 3,
+                              wordSpacing: 3,
+                            ),
                           ),
                         ),
                       ],
@@ -117,12 +117,15 @@ class _LoginState extends State<Login> {
               height: 10,
             ),
             Center(
-              child: Text(
-                'NO ACCOUNT? SIGN IN NOW!',
-                style: GoogleFonts.roboto(
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black,
-                  fontSize: 15,
+              child: FlatButton(
+                onPressed: () => Navigator.pushReplacementNamed(context, '/register'),
+                child: Text(
+                  'NO ACCOUNT? SIGN IN NOW!',
+                  style: GoogleFonts.roboto(
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black,
+                    fontSize: 15,
+                  ),
                 ),
               ),
             ),
