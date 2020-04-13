@@ -26,7 +26,9 @@ class _ArtistDiscographyState extends State<ArtistDiscography> {
   @override
   void initState() {
     _scrollController = ScrollController()..addListener(() => setState(() {}));
-    widget.artista.fetchRemote().whenComplete(() => setState(() {}));
+    if (widget.artista.albums.isEmpty) {
+      widget.artista.fetchRemote().whenComplete(() => setState(() {}));
+    }
     super.initState();
   }
 
