@@ -19,10 +19,10 @@ class _HomeScreenWrapperState extends State<HomeScreenWrapper>
   // Tabs
   List<Widget> _myTabs = [
     PlaylistsScreen(),
-    MyPlaylists(),
-    GenresScreen(),
     AlbumScreen(),
     ArtistScreen(),
+    MyPlaylists(),
+    GenresScreen(),
   ];
 
   @override
@@ -71,10 +71,10 @@ class _HomeScreenWrapperState extends State<HomeScreenWrapper>
                   ),
                   tabs: <Widget>[
                     buildTextTab('Following'),
-                    buildTextTab('Your playlists'),
-                    buildTextTab('Genres'),
                     buildTextTab('Albums'),
                     buildTextTab('Artists'),
+                    buildTextTab('Your playlists'),
+                    buildTextTab('Genres'),
                   ],
                 ),
               ),
