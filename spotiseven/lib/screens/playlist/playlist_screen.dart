@@ -255,8 +255,7 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
                     Row(
                       children: <Widget>[
                         IconButton(
-                          onPressed: () async {
-                            await SongDAO.markAs(s.favorite, s);
+                          onPressed: () {
                             setState(() {
                               s.setFavorite(!s.favorite);
                             });
