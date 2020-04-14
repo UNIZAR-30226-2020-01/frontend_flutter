@@ -49,7 +49,12 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
                   SliverAppBar(
                     backgroundColor: Colors.black,
                     leading: IconButton(
-                      onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => PlaylistScreenOptions(playlist: this.widget.playlist,))),
+                      onPressed: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => PlaylistScreenOptions(
+                                    playlist: this.widget.playlist,
+                                  ))),
                       icon: Icon(Icons.more_vert),
                       color: Colors.white,
                     ),
@@ -209,7 +214,9 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
             ),
             Expanded(
               flex: 1,
-              child: SizedBox(width: 1,),
+              child: SizedBox(
+                width: 1,
+              ),
             ),
             Expanded(
               flex: 13,
@@ -242,18 +249,22 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
                         ),
                       ],
                     ),
-                    SizedBox(width: 10,),
+                    SizedBox(
+                      width: 10,
+                    ),
                     Row(
                       children: <Widget>[
                         IconButton(
                           onPressed: () async {
                             await SongDAO.markAs(s.favorite, s);
                             setState(() {
-                            s.favorite = !s.favorite;
-                          });
+                              s.setFavorite(!s.favorite);
+                            });
                           },
-                          icon: Icon(s.favorite ? Icons.star : Icons.star_border,
-                            color: s.favorite ? Colors.yellow : Colors.white,),
+                          icon: Icon(
+                            s.favorite ? Icons.star : Icons.star_border,
+                            color: s.favorite ? Colors.yellow : Colors.white,
+                          ),
                         ),
                         PopupMenuButton<String>(
                           icon: Icon(

@@ -16,8 +16,20 @@ class SongDAO {
   }
 
   static Future<void> markAs(bool favorite, Song song) async {
-    // TODO: Cambiar la URL, y el body
-    // await _client.post('$url/path', body: {}, headers: TokenSingleton().authHeader);
+    // TODO: Validar
+    if(favorite){
+      // Marcamos como favorita
+      Response resp = await _client.get('${song.urlApi}/set_favorite/', headers: TokenSingleton().authHeader);
+      if(resp.statusCode != 200) {
+        throw Exception('Algo ha ido mal al marcar como favorito. Codigo de error: ${resp.statusCode}');
+      }
+    }else{
+      // Eliminamos como favorita
+      Response resp = await _client.get('${song.urlApi}/remove_favorite/', headers: TokenSingleton().authHeader);
+      if(resp.statusCode != 200) {
+        throw Exception('Algo ha ido mal al marcar como favorito. Codigo de error: ${resp.statusCode}');
+      }
+    }
   }
 
   static Future<Song> getByUrl(String url) async {

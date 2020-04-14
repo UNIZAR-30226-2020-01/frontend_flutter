@@ -64,4 +64,9 @@ class Song {
     this.lyrics = aux.lyrics;
   }
 
+  Future<void> setFavorite(bool fav) {
+    this.favorite = fav;
+    SongDAO.markAs(fav, this);
+  }
+
 }

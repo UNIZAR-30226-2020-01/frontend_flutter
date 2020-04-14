@@ -274,7 +274,7 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
                       children: <Widget>[
                         IconButton(
                           onPressed: () => setState(() {
-                            s.favorite = !s.favorite;
+                            s.setFavorite(!s.favorite);
                           }),
                           icon: Icon(
                             s.favorite ? Icons.star : Icons.star_border,
