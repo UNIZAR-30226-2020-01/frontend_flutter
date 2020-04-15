@@ -27,8 +27,8 @@ class Song {
       // El servidor es https, no http
       url: json['file'].toString().replaceAll('http://', 'https://'),
       album: album,
+      favorite: json['is_fav'] ?? false,
       // TODO: Cambiar esto para que coincida con la API REST
-      favorite: json['favorite'] ?? false,
       urlApi: json['url'].toString().replaceAll('http://', 'https://'),
     );
   }
@@ -40,7 +40,7 @@ class Song {
       url: json['file'].toString().replaceAll('http://', 'https://'),
       album: Album.fromJSONListed(json['album']),
       // TODO: Cambiar esto para que coincida con la API REST
-      favorite: json['favorite'] ?? false,
+      favorite: json['is_fav'] ?? false,
       urlApi: json['url'].toString().replaceAll('http://', 'https://'),
     );
   }
@@ -52,7 +52,7 @@ class Song {
       url: json['file'].toString().replaceAll('http://', 'https://'),
       album: Album.fromJSONListed(json['album']),
       // TODO: Cambiar esto para que coincida con la API REST
-      favorite: json['favorite'] ?? false,
+      favorite: json['is_fav'] ?? false,
       urlApi: json['url'].toString().replaceAll('http://', 'https://'),
       lyrics: json['lyrics'] ?? '',
     );
