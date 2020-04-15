@@ -25,4 +25,14 @@ class Podcast {
     @required this.numChapters,
     @required this.chapters,
   });
+
+  factory Podcast.fromJSON(Map<String, Object> json) {
+    return Podcast(
+        title: json['title'],
+        canal: json['canal'],
+        photoUrl: json['image'],
+        numChapters: null,
+        //podcast: (json['podcast']as Map)['title']
+    );
+  }
 }

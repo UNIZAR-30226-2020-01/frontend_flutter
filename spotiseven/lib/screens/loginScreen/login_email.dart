@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:spotiseven/usefullMethods.dart';
 import 'package:spotiseven/user/user.dart';
 import 'package:spotiseven/user/userDAO.dart';
 
@@ -36,8 +38,9 @@ class _LoginMailState extends State<LoginEmail> {
                 TextFormField(
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
-                    labelText: 'Username',
+                    labelText: 'USERNAME',
                   ),
+                  cursorColor: Colors.black,
                   validator: (value) {
                     Pattern pattern = r'^[^0-9].*$';
                     RegExp regex = new RegExp(pattern);
@@ -58,6 +61,7 @@ class _LoginMailState extends State<LoginEmail> {
                   decoration: const InputDecoration(
                     labelText: 'PASSWORD',
                   ),
+                  cursorColor: Colors.black,
                   validator: (String value) {
                     if (value.isEmpty && value.length < 8) {
                       return 'Debes introducir una contraseña';
@@ -74,10 +78,12 @@ class _LoginMailState extends State<LoginEmail> {
                 ),
                 _showError(),
                 RaisedButton(
-                  child: Text(
-                    'Log in',
-                    style: TextStyle(
-                      fontSize: 20,
+                  color: Color.fromRGBO(0, 0, 0, 0.8),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(70)),
+                  child: Container(
+                    height: 40,
+                    child: Center(
+                      child: UsefulMethods.text('log in', 23.0, 3.0, 255, 255, 255, 1.0),
                     ),
                   ),
                   onPressed: () async {
@@ -87,15 +93,15 @@ class _LoginMailState extends State<LoginEmail> {
                       bool auth_ok = await UserDAO.authUserWithPassword(
                           User(username: this._username.trim()), _password);
                       print('AUTH_OK = $auth_ok');
-                      if(!auth_ok){
+                      if (!auth_ok) {
                         // Error en la autentificacion
                         setState(() {
                           _error = true;
                         });
-                      }else{
+                      } else {
                         // No ha habido error. Entramos
 //                        Navigator.popAndPushNamed(context, '/home');
-                          Navigator.pushReplacementNamed(context, '/home');
+                        Navigator.pushReplacementNamed(context, '/home');
                       }
                     } else {
                       // Error -> activamos la autovalidacion
@@ -121,7 +127,7 @@ class _LoginMailState extends State<LoginEmail> {
           fontWeight: FontWeight.bold,
         ),
       );
-    }else{
+    } else {
       return SizedBox();
     }
   }
@@ -131,14 +137,38 @@ class _LoginMailState extends State<LoginEmail> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Container(
+        height: double.infinity,
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/images/photo1.png'),
-            fit: BoxFit.fill,
+            image: AssetImage('assets/images/background.png'),
+            fit: BoxFit.cover,
           ),
         ),
         child: Center(
           child: CustomScrollView(
+            slivers: <Widget>[
+              SliverAppBar(
+                backgroundColor: Colors.transparent,
+                expandedHeight: MediaQuery.of(context).size.height * 0.2,
+                flexibleSpace: FlexibleSpaceBar(
+                  background: Image.asset('assets/images/spotiseven.png'),
+                ),
+              ),
+              SliverFixedExtentList(
+                itemExtent: 400.00,
+                delegate: SliverChildListDelegate([
+                  _form(),
+                ]),
+              )
+            ],
+          ),
+        ),
+        ),
+//      ),
+    );
+  }
+}
+/*child: CustomScrollView(
             slivers: <Widget>[
               SliverAppBar(
                 backgroundColor: Colors.transparent,
@@ -155,8 +185,4 @@ class _LoginMailState extends State<LoginEmail> {
               )
             ],
           ),
-        ),
-      ),
-    );
-  }
-}
+        ),*/
