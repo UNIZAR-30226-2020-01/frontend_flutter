@@ -21,16 +21,38 @@
 #   directories:
 #     - $HOME/.pub-cache
 
-language: dart
-dist: xenial
+os: linux
+language: android
+licenses:
+  - 'android-sdk-preview-license-.+'
+  - 'android-sdk-license-.+'
+  - 'google-gdk-license-.+'
+android:
+  components:
+    - tools
+    - platform-tools
+    - build-tools-25.0.3
+    - android-25
+    - sys-img-armeabi-v7a-google_apis-25
+    - extra-android-m2repository
+    - extra-google-m2repository
+    - extra-google-android-support
+jdk: oraclejdk8
+sudo: false
 addons:
   apt:
+    sources:
+      - ubuntu-toolchain-r-test
     packages:
       - libstdc++6
       - fonts-droid-fallback
       - lib32stdc++6
       - curl
 install:
+  - wget http://services.gradle.org/distributions/gradle-3.5-bin.zip
+  - unzip -qq gradle-3.5-bin.zip
+  - export GRADLE_HOME=$PWD/gradle-3.5
+  - export PATH=$GRADLE_HOME/bin:$PATH
   - git clone https://github.com/flutter/flutter.git -b stable --depth 1
   - export PATH="$PATH:$(pwd)/flutter/bin/"
   - ./flutter/bin/flutter doctor
