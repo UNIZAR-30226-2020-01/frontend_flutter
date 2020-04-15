@@ -31,10 +31,11 @@ addons:
       - lib32stdc++6
       - curl
 install:
-  - git clone https://github.com/flutter/flutter.git -b stable
+  - git clone https://github.com/flutter/flutter.git -b stable --depth 1
   - ./flutter/bin/flutter doctor
 script:
   # - ./flutter/bin/flutter test
+  - ./flutter/bin/flutter -v build apk
 cache:
   directories:
     - $HOME/.pub-cache
