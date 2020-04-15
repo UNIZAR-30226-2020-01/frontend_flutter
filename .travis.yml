@@ -37,7 +37,8 @@ install:
 script:
   # - ./flutter/bin/flutter test
   - cd spotiseven
-  - echo $PATH
+  - flutter pub get
+  - flutter pub upgrade
   - flutter -v build apk
 cache:
   directories:
