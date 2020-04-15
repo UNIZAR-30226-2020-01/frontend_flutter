@@ -28,12 +28,7 @@ class Album {
 
   // Constructor
   Album(
-      {this.url,
-      this.titulo,
-      this.artista,
-      this.photoUrl,
-      this.colaboradores,
-      this.numberSongs}) {
+      {this.url, this.titulo, this.artista, this.photoUrl, this.colaboradores, this.numberSongs}) {
     list = List();
   }
 
@@ -49,8 +44,7 @@ class Album {
     return a;
   }
 
-  static Album fromJSONListedWithArtist(
-      Map<String, Object> json, Artist artist) {
+  static Album fromJSONListedWithArtist(Map<String, Object> json, Artist artist) {
     Album a = Album(
       url: json['url'],
       titulo: json['title'],
@@ -63,14 +57,11 @@ class Album {
   }
 
   // TODO: Cambiar esto para que coincida con la API REST
-  static Album fromJSONDetailWithArtist(
-      Map<String, Object> json, Artist artist) {
+  static Album fromJSONDetailWithArtist(Map<String, Object> json, Artist artist) {
     List<String> colaborators = List();
-    if (json['other_artists'] != null &&
-        (json['other_artists'] as List) != List()) {
-      colaborators = (json['other_artists'] as List)
-          .map((d) => ((d as Map)['name'] as String))
-          .toList();
+    if (json['other_artists'] != null && (json['other_artists'] as List) != List()) {
+      colaborators =
+          (json['other_artists'] as List).map((d) => ((d as Map)['name'] as String)).toList();
     }
     Album a = Album(
       url: json['url'],
@@ -82,9 +73,7 @@ class Album {
       numberSongs: json['number_songs'],
     );
     if (json.containsKey('songs')) {
-      a.list = (json['songs'] as List)
-          .map((j) => Song.fromJSONWithAlbum(j, a))
-          .toList();
+      a.list = (json['songs'] as List).map((j) => Song.fromJSONWithAlbum(j, a)).toList();
       // Mapeamos el album para las canciones
       a.list = a.list.map((Song s) => s..album = a).toList();
     } else {

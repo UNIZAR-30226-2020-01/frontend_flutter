@@ -78,10 +78,11 @@ class _PodcastChapterInfoState extends State<PodcastChapterInfo> {
             child: _text(context, ' Duration: ${widget.podcastChapter.duration}', 30.0, 0, 0, 0, 1.0),
           ),
           SizedBox(height: 10,),
-          Container(
+          //TODO:   que hacemos con la fecha
+          /*Container(
             width: MediaQuery.of(context).size.width *0.2,
             child: _text(context, ' Date: ${widget.podcastChapter.date}', 30.0, 0, 0, 0, 1.0),
-          ),
+          ),*/
 
         ],
       ),

@@ -101,8 +101,8 @@ class GenericNewPodChapter extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    UsefulMethods.text('Duration: ${podcastChapter.duration}', 10.0, 0.0,  255,255,255,1.0),
-                    UsefulMethods.text(podcastChapter.date, 10.0, 0.0,  255,255,255,1.0),
+                    UsefulMethods.text('Duration: ${Duration(seconds: podcastChapter.duration).toString()}', 10.0, 0.0,  255,255,255,1.0),
+//                  todo: la fecha bro  UsefulMethods.text(podcastChapter.date, 10.0, 0.0,  255,255,255,1.0),
                   ],
                 ),
               ),

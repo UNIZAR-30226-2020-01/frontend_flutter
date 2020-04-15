@@ -11,8 +11,8 @@ class PodcastChapter {
   Podcast podcast;
   //Descripción
   String description;
-  String duration;
-  String date;
+  int duration;
+  String url;
   String photoUrl;
 
   PodcastChapter({
@@ -20,7 +20,32 @@ class PodcastChapter {
     this.podcast,
     @required this.description,
     @required this.duration,
-    @required this.date,
+    @required this.url,
     @required this.photoUrl,
 });
+  static fromJSON(Map<String, Object> json){
+    PodcastChapter chap = PodcastChapter(
+        title: json['title'],
+        description: json['description'],
+        duration: json['duration'],
+        photoUrl: json['image'],
+        url: json['url'],
+        podcast: Podcast.fromJSONListed(json['podcast'])
+    );
+    return chap;
+  }
+
+  static fromJSONwithPodcast(Map<String, Object> json, Podcast p){
+    PodcastChapter chap = PodcastChapter(
+        title: json['title'],
+        description: json['description'],
+        duration: json['duration'],
+        photoUrl: json['image'],
+        url: json['url'],
+        podcast: p
+    );
+    return chap;
+  }
+
+
 }
