@@ -46,8 +46,8 @@ addons:
     packages:
       - libstdc++6
       - fonts-droid-fallback
-      - lib32stdc++6
-      - curl
+      # - lib32stdc++6
+      # - curl
 install:
   - wget http://services.gradle.org/distributions/gradle-3.5-bin.zip
   - unzip -qq gradle-3.5-bin.zip
