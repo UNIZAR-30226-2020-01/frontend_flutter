@@ -3,7 +3,7 @@
 # Script para subir la apk a la rama master
 apkfile='app-release.apk'
 
-cp "build/app/outputs/apk/release/$apkfile" $HOME
+cp "spotiseven/build/app/outputs/apk/release/$apkfile" $HOME
 
 # Configuramos Git
 git config --global user.email "pedro.tamargo.allue@gmail.com"

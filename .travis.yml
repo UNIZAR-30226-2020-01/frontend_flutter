@@ -42,8 +42,9 @@ script:
   - cd spotiseven
   - flutter pub get
   - flutter pub upgrade
-  # - flutter -v build apk
+  - flutter -v build apk
 after_success:
+  - cd ..
   - bash upload_apk_master.sh
 cache:
   directories:
