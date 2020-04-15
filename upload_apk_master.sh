@@ -15,7 +15,7 @@ git clone --quiet --branch master https://piter1902:$GITHUB_API_KEY@github.com/U
 
 # Nos introducimos al repositorio y copiamos la apk
 cd frontend_flutter
-cp $HOME/$apkfile
+cp $HOME/$apkfile .
 
 git add .
 git remote add origin https://piter1902:$GITHUB_API_KEY@github.com/UNIZAR-30226-2020-01/frontend_flutter.git
