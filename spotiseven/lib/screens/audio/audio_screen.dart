@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:spotiseven/audio/playingSingleton.dart';
 import 'package:spotiseven/audio/utils/song.dart';
+import 'package:spotiseven/screens/audio/actual_lyrics.dart';
 import 'package:spotiseven/screens/audio/actual_playlist.dart';
 
 class PlayingScreen extends StatefulWidget {
@@ -68,7 +69,7 @@ class _PlayingScreenState extends State<PlayingScreen> {
     return Scaffold(
       body: SafeArea(
         child: Stack(
-          children: <Widget> [
+          children: <Widget>[
             Positioned(
               top: 0,
               width: MediaQuery.of(context).size.width,
@@ -84,19 +85,8 @@ class _PlayingScreenState extends State<PlayingScreen> {
                     // TODO: Change this dinamically (playlist photo)
                     image: NetworkImage(
 //                        'https://image.shutterstock.com/image-photo/serious-computer-hacker-dark-clothing-600w-1557297230.jpg'
-                    '${_player.song.photoUrl}'),
+                        '${_player.song.photoUrl}'),
                     fit: BoxFit.cover,
-                  ),
-                ),
-                child: Text(
-                  '${_player.playlist.title}',
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.roboto(
-                    fontWeight: FontWeight.w300,
-                    color: Colors.white,
-                    fontSize: 25,
-                    letterSpacing: 3,
-                    wordSpacing: 3,
                   ),
                 ),
               ),
@@ -235,10 +225,19 @@ class _PlayingScreenState extends State<PlayingScreen> {
     return ButtonBar(
       alignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        buildIconButton(Icons.subtitles, () => print('subtitles')),
+        buildIconButton(Icons.subtitles, () {
+          print('subtitles');
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => LyricsScreen()));
+        }),
         buildIconButton(Icons.playlist_add, () {
           print('playlist_add');
-          Navigator.push(context, MaterialPageRoute(builder: (context) => ActualPlaylistScreen(playlist: _player.playlist,)));
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ActualPlaylistScreen(
+                        playlist: _player.playlist,
+                      )));
         }),
       ],
     );
@@ -248,7 +247,8 @@ class _PlayingScreenState extends State<PlayingScreen> {
     return ButtonBar(
       alignment: MainAxisAlignment.center,
       children: <Widget>[
-        buildIconButton(_player.repeatActual? Icons.repeat_one : Icons.repeat, () {
+        buildIconButton(_player.repeatActual ? Icons.repeat_one : Icons.repeat,
+            () {
           setState(() {
             _player.repeatActual = !_player.repeatActual;
           });

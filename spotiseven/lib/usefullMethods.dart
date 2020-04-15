@@ -65,6 +65,14 @@ class UsefulMethods {
       ),
     );
   }
+  static Widget comingSoon(context){
+    return Container(
+    height: MediaQuery.of(context).size.height,
+    width: MediaQuery.of(context).size.width,
+    color: Colors.black,
+    child: UsefulMethods.text('COOMING SOON', 30.0, 5.0, 251, 225, 33, 1.0),
+    );
+  }
 }
 
 class Items {

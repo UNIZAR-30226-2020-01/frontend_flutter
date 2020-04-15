@@ -6,6 +6,7 @@ import 'package:spotiseven/audio/utils/album.dart';
 import 'package:spotiseven/audio/utils/playlist.dart';
 import 'package:spotiseven/audio/utils/song.dart';
 import 'package:spotiseven/screens/album/album_screen_options.dart';
+import 'package:spotiseven/usefullMethods.dart';
 
 class AlbumDetailScreen extends StatefulWidget {
   final Album album;
@@ -23,10 +24,12 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
   @override
   void initState() {
     _scrollController = ScrollController()..addListener(() => setState(() {}));
-    widget.album.fetchRemote().whenComplete(() {
-      print('${widget.album.photoUrl}');
-      setState(() {});
-    });
+    if (widget.album.list.isEmpty) {
+      widget.album.fetchRemote().whenComplete(() {
+        print('${widget.album.photoUrl}');
+        setState(() {});
+      });
+    }
     super.initState();
   }
 
@@ -39,89 +42,86 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          Container(
-            color: Colors.white,
-            child: RefreshIndicator(
-              onRefresh: () => Future.delayed(
-                  Duration(microseconds: 1), () => print('recargando')),
-              child: CustomScrollView(
-                controller: _scrollController,
-                physics: const BouncingScrollPhysics(),
-                slivers: <Widget>[
-                  SliverAppBar(
-                    backgroundColor: Colors.black,
-                    leading: IconButton(
-                      onPressed: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => AlbumScreenOptions(
-                                    album: this.widget.album,
-                                  ))),
-                      icon: Icon(Icons.more_vert),
-                      color: Colors.white,
-                    ),
-                    elevation: 0,
-                    // Propiedades sliverappbar
-                    floating: false,
-                    snap: false,
-                    pinned: true,
-                    // Efectos
-                    stretch: true,
-                    onStretchTrigger: () => Future.delayed(
-                        Duration(microseconds: 1), () => print('stretch')),
-                    expandedHeight: 300,
-                    flexibleSpace: FlexibleSpaceBar(
+      body: SafeArea(
+        child: RefreshIndicator(
+          onRefresh: () => widget.album.fetchRemote(),
+          child: Stack(
+            children: <Widget>[
+              Container(
+                color: Colors.white,
+                child: CustomScrollView(
+                  controller: _scrollController,
+                  physics: const BouncingScrollPhysics(),
+                  slivers: <Widget>[
+                    SliverAppBar(
+                      backgroundColor: Colors.black,
+                      leading: IconButton(
+                        onPressed: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => AlbumScreenOptions(
+                                      album: this.widget.album,
+                                    ))),
+                        icon: Icon(Icons.more_vert),
+                        color: Colors.white,
+                      ),
+                      elevation: 0,
+                      // Propiedades sliverappbar
+                      floating: false,
+                      snap: false,
+                      pinned: true,
                       // Efectos
-                      stretchModes: [
-                        StretchMode.zoomBackground,
-                        StretchMode.blurBackground,
-                        StretchMode.fadeTitle,
-                      ],
-                      title: SizedBox(
-                        height: 200,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: <Widget>[
-                            Text(
-                              '${widget.album.titulo}',
-                              style: GoogleFonts.roboto(
-                                fontWeight: FontWeight.w600,
-                                color: Colors.white,
-                                fontSize: 25,
-                                letterSpacing: 3,
-                                wordSpacing: 3,
-                              ),
-                              textAlign: TextAlign.end,
-                            ),
-                          ],
+                      stretch: true,
+                      onStretchTrigger: () => Future.delayed(
+                          Duration(microseconds: 1), () => print('stretch')),
+                      expandedHeight: 300,
+                      flexibleSpace: FlexibleSpaceBar(
+                        // Efectos
+                        stretchModes: [
+                          StretchMode.zoomBackground,
+                          StretchMode.blurBackground,
+                          StretchMode.fadeTitle,
+                        ],
+                        centerTitle: true,
+                        background: Image.network(
+                          '${widget.album.photoUrl}',
+                          fit: BoxFit.cover,
                         ),
                       ),
-                      centerTitle: true,
-                      background: Image.network(
-                        '${widget.album.photoUrl}',
-                        fit: BoxFit.cover,
+                    ),
+                    SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (BuildContext context, int index) {
+                          return buildSongPreview_v2(
+                              widget.album.list[index], widget.album, context);
+                        },
+                        childCount: widget.album.list.length,
                       ),
                     ),
-                  ),
-                  SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (BuildContext context, int index) {
-                        return buildSongPreview_v2(
-                            widget.album.list[index], widget.album, context);
-                      },
-                      childCount: widget.album.list.length,
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
+              _fabReproduction(),
+              _name(),
+            ],
           ),
-          _fabReproduction(),
-        ],
+        ),
       ),
+    );
+  }
+
+  _name() {
+    final double defaultTopMargin = 271 - 0.0;
+    double top = defaultTopMargin;
+    return Positioned(
+      top: top,
+      left: 10,
+      child: Container(
+//          margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+          padding: EdgeInsets.fromLTRB(2, 2, 2, 2),
+          height: MediaQuery.of(context).size.width * 0.085,
+          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
+          child: UsefulMethods.text(widget.album.titulo, 25.0, 0.0, 0, 0, 0, 1.0)),
     );
   }
 
@@ -156,27 +156,34 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
       right: 16,
       child: Transform(
         transform: new Matrix4.identity()..scale(scale),
-        child: Container(
-          child: RaisedButton(
-            onPressed: () => PlayingSingleton()
-              // TODO: Integrar la reproduccion de un album como playlist (poner como lista de canciones las del album)
-              ..setPlayList(Playlist(
-                  title: widget.album.titulo,
-                  photoUrl: widget.album.photoUrl,
-                  playlist: widget.album.list))
-              ..randomize()
-              ..play(PlayingSingleton().song),
-            child: Text('PLAY',
-                style: GoogleFonts.roboto(
-                  color: Colors.black,
-                  fontSize: 20,
-                  fontWeight: FontWeight.normal,
-                )),
-            elevation: 0,
-            color: Colors.white,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10))),
-          ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            /*Container(
+              margin: EdgeInsets.fromLTRB(0, 0, 90, 0),
+              padding: EdgeInsets.fromLTRB(2, 2, 2, 2),
+              height: MediaQuery.of(context).size.width*0.08,
+              decoration: BoxDecoration(
+                color:  Colors.white,
+                borderRadius: BorderRadius.circular(10)
+              ),
+              child: UsefulMethods.text(widget.album.titulo, 20.0, 0.0, 0, 0, 0, 1.0)
+            ),*/
+            RaisedButton(
+              onPressed: () => PlayingSingleton()
+                // TODO: Integrar la reproduccion de un album como playlist (poner como lista de canciones las del album)
+                ..setPlayList(Playlist(
+                    title: widget.album.titulo,
+                    photoUrl: widget.album.photoUrl,
+                    playlist: widget.album.list))
+                ..randomize()
+                ..play(PlayingSingleton().song),
+              child: UsefulMethods.text('PLAY', 25.0, 0.0, 0, 0, 0, 1.0),
+              elevation: 0,
+              color: Colors.white,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+            ),
+          ],
         ),
       ),
     );
@@ -184,6 +191,7 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
 
   Widget buildSongPreview_v2(Song s, Album a, BuildContext context) {
     return Container(
+      width: MediaQuery.of(context).size.width * 0.2,
       margin: EdgeInsets.fromLTRB(30, 15, 30, 15),
       child: GestureDetector(
         onTap: () async {
@@ -199,78 +207,106 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Container(
-              child: ClipRRect(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-                child: AspectRatio(
-                  aspectRatio: 1,
-                  child: Image.network(
-                    s.photoUrl,
-                    fit: BoxFit.cover,
+            Expanded(
+              flex: 3,
+              child: Container(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  child: AspectRatio(
+                    aspectRatio: 1,
+                    child: Image.network(
+                      s.photoUrl,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
-              ),
-              height: 60,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-                border: Border.all(
-                  width: 1,
-                  color: Colors.black,
+                height: 60,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  border: Border.all(
+                    width: 1,
+                    color: Colors.black,
+                  ),
                 ),
               ),
             ),
-            Container(
-              height: 60,
-              width: MediaQuery.of(context).size.width * 0.7,
-              padding: EdgeInsets.only(left: 30, right: 10),
-              decoration: BoxDecoration(
-                color: Colors.black,
-                borderRadius: BorderRadius.all(Radius.circular(15)),
+            Expanded(
+              flex: 1,
+              child: SizedBox(
+                width: 1,
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        '${s.title}',
-                        style: TextStyle(
-                          color: Colors.white,
+            ),
+            Expanded(
+              flex: 13,
+              child: Container(
+                height: 60,
+                width: MediaQuery.of(context).size.width * 0.7,
+                padding: EdgeInsets.only(left: 30, right: 10),
+                decoration: BoxDecoration(
+                  color: Colors.black,
+                  borderRadius: BorderRadius.all(Radius.circular(15)),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          '${s.title}',
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
                         ),
-                      ),
-                      Text(
-                        '${s.album.artista.name}',
-                        style: TextStyle(
-                          color: Colors.white,
+                        Text(
+                          '${s.album.artista.name}',
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  PopupMenuButton<String>(
-                    icon: Icon(
-                      Icons.more_vert,
-                      color: Colors.white,
+                      ],
                     ),
-                    color: Colors.white,
-                    itemBuilder: (context) => <PopupMenuEntry<String>>[
-                      PopupMenuItem<String>(
-                        value: 'add_next',
-                        child: Text('Play Next'),
-                      ),
-                    ],
-                    onSelected: (String value) {
-                      switch (value) {
-                        case 'add_next':
-                          PlayingSingleton().addSongNext(s);
-                          break;
-                        default:
-                          print('No action?');
-                      }
-                    },
-                  ),
-                ],
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Row(
+                      children: <Widget>[
+                        IconButton(
+                          onPressed: () => setState(() {
+                            s.setFavorite(!s.favorite);
+                          }),
+                          icon: Icon(
+                            s.favorite ? Icons.star : Icons.star_border,
+                            color: s.favorite ? Colors.yellow : Colors.white,
+                          ),
+                        ),
+                        PopupMenuButton<String>(
+                          icon: Icon(
+                            Icons.more_vert,
+                            color: Colors.white,
+                          ),
+                          color: Colors.white,
+                          itemBuilder: (context) => <PopupMenuEntry<String>>[
+                            PopupMenuItem<String>(
+                              value: 'add_next',
+                              child: Text('Play Next'),
+                            ),
+                          ],
+                          onSelected: (String value) {
+                            switch (value) {
+                              case 'add_next':
+                                PlayingSingleton().addSongNext(s);
+                                break;
+                              default:
+                                print('No action?');
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ],

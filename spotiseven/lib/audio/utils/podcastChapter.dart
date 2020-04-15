@@ -12,6 +12,7 @@ class PodcastChapter {
   //Descripción
   String description;
   String duration;
+  //todo: quitarlo igual
   String date;
   String photoUrl;
 
@@ -23,4 +24,15 @@ class PodcastChapter {
     @required this.date,
     @required this.photoUrl,
 });
+
+  factory PodcastChapter.fromJSON(Map<String, Object> json) {
+    return PodcastChapter(
+      title: json['title'],
+      description: json['description'],
+      duration: json['duration'],
+      date: json['date'],
+      photoUrl: json['image'],
+      podcast: Podcast.fromJSON(json['podcast']),
+    );
+  }
 }

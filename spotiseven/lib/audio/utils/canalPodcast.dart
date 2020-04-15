@@ -9,8 +9,10 @@ class CanalPodcast{
   //Nombre del capitulo
   String title;
   //Podcast al que pertenece
+  //TODO: QUITAR
   String author;
   //Descripción
+  //
   String photoUrl;
 
   List<Podcast> programs;

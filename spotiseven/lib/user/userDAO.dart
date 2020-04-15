@@ -24,6 +24,22 @@ class UserDAO {
     return ok && ((await getUserData()) != null);
   }
 
+  static Future<bool> registerUserWithPassword(User user, String password) async {
+    // TODO: Implementar con el backend
+    Response response = await _client.post('$_url/register/', body: {
+      'username': user.username,
+      'password': password,
+    });
+    print('$_url/register/');
+    if(response.statusCode == 201){
+      // Ha ido bien
+      return true;
+    }else{
+      // Ha habido problemas
+      throw Exception('Problema en el registro. Codigo de error ${response.statusCode}');
+    }
+  }
+
   static Future<User> getUserData() async{
     TokenSingleton tokenSingleton = TokenSingleton();
     // TODO: Change this URL
