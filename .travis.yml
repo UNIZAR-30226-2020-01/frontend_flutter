@@ -32,12 +32,13 @@ addons:
       - curl
 install:
   - git clone https://github.com/flutter/flutter.git -b stable --depth 1
+  - export PATH="$PATH:pwd/flutter/bin/"
   - ./flutter/bin/flutter doctor
 script:
   # - ./flutter/bin/flutter test
   - cd spotiseven
   - pwd
-  - ./flutter/bin/flutter -v build apk
+  - flutter -v build apk
 cache:
   directories:
     - $HOME/.pub-cache
