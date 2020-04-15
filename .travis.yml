@@ -1,25 +1,6 @@
-# os:
-#   - linux
-# sudo: required
-# addons:
-#   apt:
-#     # Flutter depends on /usr/lib/x86_64-linux-gnu/libstdc++.so.6 version GLIBCXX_3.4.18
-#     sources:
-#       - ubuntu-toolchain-r-test # if we don't specify this, the libstdc++6 we get is the wrong version
-#     packages:
-#       - libstdc++6
-#       - fonts-droid-fallback
-#       - lib32stdc++6
-#       - curl
-#
-# before_script:
-#   - git clone https://github.com/flutter/flutter.git -b beta
-#   - ./flutter/bin/flutter doctor
-# script:
-#   #- ./flutter/bin/flutter test
-# cache:
-#   directories:
-#     - $HOME/.pub-cache
+branches:
+  only:
+    - master
 
 os: linux
 language: android
@@ -61,7 +42,9 @@ script:
   - cd spotiseven
   - flutter pub get
   - flutter pub upgrade
-  - flutter -v build apk
+  # - flutter -v build apk
+after_success:
+  - bash upload_apk_master.sh
 cache:
   directories:
     - $HOME/.pub-cache
