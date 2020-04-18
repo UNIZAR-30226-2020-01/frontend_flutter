@@ -2,9 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:spotiseven/audio/playingSingleton.dart';
+import 'package:spotiseven/audio/utils/DAO/playlistDAO.dart';
 import 'package:spotiseven/audio/utils/DAO/songDAO.dart';
 import 'package:spotiseven/audio/utils/playlist.dart';
 import 'package:spotiseven/audio/utils/song.dart';
+import 'package:spotiseven/screens/playlist/create_playlist.dart';
 import 'package:spotiseven/screens/playlist/playlist_screen_options.dart';
 
 class PlaylistScreen extends StatefulWidget {
@@ -19,10 +21,18 @@ class PlaylistScreen extends StatefulWidget {
 class _PlaylistScreenState extends State<PlaylistScreen> {
   // Control del scroll
   ScrollController _scrollController;
+  // Para añadir a la playlist
+  List<Playlist> _playlists = List();
 
   @override
   void initState() {
     _scrollController = ScrollController()..addListener(() => setState(() {}));
+    PlaylistDAO.getAllPlaylists().then((List<Playlist> playlist) {
+      print('listas: ${playlist.length}');
+      setState(() {
+        _playlists = playlist;
+      });
+    });
     super.initState();
   }
 
@@ -276,11 +286,53 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
                               value: 'add_next',
                               child: Text('Play Next'),
                             ),
+                            PopupMenuItem<String>(
+                              value: 'add_to_playlist',
+                              child: Text('Add to playlist'),
+                            ),
                           ],
-                          onSelected: (String value) {
+                          onSelected: (String value) async {
                             switch (value) {
                               case 'add_next':
                                 PlayingSingleton().addSongNext(s);
+                                break;
+                              case 'add_to_playlist':
+                                print('Añadiendo a playlist');
+                                String opt = await showDialog<String>(
+                                    context: context,
+                                    barrierDismissible: true,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: Text('Select Playlist to add'),
+                                        elevation: 0,
+                                        actions: [
+                                              FlatButton(
+                                                onPressed: () {
+                                                  Navigator.pop(context, 'new');
+                                                },
+                                                child: Text(
+                                                  'New Playlist',
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                              )
+                                            ] +
+                                            _playlists
+                                                .map((Playlist pl) =>
+                                                    _createPlaylistFlatButton(
+                                                        context, pl, s))
+                                                .toList(),
+                                      );
+                                    });
+                                print('$opt');
+                                if (opt == 'new') {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              CreatePlaylistScreen()));
+                                }
                                 break;
                               default:
                                 print('No action?');
@@ -295,6 +347,20 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  FlatButton _createPlaylistFlatButton(
+      BuildContext context, Playlist pl, Song s) {
+    return FlatButton(
+      onPressed: () {
+        print('Añadir cancion ${s.title} a playlist ${pl.title}');
+        Navigator.pop(context, 'not_new');
+      },
+      child: Text(
+        '${pl.title}',
+        style: TextStyle(color: Colors.black),
       ),
     );
   }

@@ -100,4 +100,11 @@ class Album {
     titulo = album.titulo;
     list = album.list;
   }
+
+  dynamic toJSON() {
+    return {
+      'titulo': this.titulo,
+      'artista': this.artista.toJSON(),
+    };
+  }
 }

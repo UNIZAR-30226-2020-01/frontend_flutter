@@ -44,4 +44,13 @@ class Playlist {
       user: p.user,
     );
   }
+
+  // TODO: Integrar con el endpoint
+  Map<String, dynamic> toJSON() {
+    var m = Map<String,dynamic>();
+    m['title'] = this.title;
+    m['playlist'] = this.playlist.map((s) => s.toJSON()).toList();
+    m['photoUrl'] = this.photoUrl;
+    return m;
+  }
 }

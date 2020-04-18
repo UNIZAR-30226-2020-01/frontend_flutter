@@ -76,4 +76,10 @@ class Artist {
     this.albums = artist.albums;
     this.biography = artist.biography;
   }
+
+  dynamic toJSON() {
+    return {
+      'name': this.name,
+    };
+  }
 }
