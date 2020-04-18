@@ -5,6 +5,9 @@ import 'package:spotiseven/audio/utils/song.dart';
 // TODO: Falta el usuario
 // TODO: Imagen de playlist
 class Playlist {
+  // URL del recurso
+  String url;
+
   // Titulo de la playlist
   String title;
 
@@ -19,11 +22,12 @@ class Playlist {
   String photoUrl;
 
   // Constructor
-  Playlist({this.title, this.playlist, this.photoUrl, this.user});
+  Playlist({this.url, this.title, this.playlist, this.photoUrl, this.user});
 
   // TODO: Cambiar esto para que coincida con la API REST
   factory Playlist.fromJSON(Map<String, Object> json) {
     return Playlist(
+      url: (json['url'] as String).replaceAll('http://', 'https://'),
       title: json['title'],
       playlist: (json['songs'] as List).map((d) => Song.fromJSON(d)).toList(),
       photoUrl: json['icon'],
@@ -38,6 +42,7 @@ class Playlist {
       songs.add(s);
     }
     return Playlist(
+      url: p.url,
       title: p.title,
       playlist: songs,
       photoUrl: p.photoUrl,

@@ -95,15 +95,29 @@ class PlaylistDAO {
   }
 
   static Future<void> createPlaylist(Playlist p) async {
-    print('$_url/playlist');
-    Response response = await _client.post('$_url/playlists',
+    print('$_url/playlist/');
+    Response response = await _client.post('$_url/playlists/',
         body: {'title': p.title}, headers: TokenSingleton().authHeader);
-    if (response.statusCode == 200) {
+    if (response.statusCode == 201) {
       // Ha ido bien
       print('La creacion de la lista ha ido bien');
     } else {
       throw Exception(
           'Error al crear una playlist. Codigo de error: ${response.statusCode}');
+    }
+  }
+
+  static Future<void> addSongToPlaylist(Playlist p, Song s) async {
+    var list = s.urlApi.split('/');
+    var id = list[list.length - 2];
+    print('id: $id');
+    print('url: ${p.url}add_song/');
+    Response response = await _client.post('${p.url}add_song/',
+        headers: TokenSingleton().authHeader, body: {
+          'song_id': id,
+        });
+    if(response.statusCode != 200){
+      throw Exception('Error al añadir una cancion a la playlist. Codigo de error: ${response.statusCode}');
     }
   }
 }

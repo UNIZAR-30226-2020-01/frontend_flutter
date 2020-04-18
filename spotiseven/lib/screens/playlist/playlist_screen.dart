@@ -356,6 +356,7 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
     return FlatButton(
       onPressed: () {
         print('Añadir cancion ${s.title} a playlist ${pl.title}');
+        PlaylistDAO.addSongToPlaylist(pl, s);
         Navigator.pop(context, 'not_new');
       },
       child: Text(
