@@ -28,7 +28,7 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
   void initState() {
     _scrollController = ScrollController()..addListener(() => setState(() {}));
     PlaylistDAO.getAllPlaylists().then((List<Playlist> playlist) {
-      print('listas: ${playlist.length}');
+//      print('listas: ${playlist.length}');
       setState(() {
         _playlists = playlist;
       });
@@ -45,6 +45,12 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    int numSongs = 0;
+    if(this.widget.playlist.playlist != null){
+      numSongs = this.widget.playlist.playlist.length;
+    }
+
     return Scaffold(
       body: Stack(
         children: <Widget>[
@@ -121,7 +127,7 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
                             widget.playlist,
                             context);
                       },
-                      childCount: widget.playlist.playlist.length,
+                      childCount: numSongs,
                     ),
                   ),
                 ],
@@ -328,11 +334,15 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
                                     });
                                 print('$opt');
                                 if (opt == 'new') {
-                                  Navigator.push(
+                                  Playlist nueva = await Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
                                               CreatePlaylistScreen()));
+                                  if (nueva != null) {
+                                    // TODO: Cambiar esto para que nueva tenga url
+                                    PlaylistDAO.addSongToPlaylist(nueva, s);
+                                  }
                                 }
                                 break;
                               default:

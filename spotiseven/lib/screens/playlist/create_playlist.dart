@@ -26,7 +26,7 @@ class _CreatePlaylistScreenState extends State<CreatePlaylistScreen> {
         centerTitle: true,
         leading: IconButton(
           icon: Icon(Icons.close),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => Navigator.pop(context, null),
         ),
       ),
       body: Container(
@@ -40,9 +40,14 @@ class _CreatePlaylistScreenState extends State<CreatePlaylistScreen> {
               height: 20,
             ),
             RaisedButton(
-              onPressed: () => PlaylistDAO.createPlaylist(Playlist(
-                title: _title,
-              )..playlist = List()),
+              onPressed: () async {
+                Playlist pl = Playlist(
+                  title: _title,
+                )..playlist = List();
+                await PlaylistDAO.createPlaylist(pl);
+                // Devolvemos la playlist creada a la pila
+                Navigator.pop(context, pl);
+              },
               child: Text('ADD PLAYLIST'),
             ),
           ],

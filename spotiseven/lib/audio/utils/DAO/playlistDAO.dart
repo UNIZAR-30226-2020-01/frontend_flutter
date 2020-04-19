@@ -117,6 +117,8 @@ class PlaylistDAO {
     if (response.statusCode == 201) {
       // Ha ido bien
       print('La creacion de la lista ha ido bien');
+      // TODO: Actualizar la información de la playlist
+      p = Playlist.fromJSONListed(jsonDecode(response.body));
     } else {
       throw Exception(
           'Error al crear una playlist. Codigo de error: ${response.statusCode}');

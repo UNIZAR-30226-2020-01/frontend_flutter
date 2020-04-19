@@ -29,12 +29,10 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
   @override
   void initState() {
     _scrollController = ScrollController()..addListener(() => setState(() {}));
-    if (widget.album.list.isEmpty) {
-      widget.album.fetchRemote().whenComplete(() {
-        print('${widget.album.photoUrl}');
-        setState(() {});
-      });
-    }
+    widget.album.fetchRemote().whenComplete(() {
+      print('${widget.album.photoUrl}');
+      setState(() {});
+    });
     PlaylistDAO.getAllPlaylists().then((List<Playlist> playlist) {
       print('listas: ${playlist.length}');
       setState(() {
@@ -131,8 +129,10 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
 //          margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
           padding: EdgeInsets.fromLTRB(2, 2, 2, 2),
           height: MediaQuery.of(context).size.width * 0.085,
-          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
-          child: UsefulMethods.text(widget.album.titulo, 25.0, 0.0, 0, 0, 0, 1.0)),
+          decoration: BoxDecoration(
+              color: Colors.white, borderRadius: BorderRadius.circular(10)),
+          child:
+              UsefulMethods.text(widget.album.titulo, 25.0, 0.0, 0, 0, 0, 1.0)),
     );
   }
 
@@ -192,7 +192,8 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
               child: UsefulMethods.text('PLAY', 25.0, 0.0, 0, 0, 0, 1.0),
               elevation: 0,
               color: Colors.white,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10))),
             ),
           ],
         ),
@@ -323,32 +324,36 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
                                         title: Text('Select Playlist to add'),
                                         elevation: 0,
                                         actions: [
-                                          FlatButton(
-                                            onPressed: () {
-                                              Navigator.pop(context, 'new');
-                                            },
-                                            child: Text(
-                                              'New Playlist',
-                                              style: TextStyle(
-                                                color: Colors.black,
-                                              ),
-                                            ),
-                                          )
-                                        ] +
+                                              FlatButton(
+                                                onPressed: () {
+                                                  Navigator.pop(context, 'new');
+                                                },
+                                                child: Text(
+                                                  'New Playlist',
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                              )
+                                            ] +
                                             _playlists
                                                 .map((Playlist pl) =>
-                                                _createPlaylistFlatButton(
-                                                    context, pl, s))
+                                                    _createPlaylistFlatButton(
+                                                        context, pl, s))
                                                 .toList(),
                                       );
                                     });
                                 print('$opt');
                                 if (opt == 'new') {
-                                  Navigator.push(
+                                  Playlist nueva = await Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
                                               CreatePlaylistScreen()));
+                                  if (nueva != null) {
+                                    // TODO: Cambiar esto para que nueva tenga url
+                                    PlaylistDAO.addSongToPlaylist(nueva, s);
+                                  }
                                 }
                                 break;
                               default:

@@ -16,6 +16,9 @@ class Playlist {
   // Lista de canciones en la playlist
   List<Song> playlist;
 
+  // Numeero de canciones
+  int num_songs;
+
   // TODO: Cambiar la informacion de un usuario
   // Username
   String user;
@@ -24,7 +27,7 @@ class Playlist {
   String photoUrl;
 
   // Constructor
-  Playlist({this.url, this.title, this.playlist, this.photoUrl, this.user});
+  Playlist({this.url, this.title, this.playlist, this.photoUrl, this.user, this.num_songs});
 
   // TODO: Cambiar esto para que coincida con la API REST
   factory Playlist.fromJSONDetail(Map<String, Object> json) {
@@ -35,6 +38,7 @@ class Playlist {
       photoUrl: json['icon'],
       // TODO: Comprobar esto cuando existan los usuarios
       user: (json['user'] as Map)['username'],
+      num_songs: json['number_songs'],
     );
   }
 
@@ -43,10 +47,11 @@ class Playlist {
     return Playlist(
       url: (json['url'] as String).replaceAll('http://', 'https://'),
       title: json['title'],
-      playlist: (json['songs'] as List).map((d) => Song.fromJSON(d)).toList(),
+//      playlist: (json['songs'] as List).map((d) => Song.fromJSON(d)).toList(),
       photoUrl: json['icon'],
       // TODO: Comprobar esto cuando existan los usuarios
       user: (json['user'] as Map)['username'],
+      num_songs: json['number_songs'],
     );
   }
 

@@ -27,7 +27,7 @@ class AlbumCardWidget extends StatelessWidget {
     return [
       UsefulMethods.text(album.titulo.toString(), 10.0, 0.0, 255,255, 255, 1.0),
       UsefulMethods.text(album.artista.name.toString(), 10.0, 0.0, 255,255, 255, 1.0),
-      UsefulMethods.text(album.numberSongs.toString()+'songs', 10.0, 0.0, 255,255, 255, 1.0),
+      UsefulMethods.text(album.numberSongs.toString()+' songs', 10.0, 0.0, 255,255, 255, 1.0),
     ];
     //return ['${album.titulo}', '${album.artista.name}', '${album.numberSongs} songs'];
   }

@@ -28,7 +28,7 @@ class PlaylistCardWidget extends StatelessWidget {
     return [
       UsefulMethods.text(playlist.title, 13.0, 0.0, 255, 255, 255, 1.0),
       UsefulMethods.text(playlist.user, 12.0, 0.0, 255, 255, 255, 1.0),
-      UsefulMethods.text(playlist.playlist.length.toString()+' songs', 10.0, 0.0, 255, 255, 255, 1.0),
+      UsefulMethods.text('${playlist.num_songs} songs', 10.0, 0.0, 255, 255, 255, 1.0),
     ];
   }
 }
