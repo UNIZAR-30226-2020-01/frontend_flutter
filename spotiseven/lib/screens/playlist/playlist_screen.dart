@@ -45,9 +45,8 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     int numSongs = 0;
-    if(this.widget.playlist.playlist != null){
+    if (this.widget.playlist.playlist != null) {
       numSongs = this.widget.playlist.playlist.length;
     }
 
@@ -120,15 +119,30 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
                     ),
                   ),
                   SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (BuildContext context, int index) {
-                        return buildSongPreview_v2(
-                            widget.playlist.playlist[index],
-                            widget.playlist,
-                            context);
-                      },
-                      childCount: numSongs,
-                    ),
+                    delegate: SliverChildListDelegate(
+                        widget.playlist.playlist.isNotEmpty
+                            ? widget.playlist.playlist
+                                .map((Song s) => buildSongPreview_v2(
+                                    s, widget.playlist, context))
+                                .toList()
+                            : [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 150, vertical: 50),
+                                  child: AspectRatio(
+                                      aspectRatio: 1,
+                                      child: CircularProgressIndicator()),
+                                )
+                              ]),
+//                    delegate: SliverChildBuilderDelegate(
+//                      (BuildContext context, int index) {
+//                        return buildSongPreview_v2(
+//                            widget.playlist.playlist[index],
+//                            widget.playlist,
+//                            context);
+//                      },
+//                      childCount: numSongs,
+//                    ),
                   ),
                 ],
               ),
