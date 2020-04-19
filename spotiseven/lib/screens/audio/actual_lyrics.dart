@@ -31,13 +31,15 @@ class _LyricsScreenState extends State<LyricsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    String lyrics = '';
-    if (_playingSingleton.song.lyrics != null &&
-        _playingSingleton.song.lyrics.trim().length != 0) {
-      lyrics = _playingSingleton.song.lyrics;
-    } else {
-      lyrics = 'La canción seleccionada no dispone de lyrics.';
+    Widget body = CircularProgressIndicator();
+    if(_playingSingleton.song.lyrics != null && _playingSingleton.song.lyrics == " "){
+      // No hay lyrics
+      body = Text('La canción seleccionada no dispone de lyrics.');
+    }else if(_playingSingleton.song.lyrics != null && _playingSingleton.song.lyrics.trim().length != 0){
+      // Hay lyrics
+      body = Text('${_playingSingleton.song.lyrics}');
     }
+    // Mostramos la pantalla de las lyrics
     return Scaffold(
       appBar: AppBar(
         title: Text('Lyrics of ${_playingSingleton.song.title}'),
@@ -49,7 +51,7 @@ class _LyricsScreenState extends State<LyricsScreen> {
         child: ListView(
           children: <Widget>[
             Center(
-              child: Text('${lyrics}'),
+              child: body,
             ),
           ],
         ),

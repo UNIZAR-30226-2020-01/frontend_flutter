@@ -27,7 +27,13 @@ class Playlist {
   String photoUrl;
 
   // Constructor
-  Playlist({this.url, this.title, this.playlist, this.photoUrl, this.user, this.num_songs});
+  Playlist(
+      {this.url,
+      this.title,
+      this.playlist,
+      this.photoUrl,
+      this.user,
+      this.num_songs});
 
   // TODO: Cambiar esto para que coincida con la API REST
   factory Playlist.fromJSONDetail(Map<String, Object> json) {
@@ -44,7 +50,7 @@ class Playlist {
 
   // TODO: Cambiar esto para que coincida con la API REST
   factory Playlist.fromJSONListed(Map<String, Object> json) {
-    return Playlist(
+    Playlist p = Playlist(
       url: (json['url'] as String).replaceAll('http://', 'https://'),
       title: json['title'],
 //      playlist: (json['songs'] as List).map((d) => Song.fromJSON(d)).toList(),
@@ -53,6 +59,10 @@ class Playlist {
       user: (json['user'] as Map)['username'],
       num_songs: json['number_songs'],
     );
+    if (p.playlist == null) {
+      p.playlist = List();
+    }
+    return p;
   }
 
   factory Playlist.copy(Playlist p) {
@@ -71,7 +81,7 @@ class Playlist {
 
   // TODO: Integrar con el endpoint
   Map<String, dynamic> toJSON() {
-    var m = Map<String,dynamic>();
+    var m = Map<String, dynamic>();
     m['title'] = this.title;
     m['playlist'] = this.playlist.map((s) => s.toJSON()).toList();
     m['photoUrl'] = this.photoUrl;

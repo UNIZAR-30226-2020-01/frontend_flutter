@@ -99,13 +99,28 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
                       ),
                     ),
                     SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (BuildContext context, int index) {
-                          return buildSongPreview_v2(
-                              widget.album.list[index], widget.album, context);
-                        },
-                        childCount: widget.album.list.length,
-                      ),
+                      delegate: SliverChildListDelegate(widget
+                              .album.list.isNotEmpty
+                          ? widget.album.list
+                              .map((Song s) =>
+                                  buildSongPreview_v2(s, widget.album, context))
+                              .toList()
+                          : [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 150, vertical: 50),
+                                child: AspectRatio(
+                                    aspectRatio: 1,
+                                    child: CircularProgressIndicator()),
+                              )
+                            ]),
+//                      delegate: SliverChildBuilderDelegate(
+//                        (BuildContext context, int index) {
+//                          return buildSongPreview_v2(
+//                              widget.album.list[index], widget.album, context);
+//                        },
+//                        childCount: widget.album.list.length,
+//                      ),
                     ),
                   ],
                 ),
