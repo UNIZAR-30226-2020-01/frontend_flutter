@@ -33,6 +33,7 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
         _playlists = playlist;
       });
     });
+    this.widget.playlist.fetchRemote().whenComplete(() => setState(() {}));
     super.initState();
   }
 
