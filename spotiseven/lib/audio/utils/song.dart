@@ -69,4 +69,12 @@ class Song {
     SongDAO.markAs(fav, this);
   }
 
+  // TODO: Integrar con el backend
+  dynamic toJSON() {
+    return {
+      'title': this.title,
+      'album': this.album.toJSON(),
+    };
+  }
+
 }
