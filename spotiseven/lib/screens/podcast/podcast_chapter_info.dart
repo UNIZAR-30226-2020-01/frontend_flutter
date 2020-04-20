@@ -64,24 +64,28 @@ class _PodcastChapterInfoState extends State<PodcastChapterInfo> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Container(
-            width: MediaQuery.of(context).size.width *0.3,
-            child: _text(context, '${widget.podcastChapter.title}', 25.0, 0, 0, 0, 1.0),
+            margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+//            width: MediaQuery.of(context).size.width ,
+            child: _text(context, ' ${widget.podcastChapter.title}', 10000.0, 0, 0, 0, 1.0),
           ),
           SizedBox(height: 10,),
           Container(
-            width: MediaQuery.of(context).size.width *0.1,
+            width: MediaQuery.of(context).size.width *0.5,
             child: _text(context, '${widget.podcastChapter.podcast.title}', 10.0, 0, 0, 0, 1.0),
           ),
           SizedBox(height: 10,),
           Container(
-            width: MediaQuery.of(context).size.width *0.2,
-            child: _text(context, ' Duration: ${widget.podcastChapter.duration}', 30.0, 0, 0, 0, 1.0),
+            width: MediaQuery.of(context).size.width *0.15,
+            child: _text(context, /*' Duration: ${widget.podcastChapter.duration}'*/
+                ' '+Duration(seconds: widget.podcastChapter.duration).toString().split('.')[0],
+                30.0, 0, 0, 0, 1.0),
           ),
           SizedBox(height: 10,),
-          Container(
+          //TODO:   que hacemos con la fecha
+          /*Container(
             width: MediaQuery.of(context).size.width *0.2,
             child: _text(context, ' Date: ${widget.podcastChapter.date}', 30.0, 0, 0, 0, 1.0),
-          ),
+          ),*/
 
         ],
       ),

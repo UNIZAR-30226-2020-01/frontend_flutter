@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:spotiseven/audio/utils/DAO/podcastDAO.dart';
 import 'package:spotiseven/audio/utils/podcastChapter.dart';
 import 'package:spotiseven/audio/utils/podcast.dart';
 import 'package:spotiseven/generic_components/GenericHorizontalListView.dart';
@@ -13,7 +14,16 @@ class DiscoverPodcast extends StatefulWidget {
 
 
 class _DiscoverPodcastState extends State<DiscoverPodcast> {
+  List<Podcast> _listPodcasts;
 
+  @override
+  void initState() {
+    _listPodcasts = List();
+    PodcastDAO.getAllPodcasts().then((List<Podcast> list) => setState(() {
+      _listPodcasts = list;
+    }));
+    super.initState();
+  }
 
   _foruBar() {
     return Container(
@@ -32,8 +42,8 @@ class _DiscoverPodcastState extends State<DiscoverPodcast> {
 
 
   _foruElem() {
-    List<Podcast> list = Items.devoListsPodcasts();
-    return GenericHorizontalListView(lista: list,);
+//    List<Podcast> list = Items.devoListsPodcasts();
+    return GenericHorizontalListView(lista: _listPodcasts,);
   }
 
   _suggestionsBar() {
@@ -67,15 +77,15 @@ class _DiscoverPodcastState extends State<DiscoverPodcast> {
 
 
   _suggestionsGrid() {
-    List<Podcast> list = Items.devoListsPodcasts();
+//    List<Podcast> list = Items.devoListsPodcasts();
     return Container(
       child: GridView.builder(
-        itemCount: list.length,
+        itemCount: _listPodcasts.length,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
           itemBuilder: (context, index){
             return Container(
               margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
-              child: suggestion(list[index].title),
+              child: suggestion(_listPodcasts[index].title),
             );
           }
 

@@ -13,6 +13,7 @@ class Podcast {
   CanalPodcast canal;
   //Descripción
   String photoUrl;
+  String url;
 
   int numChapters;
 
@@ -23,16 +24,44 @@ class Podcast {
     @required this.canal,
     @required this.photoUrl,
     @required this.numChapters,
+
     @required this.chapters,
-  });
+    @required this.url,
+    }) {
+    chapters = List();
+    }
 
   factory Podcast.fromJSON(Map<String, Object> json) {
     return Podcast(
-        title: json['title'],
-        canal: json['canal'],
-        photoUrl: json['image'],
-        numChapters: null,
-        //podcast: (json['podcast']as Map)['title']
+      title: json['title'],
+      canal: json['canal'],
+      photoUrl: json['image'],
+      numChapters: null,
+      //podcast: (json['podcast']as Map)['title']
     );
+  }
+
+
+  static Podcast fromJSONListed(Map<String, Object> json) {
+    Podcast p = Podcast(
+        title: json['title'],
+        canal: CanalPodcast.fromJSON(json['channel']),
+        photoUrl: json['image'],
+        numChapters: json['number_episodes'],
+        url: json['url']
+    );
+    return p;
+  }
+
+  static Podcast fromJSONDetailed(Map<String, Object> json) {
+    Podcast p = Podcast(
+        title: json['title'],
+        canal: CanalPodcast.fromJSON(json['channel']),
+        photoUrl: json['image'],
+        numChapters: json['number_episodes'],
+        url: json['url'],
+    );
+    p.chapters = (json['episodes'] as List).map((j) => (PodcastChapter.fromJSONwithPodcast(j, p) as PodcastChapter)).toList();
+    return p;
   }
 }

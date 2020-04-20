@@ -8,27 +8,25 @@ import 'package:spotiseven/audio/utils/podcast.dart';
 class CanalPodcast{
   //Nombre del capitulo
   String title;
-  //Podcast al que pertenece
-  //TODO: QUITAR
-  String author;
-  //Descripción
-  //
-  String photoUrl;
 
-  List<Podcast> programs;
+  //Podcast al que pertenece
 
 
   CanalPodcast(
   {
     @required this.title,
-    @required this.author,
-    @required this.photoUrl,
-    this.programs,
   });
   /*factory Podcast.fromJSON(Map<String, Object> json) {
     return Podcast(
       //TODO: completar cuando este claro el backend
     );
   }*/
+
+  static CanalPodcast fromJSON(Map<String, Object> json) {
+    CanalPodcast c = CanalPodcast(
+        title: json['name']
+    );
+    return c;
+  }
 
 }

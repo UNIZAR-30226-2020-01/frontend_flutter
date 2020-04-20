@@ -16,7 +16,7 @@ class GenericNewPodChapter extends StatelessWidget {
 
   _description(context){
     return Container(
-      padding: EdgeInsets.fromLTRB(30, 1, 30, 0),
+      padding: EdgeInsets.fromLTRB(30, 10, 30, 0),
         child: AutoSizeText(
           podcastChapter.description,
           textAlign: TextAlign.justify,
@@ -57,13 +57,20 @@ class GenericNewPodChapter extends StatelessWidget {
   }
   _chapterInfo(){
     return Container(
-      margin: EdgeInsets.fromLTRB(20, 10, 0, 0),
+      margin: EdgeInsets.fromLTRB(20, 10, 10, 0),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          UsefulMethods.text(podcastChapter.title, 20.0, 3.0, 255,255,255,1.0),
-          SizedBox(height: 5,),
-          UsefulMethods.text(podcastChapter.title, 14.0, 0.0, 255,255,255,1.0)
+          Container(
+            margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+            child: UsefulMethods.text(podcastChapter.title, 10.0, 0.0, 255,255,255,1.0),
+          ),
+//          SizedBox(height: 5,),
+          Container(
+              margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+              child: UsefulMethods.text(podcastChapter.podcast.title, 14.0, 0.0, 255,255,255,1.0)
+          )
         ],
       ),
     );
@@ -78,6 +85,7 @@ class GenericNewPodChapter extends StatelessWidget {
           color: Color.fromRGBO(0, 0, 0, 0.86),
         ),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Expanded(
               flex: 6,
@@ -101,8 +109,9 @@ class GenericNewPodChapter extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    UsefulMethods.text('Duration: ${podcastChapter.duration}', 10.0, 0.0,  255,255,255,1.0),
-                    UsefulMethods.text(podcastChapter.date, 10.0, 0.0,  255,255,255,1.0),
+                    UsefulMethods.text('Duration: ${Duration(seconds: podcastChapter.duration).toString().split('.')[0]}'
+                        , 10.0, 0.0,  255,255,255,1.0),
+//                  todo: la fecha bro  UsefulMethods.text(podcastChapter.date, 10.0, 0.0,  255,255,255,1.0),
                   ],
                 ),
               ),

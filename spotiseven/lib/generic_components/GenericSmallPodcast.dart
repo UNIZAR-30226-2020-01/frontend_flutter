@@ -2,22 +2,32 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:spotiseven/audio/utils/DAO/podcastDAO.dart';
 import 'package:spotiseven/audio/utils/podcast.dart';
 import 'package:spotiseven/generic_components/GenericPodcast.dart';
 import 'package:spotiseven/usefullMethods.dart';
 
 class GenericSmallPodcast extends StatelessWidget {
-  final Podcast podcast;
+  Podcast podcast;
+  Podcast p_detallado;
  
-  GenericSmallPodcast({@required this.podcast});
+  GenericSmallPodcast({@required this.podcast}){
+    coger();
+  }
+
+  Future<Podcast> coger() async{
+    p_detallado =  await PodcastDAO.getFromUrl(podcast.url);
+    return p_detallado;
+  }
 
   @override
   Widget build(BuildContext context) {
-    print('Desde small podcast ${podcast.title}');
     return GestureDetector(
       onTap: () {
-        Navigator.push(context,MaterialPageRoute(builder: (context) =>
-            GenericPodcast(podcast: podcast,),
+        Navigator.push(context,MaterialPageRoute(builder: (context) {
+          print("Chapters:" + p_detallado.chapters.toString());
+          return GenericPodcast(podcast: p_detallado,);
+        },
         ));
       },
       child: Container(
