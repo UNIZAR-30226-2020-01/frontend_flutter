@@ -73,7 +73,9 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), title: Text('')),
           // TODO: Change 'hearing' icon to podcast
-          BottomNavigationBarItem(icon: Icon(Icons.cast), title: Text('')),
+          BottomNavigationBarItem(icon: Icon(
+              Icons.cast), title: Text('')
+          ),
           BottomNavigationBarItem(icon: Icon(Icons.search), title: Text('')),
           BottomNavigationBarItem(icon: Icon(Icons.person), title: Text('')),
         ],

@@ -75,7 +75,7 @@ class UsefulMethods {
   }
 }
 
-class Items {
+/*class Items {
   static c1() {
     return CanalPodcast(title: 'RTVE',
         author: 'ESPAÑITA',
@@ -172,4 +172,4 @@ class Items {
 
       return a;
     }
-  }
+  }*/
