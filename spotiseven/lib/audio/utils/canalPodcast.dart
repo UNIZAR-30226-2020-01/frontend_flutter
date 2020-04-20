@@ -8,15 +8,8 @@ import 'package:spotiseven/audio/utils/podcast.dart';
 class CanalPodcast{
   //Nombre del capitulo
   String title;
-<<<<<<< HEAD
+
   //Podcast al que pertenece
-  //TODO: QUITAR
-  String author;
-=======
->>>>>>> dev_podcasts
-  //Descripción
-  //
-  String photoUrl;
 
 
   CanalPodcast(

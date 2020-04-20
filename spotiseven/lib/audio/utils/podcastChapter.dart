@@ -11,14 +11,10 @@ class PodcastChapter {
   Podcast podcast;
   //Descripción
   String description;
-<<<<<<< HEAD
-  String duration;
   //todo: quitarlo igual
   String date;
-=======
   int duration;
   String url;
->>>>>>> dev_podcasts
   String photoUrl;
 
   PodcastChapter({
@@ -29,7 +25,7 @@ class PodcastChapter {
     @required this.url,
     @required this.photoUrl,
 });
-<<<<<<< HEAD
+/*<<<<<<< HEAD
 
   factory PodcastChapter.fromJSON(Map<String, Object> json) {
     return PodcastChapter(
@@ -41,7 +37,7 @@ class PodcastChapter {
       podcast: Podcast.fromJSON(json['podcast']),
     );
   }
-=======
+=======*/
   static fromJSON(Map<String, Object> json){
     PodcastChapter chap = PodcastChapter(
         title: json['title'],
@@ -65,7 +61,4 @@ class PodcastChapter {
     );
     return chap;
   }
-
-
->>>>>>> dev_podcasts
 }
