@@ -26,6 +26,7 @@ class _GenericPodcastState extends State<GenericPodcast> {
 
   @override
   void initState() {
+    print("Podcast: "+widget.podcast.chapters.toString());
     _scrollController = ScrollController()..addListener(() => setState(() {}));
     super.initState();
   }
@@ -115,7 +116,6 @@ class _GenericPodcastState extends State<GenericPodcast> {
                     color: Color.fromRGBO(0, 0, 0, 1.0),
                   ),
                 ),
-                //_text(context, '${widget.artista.name} asdas', 15.0, 0, 0, 0, 1.0),
               ),
               Container(
                 width: MediaQuery.of(context).size.width * 0.1,
@@ -132,14 +132,15 @@ class _GenericPodcastState extends State<GenericPodcast> {
           ),
           SizedBox(height: 10,),
           Container(
-            width: MediaQuery.of(context).size.width*0.25,
-            child: _text(context, '${widget.podcast.canal.title} Albums', 15.0, 0, 0, 0, 1.0),
+//            width: MediaQuery.of(context).size.width*0.25,
+            margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+            child: _text(context, '${widget.podcast.canal.title}', 40.0, 0, 0, 0, 1.0),
           ),
 
           SizedBox(height: 10,),
           Container(
-            width: MediaQuery.of(context).size.width*0.25,
-            child: _text(context, '${widget.podcast.chapters} Chapters', 15.0,  0, 0, 0, 1.0),
+//            width: MediaQuery.of(context).size.width*0.25,
+            child: _text(context, '${widget.podcast.numChapters} chapters', 10.0,  0, 0, 0, 1.0),
           ),
         ],
       ),
