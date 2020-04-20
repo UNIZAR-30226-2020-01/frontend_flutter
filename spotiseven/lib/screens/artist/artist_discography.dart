@@ -10,7 +10,6 @@ import 'package:spotiseven/screens/artist/artist_info.dart';
 import 'package:spotiseven/generic_components/GenericHorizontalWidget.dart';
 import 'package:spotiseven/screens/album/album_screen.dart';
 
-
 class ArtistDiscography extends StatefulWidget {
   final Artist artista;
 
@@ -26,9 +25,7 @@ class _ArtistDiscographyState extends State<ArtistDiscography> {
   @override
   void initState() {
     _scrollController = ScrollController()..addListener(() => setState(() {}));
-    if (widget.artista.albums.isEmpty) {
-      widget.artista.fetchRemote().whenComplete(() => setState(() {}));
-    }
+    widget.artista.fetchRemote().whenComplete(() => setState(() {}));
     super.initState();
   }
 
@@ -258,22 +255,33 @@ class _ArtistDiscographyState extends State<ArtistDiscography> {
                   _appBar(context),
                   SliverList(
                     delegate: SliverChildListDelegate(
-                      widget.artista.albums
-                          .map((Album album) => GenericHorizontalWidget(
-                                args: [
-                                  '${album.titulo}',
-                                  '${album.numberSongs} songs',
-                                  'p2'
-                                ],
-                                imageUrl: album.photoUrl,
-                                onPressedFunction: () => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => AlbumDetailScreen(
-                                              album: album,
-                                            ))),
-                              ))
-                          .toList(),
+                      widget.artista.albums.isNotEmpty
+                          ? widget.artista.albums
+                              .map((Album album) => GenericHorizontalWidget(
+                                    args: [
+                                      '${album.titulo}',
+                                      '${album.numberSongs} songs',
+                                      'p2'
+                                    ],
+                                    imageUrl: album.photoUrl,
+                                    onPressedFunction: () => Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                AlbumDetailScreen(
+                                                  album: album,
+                                                ))),
+                                  ))
+                              .toList()
+                          : [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 150, vertical: 50),
+                                child: AspectRatio(
+                                    aspectRatio: 1,
+                                    child: CircularProgressIndicator()),
+                              )
+                            ],
                     ),
                   ),
                 ],

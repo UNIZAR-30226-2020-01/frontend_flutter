@@ -79,18 +79,62 @@ class PlaylistDAO {
 //    return Future.delayed(Duration(seconds: 3), () => _listPlaylist);
     // TODO: Revisar cual sera la URL final
 //    Response response = await _client.get('$_url/playlists');
-      Response response = await _client.get('$_url/user/playlists', headers: TokenSingleton().authHeader);
+    Response response = await _client.get('$_url/user/playlists',
+        headers: TokenSingleton().authHeader);
     // Convertimos los json a playlist
     // TODO: Comprobar el campo de las playlist
-      if(response.statusCode == 200){
-        print('RESPONSE: ${response.body}');
-        return (jsonDecode(response.body) as List<dynamic>)
-            .map((d) => Playlist.fromJSON(d))
-            .toList();
-      }else{
-        // TODO: Lanzar excepcion si no?
-        return [];
-      }
+    if (response.statusCode == 200) {
+      print('RESPONSE: ${response.body}');
+      return (jsonDecode(response.body) as List<dynamic>)
+          .map((d) => Playlist.fromJSONListed(d))
+          .toList();
+    } else {
+      // TODO: Lanzar excepcion si no?
+      return [];
+    }
+  }
 
+  static Future<Playlist> getByURL(String url) async {
+//    return Future.delayed(Duration(seconds: 3), () => _listPlaylist);
+    // TODO: Revisar cual sera la URL final
+//    Response response = await _client.get('$_url/playlists');
+    Response response = await _client.get('$url',
+        headers: TokenSingleton().authHeader);
+    // Convertimos los json a playlist
+    // TODO: Comprobar el campo de las playlist
+    if (response.statusCode == 200) {
+      print('RESPONSE: ${response.body}');
+      return Playlist.fromJSONDetail(jsonDecode(response.body) as Map);
+    } else {
+      throw Exception("Error al buscar en la URL: $url . Codigo de error: ${response.statusCode}");
+    }
+  }
+
+  static Future<void> createPlaylist(Playlist p) async {
+    print('$_url/playlist/');
+    Response response = await _client.post('$_url/playlists/',
+        body: {'title': p.title}, headers: TokenSingleton().authHeader);
+    if (response.statusCode == 201) {
+      // Ha ido bien
+      print('La creacion de la lista ha ido bien');
+      // TODO: Actualizar la información de la playlist
+      p = Playlist.fromJSONListed(jsonDecode(response.body));
+    } else {
+      throw Exception(
+          'Error al crear una playlist. Codigo de error: ${response.statusCode}');
+    }
+  }
+
+  static Future<void> addSongToPlaylist(Playlist p, Song s) async {
+//    var list = s.urlApi.split('/');
+//    var id = list[list.length - 2];
+//    print('id: $id');
+    print('url: ${p.url}add_song/?song=${s.urlApi}');
+    Response response = await _client.post('${p.url}add_song/?song=${s.urlApi}',
+        headers: TokenSingleton().authHeader);
+    if (response.statusCode != 200) {
+      throw Exception(
+          'Error al añadir una cancion a la playlist. Codigo de error: ${response.statusCode}');
+    }
   }
 }

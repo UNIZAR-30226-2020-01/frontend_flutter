@@ -43,8 +43,7 @@ class UserDAO {
   static Future<User> getUserData() async{
     TokenSingleton tokenSingleton = TokenSingleton();
     // TODO: Change this URL
-//    print('ESTO SE EJECUTA');
-    Response response = await _client.get('$_url/debug_auth/', headers: tokenSingleton.authHeader);
+    Response response = await _client.get('$_url/current-user/', headers: tokenSingleton.authHeader);
     if(response.statusCode == 200){
 //      print('GETUSERDATA: ${response.body}');
       // TODO: Cuidado que esto esta devolviendo una lista.

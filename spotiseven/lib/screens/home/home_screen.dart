@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:spotiseven/screens/home/albums.dart';
 import 'package:spotiseven/screens/home/artist_home.dart';
-import 'package:spotiseven/screens/home/followings.dart';
-import 'package:spotiseven/screens/home/genres.dart';
 import 'package:spotiseven/screens/home/your_playlists.dart';
+import 'package:spotiseven/screens/home/genres.dart';
+import 'package:spotiseven/screens/home/following.dart';
 
 class HomeScreenWrapper extends StatefulWidget {
   @override
@@ -21,7 +21,7 @@ class _HomeScreenWrapperState extends State<HomeScreenWrapper>
     PlaylistsScreen(),
     AlbumScreen(),
     ArtistScreen(),
-    MyPlaylists(),
+    FollowingScreen(),
     GenresScreen(),
   ];
 
@@ -70,10 +70,10 @@ class _HomeScreenWrapperState extends State<HomeScreenWrapper>
                     fontWeight: FontWeight.bold,
                   ),
                   tabs: <Widget>[
-                    buildTextTab('Following'),
+                    buildTextTab('Your playlists'),
                     buildTextTab('Albums'),
                     buildTextTab('Artists'),
-                    buildTextTab('Your playlists'),
+                    buildTextTab('Following'),
                     buildTextTab('Genres'),
                   ],
                 ),

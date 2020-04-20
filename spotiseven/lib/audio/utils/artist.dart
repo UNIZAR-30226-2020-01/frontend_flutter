@@ -53,9 +53,9 @@ class Artist {
       url: json['url'],
       name: json['name'],
       // TODO: Numero de albums?
-      numAlbums: json['numAlbums'],
+      numAlbums: json['number_albums'],
       // TODO: Numero total de tracks?
-      totalTracks: json['totalTracks'],
+      totalTracks: json['number_songs'],
       photoUrl: json['image'],
       biography: json['biography'],
     );
@@ -75,5 +75,11 @@ class Artist {
     // Parseamos las URL de los albumes del artista
     this.albums = artist.albums;
     this.biography = artist.biography;
+  }
+
+  dynamic toJSON() {
+    return {
+      'name': this.name,
+    };
   }
 }

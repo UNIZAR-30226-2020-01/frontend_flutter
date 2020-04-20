@@ -2,10 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:spotiseven/audio/playingSingleton.dart';
+import 'package:spotiseven/audio/utils/DAO/playlistDAO.dart';
 import 'package:spotiseven/audio/utils/album.dart';
 import 'package:spotiseven/audio/utils/playlist.dart';
 import 'package:spotiseven/audio/utils/song.dart';
 import 'package:spotiseven/screens/album/album_screen_options.dart';
+import 'package:spotiseven/screens/playlist/create_playlist.dart';
 import 'package:spotiseven/usefullMethods.dart';
 
 class AlbumDetailScreen extends StatefulWidget {
@@ -21,15 +23,22 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
   // Control del scroll
   ScrollController _scrollController;
 
+  // Para añadir a la playlist
+  List<Playlist> _playlists = List();
+
   @override
   void initState() {
     _scrollController = ScrollController()..addListener(() => setState(() {}));
-    if (widget.album.list.isEmpty) {
-      widget.album.fetchRemote().whenComplete(() {
-        print('${widget.album.photoUrl}');
-        setState(() {});
+    widget.album.fetchRemote().whenComplete(() {
+      print('${widget.album.photoUrl}');
+      setState(() {});
+    });
+    PlaylistDAO.getAllPlaylists().then((List<Playlist> playlist) {
+      print('listas: ${playlist.length}');
+      setState(() {
+        _playlists = playlist;
       });
-    }
+    });
     super.initState();
   }
 
@@ -90,13 +99,28 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
                       ),
                     ),
                     SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (BuildContext context, int index) {
-                          return buildSongPreview_v2(
-                              widget.album.list[index], widget.album, context);
-                        },
-                        childCount: widget.album.list.length,
-                      ),
+                      delegate: SliverChildListDelegate(widget
+                              .album.list.isNotEmpty
+                          ? widget.album.list
+                              .map((Song s) =>
+                                  buildSongPreview_v2(s, widget.album, context))
+                              .toList()
+                          : [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 150, vertical: 50),
+                                child: AspectRatio(
+                                    aspectRatio: 1,
+                                    child: CircularProgressIndicator()),
+                              )
+                            ]),
+//                      delegate: SliverChildBuilderDelegate(
+//                        (BuildContext context, int index) {
+//                          return buildSongPreview_v2(
+//                              widget.album.list[index], widget.album, context);
+//                        },
+//                        childCount: widget.album.list.length,
+//                      ),
                     ),
                   ],
                 ),
@@ -120,8 +144,10 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
 //          margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
           padding: EdgeInsets.fromLTRB(2, 2, 2, 2),
           height: MediaQuery.of(context).size.width * 0.085,
-          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
-          child: UsefulMethods.text(widget.album.titulo, 25.0, 0.0, 0, 0, 0, 1.0)),
+          decoration: BoxDecoration(
+              color: Colors.white, borderRadius: BorderRadius.circular(10)),
+          child:
+              UsefulMethods.text(widget.album.titulo, 25.0, 0.0, 0, 0, 0, 1.0)),
     );
   }
 
@@ -181,7 +207,8 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
               child: UsefulMethods.text('PLAY', 25.0, 0.0, 0, 0, 0, 1.0),
               elevation: 0,
               color: Colors.white,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10))),
             ),
           ],
         ),
@@ -292,11 +319,57 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
                               value: 'add_next',
                               child: Text('Play Next'),
                             ),
+                            PopupMenuItem<String>(
+                              value: 'add_to_playlist',
+                              child: Text('Add to playlist'),
+                            ),
                           ],
-                          onSelected: (String value) {
+                          onSelected: (String value) async {
                             switch (value) {
                               case 'add_next':
                                 PlayingSingleton().addSongNext(s);
+                                break;
+                              case 'add_to_playlist':
+                                print('Añadiendo a playlist');
+                                String opt = await showDialog<String>(
+                                    context: context,
+                                    barrierDismissible: true,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: Text('Select Playlist to add'),
+                                        elevation: 0,
+                                        actions: [
+                                              FlatButton(
+                                                onPressed: () {
+                                                  Navigator.pop(context, 'new');
+                                                },
+                                                child: Text(
+                                                  'New Playlist',
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                              )
+                                            ] +
+                                            _playlists
+                                                .map((Playlist pl) =>
+                                                    _createPlaylistFlatButton(
+                                                        context, pl, s))
+                                                .toList(),
+                                      );
+                                    });
+                                print('$opt');
+                                if (opt == 'new') {
+                                  Playlist nueva = await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              CreatePlaylistScreen()));
+                                  if (nueva != null) {
+                                    // TODO: Cambiar esto para que nueva tenga url
+                                    PlaylistDAO.addSongToPlaylist(nueva, s);
+                                  }
+                                }
                                 break;
                               default:
                                 print('No action?');
@@ -311,6 +384,21 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  FlatButton _createPlaylistFlatButton(
+      BuildContext context, Playlist pl, Song s) {
+    return FlatButton(
+      onPressed: () {
+        print('Añadir cancion ${s.title} a playlist ${pl.title}');
+        PlaylistDAO.addSongToPlaylist(pl, s);
+        Navigator.pop(context, 'not_new');
+      },
+      child: Text(
+        '${pl.title}',
+        style: TextStyle(color: Colors.black),
       ),
     );
   }
