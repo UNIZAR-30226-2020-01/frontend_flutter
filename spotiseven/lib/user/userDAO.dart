@@ -25,7 +25,6 @@ class UserDAO {
   }
 
   static Future<bool> registerUserWithPassword(User user, String password) async {
-    // TODO: Implementar con el backend
     Response response = await _client.post('$_url/register/', body: {
       'username': user.username,
       'password': password,

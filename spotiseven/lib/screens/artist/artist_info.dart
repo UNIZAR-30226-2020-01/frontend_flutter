@@ -76,14 +76,18 @@ class _ArtistInfoState extends State<ArtistInfo> {
   _infoContainer() {
     return Container(
       padding: EdgeInsets.all(20),
-      child: new Text(
-        '${widget.artista.biography}',
-        textAlign: TextAlign.justify,
-        style: GoogleFonts.roboto(
-          fontWeight: FontWeight.w600,
-          fontSize: 25,
-          color: Colors.white,
-        ),
+      child: ListView(
+        children: <Widget>[
+          Text(
+            '${widget.artista.biography}',
+            textAlign: TextAlign.justify,
+            style: GoogleFonts.roboto(
+              fontWeight: FontWeight.w600,
+              fontSize: 25,
+              color: Colors.white,
+            ),
+          ),
+        ],
       ),
     );
   }
