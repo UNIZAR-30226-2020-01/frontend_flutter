@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:http/http.dart';
 import 'package:spotiseven/audio/utils/album.dart';
@@ -98,28 +100,40 @@ class PlaylistDAO {
 //    return Future.delayed(Duration(seconds: 3), () => _listPlaylist);
     // TODO: Revisar cual sera la URL final
 //    Response response = await _client.get('$_url/playlists');
-    Response response = await _client.get('$url',
-        headers: TokenSingleton().authHeader);
+    Response response =
+        await _client.get('$url', headers: TokenSingleton().authHeader);
     // Convertimos los json a playlist
     // TODO: Comprobar el campo de las playlist
     if (response.statusCode == 200) {
       print('RESPONSE: ${response.body}');
       return Playlist.fromJSONDetail(jsonDecode(response.body) as Map);
     } else {
-      throw Exception("Error al buscar en la URL: $url . Codigo de error: ${response.statusCode}");
+      throw Exception(
+          "Error al buscar en la URL: $url . Codigo de error: ${response.statusCode}");
     }
   }
 
-  static Future<void> createPlaylist(Playlist p) async {
+  static Future<void> createPlaylist(Playlist p, File image) async {
+    String filename = image.path.split('/').last.split('\.').first;
+    print(filename);
+
+    // TODO: Hacer esto con FormData.
+    var request = MultipartRequest('POST', Uri.parse('$_url/playlists/'));
+    request.files.add(await MultipartFile.fromPath('icon', image.path));
+    request.headers.addAll(TokenSingleton().authHeader);
+
+    StreamedResponse response = await request.send();
+
     print('$_url/playlist/');
-    Response response = await _client.post('$_url/playlists/',
-        body: {'title': p.title}, headers: TokenSingleton().authHeader);
+//    Response response = await _client.post('$_url/playlists/',
+//        body: {'title': p.title, 'icon': list.toString()}, headers: TokenSingleton().authHeader);
     if (response.statusCode == 201) {
       // Ha ido bien
       print('La creacion de la lista ha ido bien');
       // TODO: Actualizar la información de la playlist
-      p = Playlist.fromJSONListed(jsonDecode(response.body));
+//      p = Playlist.fromJSONListed(jsonDecode(response.body));
     } else {
+//      print('${response.body}');
       throw Exception(
           'Error al crear una playlist. Codigo de error: ${response.statusCode}');
     }

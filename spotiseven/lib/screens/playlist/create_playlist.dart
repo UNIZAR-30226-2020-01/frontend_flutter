@@ -1,4 +1,8 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 import 'package:spotiseven/audio/utils/DAO/playlistDAO.dart';
 import 'package:spotiseven/audio/utils/playlist.dart';
 
@@ -10,10 +14,13 @@ class CreatePlaylistScreen extends StatefulWidget {
 class _CreatePlaylistScreenState extends State<CreatePlaylistScreen> {
   // Campos de la playlist
   String _title;
+  // Imagen de la playlist
+  File _image;
 
   @override
   void initState() {
     _title = '';
+    _image = null;
     super.initState();
   }
 
@@ -33,6 +40,7 @@ class _CreatePlaylistScreenState extends State<CreatePlaylistScreen> {
         padding: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
         child: Column(
           children: <Widget>[
+            _imagePicker(),
             TextField(
               onChanged: (value) => _title = value,
             ),
@@ -44,7 +52,7 @@ class _CreatePlaylistScreenState extends State<CreatePlaylistScreen> {
                 Playlist pl = Playlist(
                   title: _title,
                 )..playlist = List();
-                await PlaylistDAO.createPlaylist(pl);
+                await PlaylistDAO.createPlaylist(pl, _image);
                 // Devolvemos la playlist creada a la pila
                 Navigator.pop(context, pl);
               },
@@ -54,5 +62,42 @@ class _CreatePlaylistScreenState extends State<CreatePlaylistScreen> {
         ),
       ),
     );
+  }
+
+  Widget _imagePicker() {
+    if (_image != null) {
+      // La imagen tiene valor.
+      return GestureDetector(
+        onTap: _uploadImage,
+        child: Image.file(_image),);
+    }else{
+      // Boton de seleccionar una imagen
+      return FlatButton(
+        onPressed: _uploadImage,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Expanded(
+              flex: 5,
+              child: Icon(Icons.image),
+            ),
+            Expanded(
+              flex: 10,
+              child: Text('Select image to upload'),
+            )
+          ],
+        ),
+      );
+    }
+  }
+
+  void _uploadImage() async {
+    print('upload image');
+    File im = await ImagePicker.pickImage(source: ImageSource.gallery);
+    if(im != null){
+      setState(() {
+        _image = im;
+      });
+    }
   }
 }
