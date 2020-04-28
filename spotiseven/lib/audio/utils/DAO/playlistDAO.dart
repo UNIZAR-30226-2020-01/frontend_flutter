@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:dio/dio.dart' as dio;
 import 'package:http/http.dart';
 import 'package:spotiseven/audio/utils/album.dart';
 import 'package:spotiseven/audio/utils/artist.dart';
@@ -114,26 +115,29 @@ class PlaylistDAO {
   }
 
   static Future<void> createPlaylist(Playlist p, File image) async {
-    String filename = image.path.split('/').last.split('\.').first;
-    print(filename);
 
-    // TODO: Hacer esto con FormData.
-    var request = MultipartRequest('POST', Uri.parse('$_url/playlists/'));
-    request.files.add(await MultipartFile.fromPath('icon', image.path));
-    request.headers.addAll(TokenSingleton().authHeader);
+    print('${image.path}');
 
-    StreamedResponse response = await request.send();
+    dio.FormData fd = dio.FormData.fromMap({
+      'title': p.title,
+      'icon': await dio.MultipartFile.fromFile(image.path),
+    });
 
-    print('$_url/playlist/');
-//    Response response = await _client.post('$_url/playlists/',
-//        body: {'title': p.title, 'icon': list.toString()}, headers: TokenSingleton().authHeader);
+    print('$_url/playlists/');
+    print('FormData = ${fd.fields}');
+
+    dio.Response response = await dio.Dio().post('$_url/playlists/',
+        data: fd, options: dio.Options(headers: TokenSingleton().authHeader));
+
     if (response.statusCode == 201) {
       // Ha ido bien
       print('La creacion de la lista ha ido bien');
+      print('Respuesta ==> ${response.data}');
+      print('${response.data.runtimeType}');
       // TODO: Actualizar la información de la playlist
-//      p = Playlist.fromJSONListed(jsonDecode(response.body));
+      p = Playlist.fromJSONListed(response.data);
     } else {
-//      print('${response.body}');
+      print('${response.data}');
       throw Exception(
           'Error al crear una playlist. Codigo de error: ${response.statusCode}');
     }
