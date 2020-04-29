@@ -27,7 +27,7 @@ class _NewPodcastState extends State<NewPodcast> {
     PodcastDAO.getAllPodcasts().then((List<Podcast> list) {
       setState(() {
       _listPodcasts = list;
-      String x = list.toString();
+      String x = list.map((Podcast p) => p.title).toString();
       print('=========================');
       print(x);
 
@@ -35,7 +35,7 @@ class _NewPodcastState extends State<NewPodcast> {
       Podcast p = _listPodcasts.first;
       PodcastDAO.getFromUrl(p.url).then((Podcast p ) => setState(() {
         print('------------');
-        print(p.chapters);
+        print(p.chapters.map((PodcastChapter pc) => pc.title));
         _episodios = p.chapters;
       }));
     });
