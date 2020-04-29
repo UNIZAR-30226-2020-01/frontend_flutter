@@ -114,7 +114,7 @@ class PlaylistDAO {
     }
   }
 
-  static Future<void> createPlaylist(Playlist p, File image) async {
+  static Future<Playlist> createPlaylist(Playlist p, File image) async {
 
     print('${image.path}');
 
@@ -135,7 +135,7 @@ class PlaylistDAO {
       print('Respuesta ==> ${response.data}');
       print('${response.data.runtimeType}');
       // TODO: Actualizar la información de la playlist
-      p = Playlist.fromJSONListed(response.data);
+      return Playlist.fromJSONListed(response.data);
     } else {
       print('${response.data}');
       throw Exception(

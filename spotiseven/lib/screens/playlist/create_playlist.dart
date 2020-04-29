@@ -52,7 +52,7 @@ class _CreatePlaylistScreenState extends State<CreatePlaylistScreen> {
                 Playlist pl = Playlist(
                   title: _title,
                 )..playlist = List();
-                await PlaylistDAO.createPlaylist(pl, _image);
+                pl = await PlaylistDAO.createPlaylist(pl, _image);
                 // Devolvemos la playlist creada a la pila
                 Navigator.pop(context, pl);
               },
