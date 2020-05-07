@@ -3,10 +3,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_exoplayer/audioplayer.dart';
 import 'package:spotiseven/audio/playingSingleton.dart';
+import 'package:spotiseven/audio/utils/playlist.dart';
+import 'package:spotiseven/audio/utils/song.dart';
 import 'package:spotiseven/screens/home/home_screen.dart';
 import 'package:spotiseven/screens/podcast/podcastscreen.dart';
 import 'package:spotiseven/screens/search/searchBar.dart';
 import 'package:spotiseven/screens/user/user_screen.dart';
+import 'package:spotiseven/user/userDAO.dart';
 
 class MainScreenWrapper extends StatefulWidget {
   @override
@@ -40,6 +43,23 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
     _subscriptionState = subscribeStateEvents();
     _subscriptionSong =
         _player.getStreamedSong().listen((s) => setState(() {}));
+    // Buscamos en el remoto lo que se estuviera reproduciendo
+    UserDAO.retrieveSongWithTimestamp().then((Map<String,Object> map) async {
+      print('${map.toString()}');
+      if(map != null) {
+        PlayingSingleton playingSingleton = PlayingSingleton();
+        Song song = map['playing'] as Song;
+        await playingSingleton.setPlaylistWithoutPlaying(Playlist(photoUrl: song.photoUrl, title: song.album.titulo, playlist: [song], num_songs: 1));
+        print('Playing1: ${playingSingleton.playing}');
+//        await playingSingleton.pause();
+        setState(() {});
+        print('Playing2: ${playingSingleton.playing}');
+//        await playingSingleton.play(song);
+        playingSingleton.seekPosition((map['timestamp'] as Duration).inSeconds);
+//        await playingSingleton.pause();
+        print('Playing3: ${playingSingleton.playing}');
+      }
+    });
     super.initState();
   }
 

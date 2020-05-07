@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:spotiseven/audio/playingSingleton.dart';
-import 'package:spotiseven/audio/utils/song.dart';
 import 'package:spotiseven/screens/home/albums.dart';
 import 'package:spotiseven/screens/home/artist_home.dart';
-import 'package:spotiseven/screens/home/your_playlists.dart';
-import 'package:spotiseven/screens/home/genres.dart';
 import 'package:spotiseven/screens/home/following.dart';
-import 'package:spotiseven/user/userDAO.dart';
+import 'package:spotiseven/screens/home/genres.dart';
+import 'package:spotiseven/screens/home/your_playlists.dart';
 
 class HomeScreenWrapper extends StatefulWidget {
   @override
@@ -32,14 +29,6 @@ class _HomeScreenWrapperState extends State<HomeScreenWrapper>
   void initState() {
     _tabController =
         TabController(vsync: this, length: _myTabs.length, initialIndex: 0);
-    // Buscamos en el remoto lo que se estuviera reproduciendo
-    UserDAO.retrieveSongWithTimestamp().then((Map<String,Object> map) async {
-      if(map != null) {
-        PlayingSingleton playingSingleton = PlayingSingleton();
-        playingSingleton.play(map['playing'] as Song);
-        playingSingleton.seekPosition((map['timestamp'] as Duration).inSeconds);
-      }
-    });
     super.initState();
   }
 

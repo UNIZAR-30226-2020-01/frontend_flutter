@@ -61,7 +61,7 @@ class UserDAO {
   
   // Sincronización de la reproducción con el backend
   static Future<void> saveSongState(Song song, Duration timestamp) async {
-    Response resp = await _client.get('${song.urlApi}set_playing?t=${timestamp.inSeconds}');
+    Response resp = await _client.get('${song.urlApi}set_playing?t=${timestamp.inSeconds}', headers: TokenSingleton().authHeader);
     if(resp.statusCode == 200){
       // Ha ido bien -> Devuelve una cadena que dice el status
       print('${utf8.decode(resp.bodyBytes)}');
@@ -71,16 +71,17 @@ class UserDAO {
   }
 
   static Future<Map<String, Object>> retrieveSongWithTimestamp() async {
-    Response resp = await _client.get('$_url/current-user/');
+    Response resp = await _client.get('$_url/current-user/', headers: TokenSingleton().authHeader);
     if(resp.statusCode == 200){
       // En playing   -> song en forma de detalle (DINAMICO. Puede ser un podcast chapter)
       // En timestamp -> entero en segundos
-      dynamic map = jsonDecode(utf8.decode(resp.bodyBytes));
+      // TODO: Cuidado que esto devuelve una lista
+      dynamic map = (jsonDecode(utf8.decode(resp.bodyBytes)) as List)[0];
       if(map['playing'] != null && map['timestamp'] != null){
         // Ha ido bien
         return {
           'playing': Song.fromJsonDetail(map['playing']),
-          'timestamp': Duration(seconds: int.parse(map['timestamp'] as String)),
+          'timestamp': Duration(seconds: map['timestamp']),
         };
       }else{
         // No se ha enccontrado el objeto necesario en el remoto. No se reproducia nada
@@ -93,7 +94,7 @@ class UserDAO {
 
   // Follow User
   static Future<void> followUser(User user) async {
-    Response resp = await _client.get('${user.url}follow/');
+    Response resp = await _client.get('${user.url}follow/', headers: TokenSingleton().authHeader);
     if(resp.statusCode == 200){
       // Ha ido bien -> Le estamos siguiendo
     }else{
@@ -103,7 +104,7 @@ class UserDAO {
 
   // Unfollow User
   static Future<void> unfollowUser(User user) async {
-    Response resp = await _client.get('${user.url}unfollow/');
+    Response resp = await _client.get('${user.url}unfollow/', headers: TokenSingleton().authHeader);
     if(resp.statusCode == 200){
       // Ha ido bien -> Le hemos dejado de seguir
     }else{
@@ -113,7 +114,7 @@ class UserDAO {
 
   // Playlist de los usuarios que sigues
   static Future<List<Playlist>> followingPlaylists() async {
-    Response resp = await _client.get('$_url/user/followed/playlists/');
+    Response resp = await _client.get('$_url/user/followed/playlists/',headers: TokenSingleton().authHeader);
     if(resp.statusCode == 200){
       // Ha ido bien
       return (jsonDecode(utf8.decode(resp.bodyBytes)) as List).map((dynamic d) => Playlist.fromJSONListed(d)).toList();
