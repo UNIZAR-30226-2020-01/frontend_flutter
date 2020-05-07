@@ -1,11 +1,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:spotiseven/audio/playingSingleton.dart';
 import 'package:spotiseven/audio/utils/podcastChapter.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:spotiseven/audio/utils/song.dart';
 import 'package:spotiseven/screens/podcast/podcast_chapter_info.dart';
 import 'package:spotiseven/usefullMethods.dart';
 import 'package:spotiseven/screens/podcast/newpodcast.dart';
+import 'package:spotiseven/audio/PodcastChapterWrapper.dart';
 
 //esto solo aparece en NEW PODCAST
 class GenericNewPodChapter extends StatelessWidget {
@@ -124,7 +127,11 @@ class GenericNewPodChapter extends StatelessWidget {
   Widget build(BuildContext context) {
     print('capitulo del podcast');
     return GestureDetector(
-          onTap: (){
+          onTap: ()  {
+            print('=====URI:'+podcastChapter.uri);
+            var playingSingleton = PlayingSingleton();
+            playingSingleton.setPlayList(PodcastChapterWrapper(podcastChapter));
+            print('Reproduciendo ${playingSingleton.song.title}');
             print('Pulsado en un new chapter');
             Navigator.push(context, MaterialPageRoute(builder: (context) => PodcastChapterInfo(podcastChapter: podcastChapter,)));
           },
