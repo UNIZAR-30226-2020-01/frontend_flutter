@@ -17,6 +17,10 @@ class MainScreenWrapper extends StatefulWidget {
 }
 
 class _MainScreenWrapperState extends State<MainScreenWrapper> {
+
+  // Variable para hacer la trampa de la reproducción
+  bool _firstTime;
+
   // Select Screen from BottomNavigationBar
   int _currentIndex = 0;
 
@@ -48,40 +52,28 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
     _subscriptionSong =
         _player.getStreamedSong().listen((s) => setState(() {}));
     // Buscamos en el remoto lo que se estuviera reproduciendo
-    initSongFromRemote();
+    _firstTime = true;
     super.initState();
   }
 
   Future<void> initSongFromRemote() async {
     Map<String, Object> map = await UserDAO.retrieveSongWithTimestamp();
-    print('${map.toString()}');
+    print('Mapa: ${map.toString()}');
     if (map != null) {
       PlayingSingleton playingSingleton = PlayingSingleton();
       Song song = map['playing'] as Song;
-      StreamSubscription ss = playingSingleton.getStreamedPlayedState().listen((PlayerState ps) {
-        print('${ps.toString()}');
-        if(ps == PlayerState.PLAYING) {
-          print('Pausando');
-          playingSingleton.pause();
-        }
-      });
       await playingSingleton
-          .setPlayList(Playlist(
+          .setPlayListWithoutPlaying(Playlist(
               photoUrl: song.photoUrl,
               title: song.album.titulo,
               playlist: [song],
               num_songs: 1))
           .whenComplete(() => playingSingleton.pause());
-//      await playingSingleton.play(song);
-      await playingSingleton.pause();
-      print('Playing1: ${playingSingleton.playing}');
+      _subscriptionState.cancel();
+      await playingSingleton.play(song);
+      _subscriptionState = subscribeStateEvents();
       playingSingleton.seekPosition((map['timestamp'] as Duration).inSeconds);
-      print('Playing2: ${playingSingleton.playing}');
-      await playingSingleton.pause();
-      print('Playing3: ${playingSingleton.playing}');
       setState(() {});
-      await playingSingleton.pause();
-      Future.delayed(Duration(seconds: 5), () => ss.cancel());
     }
   }
 
@@ -128,7 +120,12 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
       ),
       floatingActionButton: _showFloatingButton()
           ? FloatingActionButton(
-              onPressed: () {
+              onPressed: () async {
+                if(_firstTime){
+                  print('First Time push');
+                  initSongFromRemote();
+                  setState(() {_firstTime = false;});
+                }
                 print('pressed fab');
                 // Hay una canción en reproduccion. Actualizamos el estado.
                 setState(() {
@@ -157,6 +154,9 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
   }
 
   bool _showFloatingButton() {
+    if(_firstTime){
+      return true;
+    }
     return !_showReprBar && _player.song != null;
   }
 
