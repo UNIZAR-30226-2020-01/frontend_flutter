@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:spotiseven/screens/home/albums.dart';
 import 'package:spotiseven/screens/home/artist_home.dart';
-import 'package:spotiseven/screens/home/your_playlists.dart';
-import 'package:spotiseven/screens/home/genres.dart';
 import 'package:spotiseven/screens/home/following.dart';
+import 'package:spotiseven/screens/home/genres.dart';
+import 'package:spotiseven/screens/home/your_playlists.dart';
 
 class HomeScreenWrapper extends StatefulWidget {
   @override

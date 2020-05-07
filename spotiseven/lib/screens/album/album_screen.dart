@@ -224,7 +224,7 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
         onTap: () async {
           var playingSingleton = PlayingSingleton();
           // TODO: Integrar la reproduccion de un album como playlist (poner como lista de canciones las del album)
-          playingSingleton.setPlayList(Playlist(
+          playingSingleton.setPlayListWithoutPlaying(Playlist(
               title: widget.album.titulo,
               photoUrl: widget.album.photoUrl,
               playlist: widget.album.list));

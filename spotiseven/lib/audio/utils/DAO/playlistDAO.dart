@@ -1,5 +1,8 @@
 import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
 
+import 'package:dio/dio.dart' as dio;
 import 'package:http/http.dart';
 import 'package:spotiseven/audio/utils/album.dart';
 import 'package:spotiseven/audio/utils/artist.dart';
@@ -85,7 +88,7 @@ class PlaylistDAO {
     // TODO: Comprobar el campo de las playlist
     if (response.statusCode == 200) {
       print('RESPONSE: ${response.body}');
-      return (jsonDecode(response.body) as List<dynamic>)
+      return (jsonDecode(utf8.decode(response.bodyBytes)) as List<dynamic>)
           .map((d) => Playlist.fromJSONListed(d))
           .toList();
     } else {
@@ -98,28 +101,47 @@ class PlaylistDAO {
 //    return Future.delayed(Duration(seconds: 3), () => _listPlaylist);
     // TODO: Revisar cual sera la URL final
 //    Response response = await _client.get('$_url/playlists');
-    Response response = await _client.get('$url',
-        headers: TokenSingleton().authHeader);
+    Response response =
+        await _client.get('$url', headers: TokenSingleton().authHeader);
     // Convertimos los json a playlist
     // TODO: Comprobar el campo de las playlist
     if (response.statusCode == 200) {
       print('RESPONSE: ${response.body}');
-      return Playlist.fromJSONDetail(jsonDecode(response.body) as Map);
+      return Playlist.fromJSONDetail(jsonDecode(utf8.decode(response.bodyBytes)) as Map);
     } else {
-      throw Exception("Error al buscar en la URL: $url . Codigo de error: ${response.statusCode}");
+      throw Exception(
+          "Error al buscar en la URL: $url . Codigo de error: ${response.statusCode}");
     }
   }
 
-  static Future<void> createPlaylist(Playlist p) async {
-    print('$_url/playlist/');
-    Response response = await _client.post('$_url/playlists/',
-        body: {'title': p.title}, headers: TokenSingleton().authHeader);
+  static Future<Playlist> createPlaylist(Playlist p, File image) async {
+
+    print('${image.path}');
+
+    var file = await dio.MultipartFile.fromFile(image.path);
+
+    print('${file.toString()}');
+
+    dio.FormData fd = dio.FormData.fromMap({
+      'title': p.title,
+      'icon': file,
+    });
+
+    print('$_url/playlists/');
+    print('FormData = ${fd.fields}');
+
+    dio.Response response = await dio.Dio().post('$_url/playlists/',
+        data: fd, options: dio.Options(headers: TokenSingleton().authHeader));
+
     if (response.statusCode == 201) {
       // Ha ido bien
       print('La creacion de la lista ha ido bien');
+      print('Respuesta ==> ${response.data}');
+      print('${response.data.runtimeType}');
       // TODO: Actualizar la información de la playlist
-      p = Playlist.fromJSONListed(jsonDecode(response.body));
+      return Playlist.fromJSONListed(response.data);
     } else {
+      print('${response.data}');
       throw Exception(
           'Error al crear una playlist. Codigo de error: ${response.statusCode}');
     }
@@ -135,6 +157,17 @@ class PlaylistDAO {
     if (response.statusCode != 200) {
       throw Exception(
           'Error al añadir una cancion a la playlist. Codigo de error: ${response.statusCode}');
+    }
+  }
+
+  /// Busca el parámetro en: título o nombre del usuario creador
+  static Future<List<Playlist>> searchPlaylist(String query) async {
+    Response resp = await _client.get('$_url/playlists/?search=$query');
+    if(resp.statusCode == 200) {
+      // Ha ido bien, devolvemos las listas
+      return jsonDecode(utf8.decode(resp.bodyBytes)).map((dynamic d) => Playlist.fromJSONListed(d)).toList();
+    }else{
+      throw Exception('La busqueda de Playlist ha ido mal. Codigo de error ${resp.statusCode}');
     }
   }
 }

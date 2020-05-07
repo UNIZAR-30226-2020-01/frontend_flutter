@@ -20,7 +20,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState(){
     super.initState();
 
-    _mockCheckForSession().then(
+    _checkForSession().then(
             (bool status) {
           if (status) {
             _navigateToHome();
@@ -31,7 +31,7 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 
-  Future<bool> _mockCheckForSession() async{
+  Future<bool> _checkForSession() async{
     //TODO: check de si el usuario está logeado
     await Future.delayed(Duration(milliseconds: 2000), () {});
     /*if(FirebaseAuth.instance.currentUser() != null) return true;

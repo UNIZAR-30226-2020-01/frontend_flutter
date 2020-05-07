@@ -14,9 +14,10 @@ class PodcastDAO{
   
   static Future<List<Podcast>> getAllPodcasts() async {
     List<dynamic> response =
-    await _client.get('$_url/podcasts', headers: TokenSingleton().authHeader).then((Response resp) {
+    await _client.get('$_url/podcasts/', headers: TokenSingleton().authHeader).then((Response resp) {
       if (resp.statusCode == 200) {
-        return jsonDecode(resp.body);
+//        return jsonDecode(resp.body);
+        return jsonDecode(utf8.decode(resp.bodyBytes));
       } else {
         throw Exception('No tienes permisos para acceder a este recurso');
       }
@@ -29,12 +30,14 @@ class PodcastDAO{
     dynamic response =
     await _client.get(Url, headers: TokenSingleton().authHeader).then((Response resp) {
       if (resp.statusCode == 200) {
-        return jsonDecode(resp.body);
+        print('HEADERS: ${resp.headers}');
+//        return jsonDecode(resp.body);
+        return jsonDecode(utf8.decode(resp.bodyBytes));
       } else {
         throw Exception('No tienes permisos para acceder a este recurso');
       }
     });
-    print(response);
+//    print(response);
     return Podcast.fromJSONDetailed(response);
   }
 

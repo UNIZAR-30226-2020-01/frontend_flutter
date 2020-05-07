@@ -41,4 +41,15 @@ class ArtistDAO {
       throw Exception('No tienes permisos para acceder a este recurso');
     }
   }
+
+  /// Busca el parámetro en: nombre del artista
+  static Future<List<Artist>> searchArtist(String query) async {
+    Response resp = await _client.get('$_url/artists/?search=$query');
+    if(resp.statusCode == 200) {
+      // Ha ido bien, devolvemos las listas
+      return jsonDecode(utf8.decode(resp.bodyBytes)).map((dynamic d) => Artist.fromJSONListed(d)).toList();
+    }else{
+      throw Exception('La busqueda de Artist ha ido mal. Codigo de error ${resp.statusCode}');
+    }
+  }
 }

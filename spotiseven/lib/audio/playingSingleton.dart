@@ -5,6 +5,7 @@ import 'package:flutter_exoplayer/audioplayer.dart';
 import 'package:spotiseven/audio/playlistController.dart';
 import 'package:spotiseven/audio/utils/playlist.dart';
 import 'package:spotiseven/audio/utils/song.dart';
+import 'package:spotiseven/user/userDAO.dart';
 
 class PlayingSingleton {
   // Singleton attribute
@@ -103,14 +104,22 @@ class PlayingSingleton {
   }
 
   // Setter de playlist a reproducir
-  void setPlayList(Playlist p) {
+  Future<void> setPlayList(Playlist p) async {
     // Paramos cualquier cancion que estuviera reproduciendose
     _audioPlayer.stop();
     _playing = false;
     // Cambiamos el PlaylistController con la nueva lista de reproduccion
     _playlistController = PlaylistController(Playlist.copy(p));
     // Actualizamos la reproduccion
-    _play(_playlistController.actualSong);
+    await _play(_playlistController.actualSong);
+  }
+
+  Future<void> setPlayListWithoutPlaying(Playlist p) async {
+    // Paramos cualquier cancion que estuviera reproduciendose
+    _audioPlayer.stop();
+    _playing = false;
+    // Cambiamos el PlaylistController con la nueva lista de reproduccion
+    _playlistController = PlaylistController(Playlist.copy(p));
   }
 
   // Funciones de control de la reproduccion
@@ -123,11 +132,14 @@ class PlayingSingleton {
   /// Reproducir una nueva cancion
   Future<void> play(Song song) async {
     _playlistController.setIteratorOn(song);
-    _play(song);
+    await _play(song);
   }
 
   /// Reproducir una nueva cancion (version interna)
   Future<void> _play(Song song) async {
+    // Para las estadisticas
+    UserDAO.saveSongState(this.song, Duration(seconds: 0));
+    // ---------------------
     print('${song.url}');
     // Cancelamos todas las suscripciones
     cancelStreams();
@@ -159,6 +171,14 @@ class PlayingSingleton {
     _playing = true;
   }
 
+  Future<void> pause() async {
+    print('PLAYINGSINGLETON: Pause');
+    await _audioPlayer.pause();
+    _playing = false;
+    // Guardamos en el backend el estado de la reproduccion
+//    await UserDAO.saveSongState(song, await _audioPlayer.getCurrentPosition());
+  }
+  
   /// Reproducir la siguiente cancion
   Future<void> next() async {
     print('PLAYINGSINGLETON: Next Song');
@@ -167,7 +187,9 @@ class PlayingSingleton {
     //avanza iter a sig cancin
     _playlistController.next();
     print('${_playlistController.actualSong.title}');
-    await _play(_playlistController.actualSong);
+    await play(_playlistController.actualSong);
+    // Guardamos en el backend el estado de la reproduccion
+    await UserDAO.saveSongState(song, await _audioPlayer.getCurrentPosition());
   }
 
   /// Reproducir la cancion anterior
@@ -177,7 +199,9 @@ class PlayingSingleton {
     _playing = false;
     _playlistController.previous();
     print('${_playlistController.actualSong.title}');
-    await _play(_playlistController.actualSong);
+    await play(_playlistController.actualSong);
+    // Guardamos en el backend el estado de la reproduccion
+    await UserDAO.saveSongState(song, await _audioPlayer.getCurrentPosition());
   }
 
   /// Reproduce el audio en la posicion dada.
@@ -188,7 +212,7 @@ class PlayingSingleton {
   }
 
   /// Cambia el estado de la reproduccion de _playing a !_playing
-  void changeReproductionState() {
+  Future<void> changeReproductionState() async {
     if (_playlistController.actualSong != null) {
       // Si no hay cancion actual -> No hay lista de reproduccion
       if (_playing) {
@@ -197,6 +221,8 @@ class PlayingSingleton {
         _audioPlayer.resume();
       }
       _playing = !_playing;
+      // Guardamos en el backend el estado de la reproduccion
+      await UserDAO.saveSongState(song, await _audioPlayer.getCurrentPosition());
     }
   }
 

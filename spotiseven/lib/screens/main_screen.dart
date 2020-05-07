@@ -3,10 +3,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_exoplayer/audioplayer.dart';
 import 'package:spotiseven/audio/playingSingleton.dart';
+import 'package:spotiseven/audio/utils/playlist.dart';
+import 'package:spotiseven/audio/utils/song.dart';
 import 'package:spotiseven/screens/home/home_screen.dart';
 import 'package:spotiseven/screens/podcast/podcastscreen.dart';
 import 'package:spotiseven/screens/search/searchBar.dart';
 import 'package:spotiseven/screens/user/user_screen.dart';
+import 'package:spotiseven/user/userDAO.dart';
 
 class MainScreenWrapper extends StatefulWidget {
   @override
@@ -14,8 +17,13 @@ class MainScreenWrapper extends StatefulWidget {
 }
 
 class _MainScreenWrapperState extends State<MainScreenWrapper> {
+
+  // Variable para hacer la trampa de la reproducción
+  bool _firstTime;
+
   // Select Screen from BottomNavigationBar
   int _currentIndex = 0;
+
   // Children to wrap
   List<Widget> _children = [
     HomeScreenWrapper(),
@@ -23,13 +31,16 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
     SearchBarScreen(),
     UserScreen(),
   ];
+
   // To show reproductor bar
   bool _showReprBar = false;
+
   // PlayingSingleton
   PlayingSingleton _player;
 
   // Suscripcion al evento de estado de la reproduccion (impedira memory leaks)
   StreamSubscription _subscriptionState;
+
   // Suscripcion al evento de cambio de cancion en reproduccion
   StreamSubscription _subscriptionSong;
 
@@ -40,7 +51,36 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
     _subscriptionState = subscribeStateEvents();
     _subscriptionSong =
         _player.getStreamedSong().listen((s) => setState(() {}));
+    // Buscamos en el remoto lo que se estuviera reproduciendo
+    _firstTime = false;
+    UserDAO.retrieveSongWithTimestamp().then((Map<String, Object> map) {
+      setState(() {
+        // TODO: Comprobar esta asignacion
+        _firstTime = map != null;
+      });
+    });
     super.initState();
+  }
+
+  Future<void> initSongFromRemote() async {
+    Map<String, Object> map = await UserDAO.retrieveSongWithTimestamp();
+    print('Mapa: ${map.toString()}');
+    if (map != null) {
+      PlayingSingleton playingSingleton = PlayingSingleton();
+      Song song = map['playing'] as Song;
+      await playingSingleton
+          .setPlayListWithoutPlaying(Playlist(
+              photoUrl: song.photoUrl,
+              title: song.album.titulo,
+              playlist: [song],
+              num_songs: 1))
+          .whenComplete(() => playingSingleton.pause());
+      _subscriptionState.cancel();
+      await playingSingleton.play(song);
+      _subscriptionState = subscribeStateEvents();
+      playingSingleton.seekPosition((map['timestamp'] as Duration).inSeconds);
+      setState(() {});
+    }
   }
 
   StreamSubscription subscribeStateEvents() =>
@@ -73,9 +113,7 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), title: Text('')),
           // TODO: Change 'hearing' icon to podcast
-          BottomNavigationBarItem(icon: Icon(
-              Icons.cast), title: Text('')
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.cast), title: Text('')),
           BottomNavigationBarItem(icon: Icon(Icons.search), title: Text('')),
           BottomNavigationBarItem(icon: Icon(Icons.person), title: Text('')),
         ],
@@ -88,7 +126,13 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
       ),
       floatingActionButton: _showFloatingButton()
           ? FloatingActionButton(
-              onPressed: () {
+              onPressed: () async {
+                if(_firstTime){
+                  // TODO: Si se escucha doble es cosa de que esto hay que gestionarlo con un stream
+                  print('First Time push');
+                  initSongFromRemote();
+                  setState(() {_firstTime = false;});
+                }
                 print('pressed fab');
                 // Hay una canción en reproduccion. Actualizamos el estado.
                 setState(() {
@@ -117,6 +161,9 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
   }
 
   bool _showFloatingButton() {
+    if(_firstTime){
+      return true;
+    }
     return !_showReprBar && _player.song != null;
   }
 
