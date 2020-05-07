@@ -44,4 +44,15 @@ class SongDAO {
       throw Exception('La busqueda de URL(SONG) ha fallado. Codigo de error: ${response.statusCode}');
     }
   }
+
+  /// Busca el parámetro en: título o nombre del artista
+  static Future<List<Song>> searchSong(String query) async {
+    Response resp = await _client.get('$_url/songs/?search=$query');
+    if(resp.statusCode == 200) {
+      // Ha ido bien, devolvemos las listas
+      return jsonDecode(utf8.decode(resp.bodyBytes)).map((dynamic d) => Song.fromJSON(d)).toList();
+    }else{
+      throw Exception('La busqueda de Song ha ido mal. Codigo de error ${resp.statusCode}');
+    }
+  }
 }

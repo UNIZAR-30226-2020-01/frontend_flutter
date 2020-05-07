@@ -155,4 +155,15 @@ class PlaylistDAO {
           'Error al añadir una cancion a la playlist. Codigo de error: ${response.statusCode}');
     }
   }
+
+  /// Busca el parámetro en: título o nombre del usuario creador
+  static Future<List<Playlist>> searchPlaylist(String query) async {
+    Response resp = await _client.get('$_url/playlists/?search=$query');
+    if(resp.statusCode == 200) {
+      // Ha ido bien, devolvemos las listas
+      return jsonDecode(utf8.decode(resp.bodyBytes)).map((dynamic d) => Playlist.fromJSONListed(d)).toList();
+    }else{
+      throw Exception('La busqueda de Playlist ha ido mal. Codigo de error ${resp.statusCode}');
+    }
+  }
 }

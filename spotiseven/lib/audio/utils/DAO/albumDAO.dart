@@ -32,4 +32,15 @@ class AlbumDAO {
       }
     });
   }
+
+  /// Busca el parámetro en: título o nombre del artista
+  static Future<List<Album>> searchAlbum(String query) async {
+    Response resp = await _client.get('$_url/albums/?search=$query');
+    if(resp.statusCode == 200) {
+      // Ha ido bien, devolvemos las listas
+      return jsonDecode(utf8.decode(resp.bodyBytes)).map((dynamic d) => Album.fromJSONListed(d)).toList();
+    }else{
+      throw Exception('La busqueda de Album ha ido mal. Codigo de error ${resp.statusCode}');
+    }
+  }
 }
