@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart';
+import 'package:spotiseven/audio/utils/playlist.dart';
 import 'package:spotiseven/audio/utils/song.dart';
 import 'package:spotiseven/user/tokenSingleton.dart';
 import 'package:spotiseven/user/user.dart';
@@ -107,6 +108,17 @@ class UserDAO {
       // Ha ido bien -> Le hemos dejado de seguir
     }else{
       throw Exception('Error al dejar de seguir al usuario ${user.username}. Codigo de error ${resp.statusCode}');
+    }
+  }
+
+  // Playlist de los usuarios que sigues
+  static Future<List<Playlist>> followingPlaylists() async {
+    Response resp = await _client.get('$_url/user/followed/playlists/');
+    if(resp.statusCode == 200){
+      // Ha ido bien
+      return (jsonDecode(utf8.decode(resp.bodyBytes)) as List).map((dynamic d) => Playlist.fromJSONListed(d)).toList();
+    }else{
+      throw Exception('Error al obtener las playlist de los siguiendo. Codigo de error ${resp.statusCode}');
     }
   }
 }
