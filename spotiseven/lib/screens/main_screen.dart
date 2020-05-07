@@ -48,7 +48,26 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
     _subscriptionSong =
         _player.getStreamedSong().listen((s) => setState(() {}));
     // Buscamos en el remoto lo que se estuviera reproduciendo
+<<<<<<< HEAD
     initSongFromRemote();
+=======
+    UserDAO.retrieveSongWithTimestamp().then((Map<String,Object> map) async {
+      print('${map.toString()}');
+      if(map != null) {
+        PlayingSingleton playingSingleton = PlayingSingleton();
+        Song song = map['playing'] as Song;
+        await playingSingleton.setPlaylistWithoutPlaying(Playlist(photoUrl: song.photoUrl, title: song.album.titulo, playlist: [song], num_songs: 1));
+        print('Playing1: ${playingSingleton.playing}');
+//        await playingSingleton.pause();
+        setState(() {});
+        print('Playing2: ${playingSingleton.playing}');
+//        await playingSingleton.play(song);
+        playingSingleton.seekPosition((map['timestamp'] as Duration).inSeconds);
+//        await playingSingleton.pause();
+        print('Playing3: ${playingSingleton.playing}');
+      }
+    });
+>>>>>>> development
     super.initState();
   }
 
