@@ -111,7 +111,7 @@ class PlayingSingleton {
     // Cambiamos el PlaylistController con la nueva lista de reproduccion
     _playlistController = PlaylistController(Playlist.copy(p));
     // Actualizamos la reproduccion
-    await _play(_playlistController.actualSong);
+    await play(_playlistController.actualSong);
   }
 
   Future<void> setPlayListWithoutPlaying(Playlist p) async {
@@ -131,6 +131,7 @@ class PlayingSingleton {
 
   /// Reproducir una nueva cancion
   Future<void> play(Song song) async {
+    UserDAO.saveSongState(this.song, Duration(seconds: 0));
     _playlistController.setIteratorOn(song);
     await _play(song);
   }
@@ -184,7 +185,7 @@ class PlayingSingleton {
     //avanza iter a sig cancin
     _playlistController.next();
     print('${_playlistController.actualSong.title}');
-    await _play(_playlistController.actualSong);
+    await play(_playlistController.actualSong);
     // Guardamos en el backend el estado de la reproduccion
     await UserDAO.saveSongState(song, await _audioPlayer.getCurrentPosition());
   }
@@ -196,7 +197,7 @@ class PlayingSingleton {
     _playing = false;
     _playlistController.previous();
     print('${_playlistController.actualSong.title}');
-    await _play(_playlistController.actualSong);
+    await play(_playlistController.actualSong);
     // Guardamos en el backend el estado de la reproduccion
     await UserDAO.saveSongState(song, await _audioPlayer.getCurrentPosition());
   }
