@@ -114,11 +114,7 @@ class PlayingSingleton {
     await _play(_playlistController.actualSong);
   }
 
-<<<<<<< HEAD
   Future<void> setPlayListWithoutPlaying(Playlist p) async {
-=======
-  Future<void> setPlaylistWithoutPlaying(Playlist p) async {
->>>>>>> development
     // Paramos cualquier cancion que estuviera reproduciendose
     _audioPlayer.stop();
     _playing = false;
@@ -177,11 +173,7 @@ class PlayingSingleton {
     await _audioPlayer.pause();
     _playing = false;
     // Guardamos en el backend el estado de la reproduccion
-<<<<<<< HEAD
 //    await UserDAO.saveSongState(song, await _audioPlayer.getCurrentPosition());
-=======
-    await UserDAO.saveSongState(song, await _audioPlayer.getCurrentPosition());
->>>>>>> development
   }
   
   /// Reproducir la siguiente cancion
