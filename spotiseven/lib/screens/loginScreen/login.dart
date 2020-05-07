@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:spotiseven/screens/podcast/newpodcast.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -95,7 +94,7 @@ class _LoginState extends State<Login> {
               margin: EdgeInsets.fromLTRB(5, 15, 5, 15),
               child: Center(
                 child: Text(
-                  'LOG IN WITH EMAIL',
+                  'LOG IN WITH USERNAME',
                   style: GoogleFonts.roboto(
                     fontWeight: FontWeight.w300,
                     color: Colors.black,
