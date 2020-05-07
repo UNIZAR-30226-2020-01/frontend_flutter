@@ -88,7 +88,7 @@ class PlaylistDAO {
     // TODO: Comprobar el campo de las playlist
     if (response.statusCode == 200) {
       print('RESPONSE: ${response.body}');
-      return (jsonDecode(response.body) as List<dynamic>)
+      return (jsonDecode(utf8.decode(response.bodyBytes)) as List<dynamic>)
           .map((d) => Playlist.fromJSONListed(d))
           .toList();
     } else {
@@ -107,7 +107,7 @@ class PlaylistDAO {
     // TODO: Comprobar el campo de las playlist
     if (response.statusCode == 200) {
       print('RESPONSE: ${response.body}');
-      return Playlist.fromJSONDetail(jsonDecode(response.body) as Map);
+      return Playlist.fromJSONDetail(jsonDecode(utf8.decode(response.bodyBytes)) as Map);
     } else {
       throw Exception(
           "Error al buscar en la URL: $url . Codigo de error: ${response.statusCode}");
@@ -118,9 +118,13 @@ class PlaylistDAO {
 
     print('${image.path}');
 
+    var file = await dio.MultipartFile.fromFile(image.path);
+
+    print('${file.toString()}');
+
     dio.FormData fd = dio.FormData.fromMap({
       'title': p.title,
-      'icon': await dio.MultipartFile.fromFile(image.path),
+      'icon': file,
     });
 
     print('$_url/playlists/');

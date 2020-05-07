@@ -3,10 +3,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_exoplayer/audioplayer.dart';
 import 'package:spotiseven/audio/playingSingleton.dart';
+import 'package:spotiseven/audio/utils/playlist.dart';
+import 'package:spotiseven/audio/utils/song.dart';
 import 'package:spotiseven/screens/home/home_screen.dart';
 import 'package:spotiseven/screens/podcast/podcastscreen.dart';
 import 'package:spotiseven/screens/search/searchBar.dart';
 import 'package:spotiseven/screens/user/user_screen.dart';
+import 'package:spotiseven/user/userDAO.dart';
 
 class MainScreenWrapper extends StatefulWidget {
   @override
@@ -16,6 +19,7 @@ class MainScreenWrapper extends StatefulWidget {
 class _MainScreenWrapperState extends State<MainScreenWrapper> {
   // Select Screen from BottomNavigationBar
   int _currentIndex = 0;
+
   // Children to wrap
   List<Widget> _children = [
     HomeScreenWrapper(),
@@ -23,13 +27,16 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
     SearchBarScreen(),
     UserScreen(),
   ];
+
   // To show reproductor bar
   bool _showReprBar = false;
+
   // PlayingSingleton
   PlayingSingleton _player;
 
   // Suscripcion al evento de estado de la reproduccion (impedira memory leaks)
   StreamSubscription _subscriptionState;
+
   // Suscripcion al evento de cambio de cancion en reproduccion
   StreamSubscription _subscriptionSong;
 
@@ -40,7 +47,42 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
     _subscriptionState = subscribeStateEvents();
     _subscriptionSong =
         _player.getStreamedSong().listen((s) => setState(() {}));
+    // Buscamos en el remoto lo que se estuviera reproduciendo
+    initSongFromRemote();
     super.initState();
+  }
+
+  Future<void> initSongFromRemote() async {
+    Map<String, Object> map = await UserDAO.retrieveSongWithTimestamp();
+    print('${map.toString()}');
+    if (map != null) {
+      PlayingSingleton playingSingleton = PlayingSingleton();
+      Song song = map['playing'] as Song;
+      StreamSubscription ss = playingSingleton.getStreamedPlayedState().listen((PlayerState ps) {
+        print('${ps.toString()}');
+        if(ps == PlayerState.PLAYING) {
+          print('Pausando');
+          playingSingleton.pause();
+        }
+      });
+      await playingSingleton
+          .setPlayList(Playlist(
+              photoUrl: song.photoUrl,
+              title: song.album.titulo,
+              playlist: [song],
+              num_songs: 1))
+          .whenComplete(() => playingSingleton.pause());
+//      await playingSingleton.play(song);
+      await playingSingleton.pause();
+      print('Playing1: ${playingSingleton.playing}');
+      playingSingleton.seekPosition((map['timestamp'] as Duration).inSeconds);
+      print('Playing2: ${playingSingleton.playing}');
+      await playingSingleton.pause();
+      print('Playing3: ${playingSingleton.playing}');
+      setState(() {});
+      await playingSingleton.pause();
+      Future.delayed(Duration(seconds: 5), () => ss.cancel());
+    }
   }
 
   StreamSubscription subscribeStateEvents() =>
@@ -73,9 +115,7 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), title: Text('')),
           // TODO: Change 'hearing' icon to podcast
-          BottomNavigationBarItem(icon: Icon(
-              Icons.cast), title: Text('')
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.cast), title: Text('')),
           BottomNavigationBarItem(icon: Icon(Icons.search), title: Text('')),
           BottomNavigationBarItem(icon: Icon(Icons.person), title: Text('')),
         ],
