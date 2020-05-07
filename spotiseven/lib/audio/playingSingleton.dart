@@ -111,7 +111,7 @@ class PlayingSingleton {
     // Cambiamos el PlaylistController con la nueva lista de reproduccion
     _playlistController = PlaylistController(Playlist.copy(p));
     // Actualizamos la reproduccion
-    await play(_playlistController.actualSong);
+    await _play(_playlistController.actualSong);
   }
 
   Future<void> setPlayListWithoutPlaying(Playlist p) async {
@@ -131,13 +131,15 @@ class PlayingSingleton {
 
   /// Reproducir una nueva cancion
   Future<void> play(Song song) async {
-    UserDAO.saveSongState(this.song, Duration(seconds: 0));
     _playlistController.setIteratorOn(song);
     await _play(song);
   }
 
   /// Reproducir una nueva cancion (version interna)
   Future<void> _play(Song song) async {
+    // Para las estadisticas
+    UserDAO.saveSongState(this.song, Duration(seconds: 0));
+    // ---------------------
     print('${song.url}');
     // Cancelamos todas las suscripciones
     cancelStreams();

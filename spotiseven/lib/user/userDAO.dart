@@ -61,6 +61,7 @@ class UserDAO {
   
   // Sincronización de la reproducción con el backend
   static Future<void> saveSongState(Song song, Duration timestamp) async {
+    print('Guardando song ${song.title} -- ${timestamp.inSeconds} s');
     Response resp = await _client.get('${song.urlApi}set_playing?t=${timestamp.inSeconds}', headers: TokenSingleton().authHeader);
     if(resp.statusCode == 200){
       // Ha ido bien -> Devuelve una cadena que dice el status

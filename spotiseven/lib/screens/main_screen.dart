@@ -52,7 +52,13 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
     _subscriptionSong =
         _player.getStreamedSong().listen((s) => setState(() {}));
     // Buscamos en el remoto lo que se estuviera reproduciendo
-    _firstTime = true;
+    _firstTime = false;
+    UserDAO.retrieveSongWithTimestamp().then((Map<String, Object> map) {
+      setState(() {
+        // TODO: Comprobar esta asignacion
+        _firstTime = map != null;
+      });
+    });
     super.initState();
   }
 
@@ -122,6 +128,7 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
           ? FloatingActionButton(
               onPressed: () async {
                 if(_firstTime){
+                  // TODO: Si se escucha doble es cosa de que esto hay que gestionarlo con un stream
                   print('First Time push');
                   initSongFromRemote();
                   setState(() {_firstTime = false;});

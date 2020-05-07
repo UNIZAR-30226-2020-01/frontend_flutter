@@ -10,6 +10,8 @@ class FollowingScreen extends StatefulWidget {
 
 class _FollowingScreenState extends State<FollowingScreen> {
 
+  bool _initialized;
+
   List<Playlist> _followingUserPlaylist;
 
   ScrollController _scrollController;
@@ -17,10 +19,14 @@ class _FollowingScreenState extends State<FollowingScreen> {
 
   @override
   void initState() {
+    _initialized = false;
     _followingUserPlaylist = List();
     _scrollController = ScrollController();
     UserDAO.followingPlaylists().then((List<Playlist> lp) => setState(() {
-      _followingUserPlaylist = lp;
+      setState(() {
+        _initialized = true;
+        _followingUserPlaylist = lp;
+      });
     }));
     super.initState();
   }
@@ -47,7 +53,11 @@ class _FollowingScreenState extends State<FollowingScreen> {
           ),
         ],
       );
-    }else{
+    }else if(_initialized) {
+      // La lista esta inicializada pero está vacía
+      return Center(child: Text('No tienes playlist de los usuarios a los que sigues'),);
+    } else{
       return Center(child: CircularProgressIndicator(),);
-    }  }
+    }
+  }
 }
