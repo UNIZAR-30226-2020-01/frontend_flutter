@@ -5,6 +5,7 @@ import 'package:flutter_exoplayer/audioplayer.dart';
 import 'package:spotiseven/audio/playlistController.dart';
 import 'package:spotiseven/audio/utils/playlist.dart';
 import 'package:spotiseven/audio/utils/song.dart';
+import 'package:spotiseven/user/userDAO.dart';
 
 class PlayingSingleton {
   // Singleton attribute
@@ -168,6 +169,8 @@ class PlayingSingleton {
     _playlistController.next();
     print('${_playlistController.actualSong.title}');
     await _play(_playlistController.actualSong);
+    // Guardamos en el backend el estado de la reproduccion
+    await UserDAO.saveSongState(song, await _audioPlayer.getCurrentPosition());
   }
 
   /// Reproducir la cancion anterior
@@ -178,6 +181,8 @@ class PlayingSingleton {
     _playlistController.previous();
     print('${_playlistController.actualSong.title}');
     await _play(_playlistController.actualSong);
+    // Guardamos en el backend el estado de la reproduccion
+    await UserDAO.saveSongState(song, await _audioPlayer.getCurrentPosition());
   }
 
   /// Reproduce el audio en la posicion dada.
@@ -188,7 +193,7 @@ class PlayingSingleton {
   }
 
   /// Cambia el estado de la reproduccion de _playing a !_playing
-  void changeReproductionState() {
+  void changeReproductionState() async {
     if (_playlistController.actualSong != null) {
       // Si no hay cancion actual -> No hay lista de reproduccion
       if (_playing) {
@@ -197,6 +202,8 @@ class PlayingSingleton {
         _audioPlayer.resume();
       }
       _playing = !_playing;
+      // Guardamos en el backend el estado de la reproduccion
+      await UserDAO.saveSongState(song, await _audioPlayer.getCurrentPosition());
     }
   }
 
