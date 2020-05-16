@@ -137,6 +137,9 @@ class PlayingSingleton {
 
   /// Reproducir una nueva cancion (version interna)
   Future<void> _play(Song song) async {
+    // Para las estadisticas
+    UserDAO.saveSongState(this.song, Duration(seconds: 0));
+    // ---------------------
     print('${song.url}');
     // Cancelamos todas las suscripciones
     cancelStreams();
@@ -184,7 +187,7 @@ class PlayingSingleton {
     //avanza iter a sig cancin
     _playlistController.next();
     print('${_playlistController.actualSong.title}');
-    await _play(_playlistController.actualSong);
+    await play(_playlistController.actualSong);
     // Guardamos en el backend el estado de la reproduccion
     await UserDAO.saveSongState(song, await _audioPlayer.getCurrentPosition());
   }
@@ -196,7 +199,7 @@ class PlayingSingleton {
     _playing = false;
     _playlistController.previous();
     print('${_playlistController.actualSong.title}');
-    await _play(_playlistController.actualSong);
+    await play(_playlistController.actualSong);
     // Guardamos en el backend el estado de la reproduccion
     await UserDAO.saveSongState(song, await _audioPlayer.getCurrentPosition());
   }

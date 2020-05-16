@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart';
 import 'package:spotiseven/audio/utils/playlist.dart';
 import 'package:spotiseven/audio/utils/song.dart';
@@ -61,6 +60,7 @@ class UserDAO {
   
   // Sincronización de la reproducción con el backend
   static Future<void> saveSongState(Song song, Duration timestamp) async {
+    print('Guardando song ${song.title} -- ${timestamp.inSeconds} s');
     Response resp = await _client.get('${song.urlApi}set_playing?t=${timestamp.inSeconds}', headers: TokenSingleton().authHeader);
     if(resp.statusCode == 200){
       // Ha ido bien -> Devuelve una cadena que dice el status
@@ -120,6 +120,19 @@ class UserDAO {
       return (jsonDecode(utf8.decode(resp.bodyBytes)) as List).map((dynamic d) => Playlist.fromJSONListed(d)).toList();
     }else{
       throw Exception('Error al obtener las playlist de los siguiendo. Codigo de error ${resp.statusCode}');
+    }
+  }
+
+  /// Busca el parámetro en: nombre del usuario y en sus playlists
+  static Future<List<User>> searchUser(String query) async {
+    Response resp = await _client.get('$_url/s7_user/?search=$query');
+    if (resp.statusCode == 200) {
+      // Ha ido bien, devolvemos las listas
+      return jsonDecode(utf8.decode(resp.bodyBytes)).map((dynamic d) =>
+          User.fromJSON(d)).toList();
+    } else {
+      throw Exception(
+          'La busqueda de Song ha ido mal. Codigo de error ${resp.statusCode}');
     }
   }
 }

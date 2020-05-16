@@ -213,7 +213,7 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
       child: GestureDetector(
         onTap: () async {
           var playingSingleton = PlayingSingleton();
-          playingSingleton.setPlayList(p);
+          playingSingleton.setPlayListWithoutPlaying(p);
           await playingSingleton.play(s);
           print('Reproduciendo ${playingSingleton.song.title}');
         },
