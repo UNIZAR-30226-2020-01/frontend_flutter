@@ -33,7 +33,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<bool> _checkForSession() async{
     //TODO: check de si el usuario está logeado
-    await Future.delayed(Duration(milliseconds: 2000), () {});
+    await Future.delayed(Duration(milliseconds: 500), () {});
     /*if(FirebaseAuth.instance.currentUser() != null) return true;
     else return false;*/
     // Comprobamos si existe el token de conexion, y además comprobamos si es valido.

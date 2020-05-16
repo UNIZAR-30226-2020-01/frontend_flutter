@@ -162,10 +162,14 @@ class PlaylistDAO {
 
   /// Busca el parámetro en: título o nombre del usuario creador
   static Future<List<Playlist>> searchPlaylist(String query) async {
+    print("DAO: BUSCANDO" + query);
     Response resp = await _client.get('$_url/playlists/?search=$query');
     if(resp.statusCode == 200) {
       // Ha ido bien, devolvemos las listas
-      return jsonDecode(utf8.decode(resp.bodyBytes)).map((dynamic d) => Playlist.fromJSONListed(d)).toList();
+      List<dynamic> lista = jsonDecode(utf8.decode(resp.bodyBytes));
+      List<Playlist> platlists = lista.map((dynamic d) => (Playlist.fromJSONListed(d) as Playlist )).toList();
+      return platlists;
+//      return jsonDecode(utf8.decode(resp.bodyBytes)).map((dynamic d) => (Playlist.fromJSONListed(d) as Playlist )).toList();
     }else{
       throw Exception('La busqueda de Playlist ha ido mal. Codigo de error ${resp.statusCode}');
     }

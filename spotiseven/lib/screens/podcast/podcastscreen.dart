@@ -48,36 +48,44 @@ class _PodcastScreenWrapper extends State<PodcastScreenWrapper>
       body: SafeArea(
         child: Stack(
           children: <Widget>[
-            Container(
-              padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
-              width: MediaQuery.of(context).size.width,
-              color: Colors.black,
-              child: PreferredSize(
-                preferredSize: Size.fromHeight(5000),
-                child: TabBar(
-                  /*indicator: UnderlineTabIndicator(
-                    borderSide: BorderSide(width: 10, color: Colors.yellow,),
-                    insets: EdgeInsets.all(5),
-                  ),*/
-                  controller: _tabController,
-                  isScrollable: true,
-                  // TODO: Use <indicator> property to change indicator
-                  indicatorPadding:
-                  EdgeInsets.symmetric(horizontal: 30, vertical: 5),
-//                  indicatorColor: Colors.yellow[800],
-                  indicatorColor: Colors.white,
-                  indicatorWeight: 7,
-                  indicatorSize: TabBarIndicatorSize.tab,
-                  // TODO: change labelStyle -> By the moment changed in tab's text
-                  labelStyle: TextStyle(
+            Align(
+              alignment: Alignment.topCenter,
+              child: Container(
+                padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+                width: MediaQuery.of(context).size.width,
+                color: Colors.black,
+                child: PreferredSize(
+                  preferredSize: Size.fromHeight(5000),
+                  child: Container(
+                    padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+                    width: MediaQuery.of(context).size.width,
                     color: Colors.black,
-                    fontWeight: FontWeight.bold,
+                    child: TabBar(
+                      /*indicator: UnderlineTabIndicator(
+                        borderSide: BorderSide(width: 10, color: Colors.yellow,),
+                        insets: EdgeInsets.all(5),
+                      ),*/
+                      controller: _tabController,
+                      isScrollable: true,
+                      // TODO: Use <indicator> property to change indicator
+                      indicatorPadding:
+                      EdgeInsets.symmetric(horizontal: 30, vertical: 5),
+//                  indicatorColor: Colors.yellow[800],
+                      indicatorColor: Colors.white,
+                      indicatorWeight: 7,
+                      indicatorSize: TabBarIndicatorSize.tab,
+                      // TODO: change labelStyle -> By the moment changed in tab's text
+                      labelStyle: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      tabs: <Widget>[
+                        buildTextTab('NEW PODCAST'),
+                        buildTextTab('SUBSCRIPTION'),
+                        buildTextTab('DISCOVER'),
+                      ],
+                    ),
                   ),
-                  tabs: <Widget>[
-                    buildTextTab('NEW PODCAST'),
-                    buildTextTab('SUBSCRIPTION'),
-                    buildTextTab('DISCOVER'),
-                  ],
                 ),
               ),
             ),
