@@ -141,31 +141,55 @@ class _PlayingScreenState extends State<PlayingScreen> {
                           stream: _player.getStreamedDuration(),
                           builder: (context, snapshot) {
                             if (snapshot.hasData) {
-                              return Slider(
-                                // TODO: Change this color and style if needed
-                                activeColor: Colors.black,
-                                inactiveColor: Colors.black12,
-                                min: 0,
-                                max: (snapshot.data as Duration)
-                                    .inSeconds
-                                    .toDouble(),
-                                value: _time.toDouble(),
-                                onChanged: (value) => seekPlayerTime(value),
+                              return Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  // -30 segundos
+                                  (snapshot.data as Duration).inSeconds > 10 * 60 ?  buildIconButton(Icons.replay_30, () {
+                                    _player.seekPosition(_time - 30 <= 0 ? 0 : _time - 30);
+                                  }) : SizedBox(),
+                                  Slider(
+                                    activeColor: Colors.black,
+                                    inactiveColor: Colors.black12,
+                                    min: 0,
+                                    max: (snapshot.data as Duration)
+                                        .inSeconds
+                                        .toDouble(),
+                                    value: _time.toDouble(),
+                                    onChanged: (value) => seekPlayerTime(value),
+                                  ),
+                                  // +30 segundos
+                                  (snapshot.data as Duration).inSeconds > 10 * 60 ?  buildIconButton(Icons.forward_30, () {
+                                    _player.seekPosition(_time + 30 <= 0 ? 0 : _time + 30);
+                                  }) : SizedBox(),
+                                ],
                               );
                             } else {
                               return FutureBuilder(
                                 future: _player.duration,
                                 builder: (context, snapshot) {
                                   if (snapshot.hasData) {
-                                    return Slider(
-                                      // TODO: Change this color and style if needed
-                                      activeColor: Colors.black,
-                                      inactiveColor: Color(0xff73afc5),
-                                      min: 0,
-                                      max: (snapshot.data as int).toDouble(),
-                                      value: _time.toDouble(),
-                                      onChanged: (value) =>
-                                          seekPlayerTime(value),
+                                    return Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        // -30 segundos
+                                        (snapshot.data as int) > 10 * 60 ?  buildIconButton(Icons.replay_30, () {
+                                          _player.seekPosition(_time - 30 <= 0 ? 0 : _time - 30);
+                                        }) : SizedBox(),
+                                        Slider(
+                                          activeColor: Colors.black,
+                                          inactiveColor: Color(0xff73afc5),
+                                          min: 0,
+                                          max: (snapshot.data as int).toDouble(),
+                                          value: _time.toDouble(),
+                                          onChanged: (value) =>
+                                              seekPlayerTime(value),
+                                        ),
+                                        // +30 segundos
+                                        (snapshot.data as int) > 10 * 60 ?  buildIconButton(Icons.forward_30, () {
+                                          _player.seekPosition(_time + 30 <= 0 ? 0 : _time + 30);
+                                        }) : SizedBox(),
+                                      ],
                                     );
                                   } else {
                                     return Slider(

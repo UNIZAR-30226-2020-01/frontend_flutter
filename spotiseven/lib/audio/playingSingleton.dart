@@ -207,7 +207,13 @@ class PlayingSingleton {
   /// Reproduce el audio en la posicion dada.
   /// [position] in seconds
   void seekPosition(int position) async {
-    _audioPlayer.seekPosition(Duration(seconds: position));
+    if(position > await this.duration){
+      // Hacemos seek de la duracion maxima
+      _audioPlayer.seekPosition(Duration(seconds: await duration));
+    }else{
+      // Position en el intervalo
+      _audioPlayer.seekPosition(Duration(seconds: position));
+    }
     _time = (await _audioPlayer.getCurrentPosition()).inSeconds;
   }
 
