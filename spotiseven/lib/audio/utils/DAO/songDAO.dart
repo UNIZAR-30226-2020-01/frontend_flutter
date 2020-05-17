@@ -50,7 +50,9 @@ class SongDAO {
     Response resp = await _client.get('$_url/songs/?search=$query');
     if(resp.statusCode == 200) {
       // Ha ido bien, devolvemos las listas
-      return jsonDecode(utf8.decode(resp.bodyBytes)).map((dynamic d) => Song.fromJSON(d)).toList();
+      List<dynamic> lista = jsonDecode(utf8.decode(resp.bodyBytes));
+      List<Song> songs = lista.map((dynamic d) => (Song.fromJSON(d) as Song )).toList();
+      return songs;
     }else{
       throw Exception('La busqueda de Song ha ido mal. Codigo de error ${resp.statusCode}');
     }

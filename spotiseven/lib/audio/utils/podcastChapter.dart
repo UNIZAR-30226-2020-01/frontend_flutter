@@ -16,6 +16,8 @@ class PodcastChapter {
   int duration;
   String url;
   String photoUrl;
+  //url de listennotes
+  String uri;
 
   PodcastChapter({
     @required this.title,
@@ -24,6 +26,7 @@ class PodcastChapter {
     @required this.duration,
     @required this.url,
     @required this.photoUrl,
+    @required this.uri
 });
 /*<<<<<<< HEAD
 
@@ -45,7 +48,8 @@ class PodcastChapter {
         duration: json['duration'],
         photoUrl: json['image'],
         url: json['url'],
-        podcast: Podcast.fromJSONListed(json['podcast'])
+        podcast: Podcast.fromJSONListed(json['podcast']),
+        uri: json['URI']
     );
     return chap;
   }
@@ -57,6 +61,7 @@ class PodcastChapter {
         duration: json['duration'],
         photoUrl: json['image'],
         url: json['url'],
+        uri: json['URI'],
         podcast: p
     );
     return chap;

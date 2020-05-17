@@ -38,7 +38,10 @@ class AlbumDAO {
     Response resp = await _client.get('$_url/albums/?search=$query');
     if(resp.statusCode == 200) {
       // Ha ido bien, devolvemos las listas
-      return jsonDecode(utf8.decode(resp.bodyBytes)).map((dynamic d) => Album.fromJSONListed(d)).toList();
+      List<dynamic> lista = jsonDecode(utf8.decode(resp.bodyBytes));
+      List<Album> albums = lista.map((dynamic d) => (Album.fromJSONListed(d) as Album )).toList();
+      return albums;
+//      return jsonDecode(utf8.decode(resp.bodyBytes)).map((dynamic d) => Album.fromJSONListed(d)).toList();
     }else{
       throw Exception('La busqueda de Album ha ido mal. Codigo de error ${resp.statusCode}');
     }

@@ -114,6 +114,12 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
           BottomNavigationBarItem(icon: Icon(Icons.home), title: Text('')),
           // TODO: Change 'hearing' icon to podcast
           BottomNavigationBarItem(icon: Icon(Icons.cast), title: Text('')),
+          /*BottomNavigationBarItem(
+              icon: Transform.scale(
+                  scale: 0.2,
+                  child: Image.asset("assets/images/pod.png")),
+            title: Text(''),
+          ),*/
           BottomNavigationBarItem(icon: Icon(Icons.search), title: Text('')),
           BottomNavigationBarItem(icon: Icon(Icons.person), title: Text('')),
         ],
@@ -140,9 +146,15 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
                 });
               },
               // TODO: Change this color
-              backgroundColor: Colors.black,
+//              backgroundColor: Colors.black,
               // TODO: Change this icon
-              child: Icon(Icons.airplanemode_active),
+              child: Transform.scale(
+                scale: 2.2,
+                child: IconButton(
+                  icon: Image.asset("assets/images/logo.png"),
+//                color: Colors.transparent,
+                ),
+              ),
             )
           : null,
       body: Stack(
@@ -160,6 +172,7 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
     );
   }
 
+
   bool _showFloatingButton() {
     if(_firstTime){
       return true;
@@ -175,7 +188,15 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
     return Container(
       padding: EdgeInsets.fromLTRB(10, 15, 10, 10),
       height: 80,
-      color: Colors.black,
+      decoration: BoxDecoration(
+        color: Colors.black,
+        border: Border(
+          bottom: BorderSide(
+            color: Colors.white,
+            width: 3.0,
+          ),
+        )
+      ),
       child: FlatButton(
         onPressed: () async {
           print('Cambio a pantalla de reproduccion');
@@ -196,7 +217,11 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             CircleAvatar(
-              backgroundImage: NetworkImage(_player.song.photoUrl),
+              radius: 22,
+              backgroundColor: Colors.white,
+              child: CircleAvatar(
+                backgroundImage: NetworkImage(_player.song.photoUrl),
+              ),
             ),
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -216,18 +241,21 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
                 ),
               ],
             ),
-            IconButton(
-              onPressed: () {
-                print('play');
-                setState(() {
-                  _player.changeReproductionState();
-                });
-              },
-              icon: Icon(
-                _player.playing ? Icons.pause : Icons.play_arrow,
-                color: Colors.white,
+            Align(
+              alignment: Alignment.center,
+              child: IconButton(
+                onPressed: () {
+                  print('play');
+                  setState(() {
+                    _player.changeReproductionState();
+                  });
+                },
+                icon: Icon(
+                  _player.playing ? Icons.pause : Icons.play_arrow,
+                  color: Colors.white,
+                ),
+                iconSize: 30,
               ),
-              iconSize: 40,
             ),
             IconButton(
               onPressed: () => setState(() => _showReprBar = false),
@@ -235,7 +263,7 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
                 Icons.keyboard_arrow_down,
                 color: Colors.white,
               ),
-              iconSize: 40,
+              iconSize: 30,
             ),
           ],
         ),

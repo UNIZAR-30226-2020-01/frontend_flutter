@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:spotiseven/screens/podcast/newpodcast.dart';
+import 'package:spotiseven/user/tokenSingleton.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -30,7 +30,11 @@ class _LoginState extends State<Login> {
       color: Color.fromRGBO(255, 255, 255, 0.6),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(70)),
       onPressed: () async {
-        // TODO: meter backend
+        print('Login con google');
+        if(await TokenSingleton().getTokenFromGoogle()){
+          // Se ha logueado bien
+          Navigator.pushNamed(context, '/home');
+        }
       },
       child: Container(
         margin: EdgeInsets.fromLTRB(5, 15, 5, 15),
@@ -95,7 +99,7 @@ class _LoginState extends State<Login> {
               margin: EdgeInsets.fromLTRB(5, 15, 5, 15),
               child: Center(
                 child: Text(
-                  'LOG IN WITH EMAIL',
+                  'LOG IN WITH USERNAME',
                   style: GoogleFonts.roboto(
                     fontWeight: FontWeight.w300,
                     color: Colors.black,

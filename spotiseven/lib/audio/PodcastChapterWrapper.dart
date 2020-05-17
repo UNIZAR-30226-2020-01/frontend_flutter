@@ -20,7 +20,7 @@ class PodcastChapterWrapper extends Playlist{
   List<Song> _convertToSongList(PodcastChapter pc) {
     Song s = Song(
       title: pc.title,
-      url: pc.url,
+      url: pc.uri,
       // TODO: Cuadrar estos argumentos
       album: Album(
         artista: Artist(

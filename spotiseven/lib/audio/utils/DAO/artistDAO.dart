@@ -47,7 +47,10 @@ class ArtistDAO {
     Response resp = await _client.get('$_url/artists/?search=$query');
     if(resp.statusCode == 200) {
       // Ha ido bien, devolvemos las listas
-      return jsonDecode(utf8.decode(resp.bodyBytes)).map((dynamic d) => Artist.fromJSONListed(d)).toList();
+      List<dynamic> lista = jsonDecode(utf8.decode(resp.bodyBytes));
+      List<Artist> artists = lista.map((dynamic d) => (Artist.fromJSONListed(d) as Artist )).toList();
+      return artists;
+//      return jsonDecode(utf8.decode(resp.bodyBytes)).map((dynamic d) => Artist.fromJSONListed(d)).toList();
     }else{
       throw Exception('La busqueda de Artist ha ido mal. Codigo de error ${resp.statusCode}');
     }
