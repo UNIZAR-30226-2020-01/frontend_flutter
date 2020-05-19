@@ -1,17 +1,42 @@
-// TODO: Remove this import
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:spotiseven/audio/utils/album.dart';
+import 'package:spotiseven/audio/utils/artist.dart';
+import 'package:spotiseven/audio/utils/playlist.dart';
+import 'package:spotiseven/audio/utils/podcast.dart';
+import 'package:spotiseven/audio/utils/podcastChapter.dart';
+import 'package:spotiseven/audio/utils/song.dart';
 import 'package:spotiseven/screens/podcast/discoverpodcast.dart';
 import 'package:spotiseven/screens/podcast/subscriptionpodcast.dart';
+import 'package:spotiseven/screens/search/searchResult/albumsFound.dart';
+import 'package:spotiseven/screens/search/searchResult/artistFound.dart';
+import 'package:spotiseven/screens/search/searchResult/playlistFound.dart';
+import 'package:spotiseven/screens/search/searchResult/podcastChapters.dart';
+import 'package:spotiseven/screens/search/searchResult/podcastFound.dart';
+import 'package:spotiseven/screens/search/searchResult/songFound.dart';
+import 'package:spotiseven/screens/search/searchResult/usersFound.dart';
 
-import 'newpodcast.dart';
+class SearchWrapper extends StatefulWidget {
+  List<Playlist> pls;
+  List<Song> songs;
+  List<Artist> artists;
+  List<Album> albums;
+  List<Podcast> pods;
+  List<PodcastChapter> podchaps;
 
-class PodcastScreenWrapper extends StatefulWidget {
+  SearchWrapper({
+    @required this.pls,
+    @required this.songs,
+    @required this.artists,
+    @required this.albums,
+    @required this.pods,
+    @required this.podchaps
+});
   @override
-  _PodcastScreenWrapper createState() => _PodcastScreenWrapper();
+  _SearchWrapper createState() => _SearchWrapper();
 }
 
-class _PodcastScreenWrapper extends State<PodcastScreenWrapper>
+class _SearchWrapper extends State<SearchWrapper>
     with SingleTickerProviderStateMixin {
 
   // To control index
@@ -21,14 +46,18 @@ class _PodcastScreenWrapper extends State<PodcastScreenWrapper>
   TabController _tabController;
 
   // Tabs
-  List<Widget> _myTabs = [
-    NewPodcast(),
-    SubscriptionPodcast(),
-    DiscoverPodcast(),
-  ];
+  List<Widget> _myTabs;
 
   @override
   void initState() {
+    _myTabs = [
+      PlaylistFound(foundpl: widget.pls,),
+      SongFound(foundsong: widget.songs,),
+      AlbumsFound(foundAlbum: widget.albums,),
+      ArtistFound(foundArtist: widget.artists,),
+      PodcastFound(),
+      ChaptersFound(),
+    ];
     _tabController =
         TabController(vsync: this, length: _myTabs.length, initialIndex: 0);
     super.initState();
@@ -51,13 +80,13 @@ class _PodcastScreenWrapper extends State<PodcastScreenWrapper>
             Align(
               alignment: Alignment.topCenter,
               child: Container(
-                padding: EdgeInsets.fromLTRB(30, 0, 0, 0),
+                padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
                 width: MediaQuery.of(context).size.width,
                 color: Colors.black,
                 child: PreferredSize(
                   preferredSize: Size.fromHeight(5000),
                   child: Container(
-                    padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+                    padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
                     width: MediaQuery.of(context).size.width,
                     color: Colors.black,
                     child: TabBar(
@@ -80,9 +109,12 @@ class _PodcastScreenWrapper extends State<PodcastScreenWrapper>
                         fontWeight: FontWeight.bold,
                       ),
                       tabs: <Widget>[
-                        buildTextTab('NEW PODCAST'),
-                        buildTextTab('SUBSCRIPTION'),
-                        buildTextTab('DISCOVER'),
+                        buildTextTab('PLAYLISTS'),
+                        buildTextTab('SONGS'),
+                        buildTextTab('ALBUMS'),
+                        buildTextTab('ARTISTS'),
+                        buildTextTab('PODCASTS'),
+                        buildTextTab('PODCAST CHAPTERS')
                       ],
                     ),
                   ),

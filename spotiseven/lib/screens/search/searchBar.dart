@@ -1,7 +1,7 @@
 import 'package:flappy_search_bar/flappy_search_bar.dart';
 import 'package:flappy_search_bar/search_bar_style.dart';
 import 'package:flutter/material.dart';
-import 'package:spotiseven/audio/playingSingleton.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:spotiseven/audio/utils/DAO/albumDAO.dart';
 import 'package:spotiseven/audio/utils/DAO/artistDAO.dart';
 import 'package:spotiseven/audio/utils/DAO/playlistDAO.dart';
@@ -9,8 +9,8 @@ import 'package:spotiseven/audio/utils/DAO/songDAO.dart';
 import 'package:spotiseven/audio/utils/album.dart';
 import 'package:spotiseven/audio/utils/artist.dart';
 import 'package:spotiseven/audio/utils/playlist.dart';
-import 'package:spotiseven/audio/utils/podcast.dart';
 import 'package:spotiseven/audio/utils/song.dart';
+import 'package:spotiseven/screens/search/searchWrapper.dart';
 import 'package:spotiseven/usefullMethods.dart';
 
 class SearchBarScreen extends StatefulWidget {
@@ -66,7 +66,79 @@ class _SearchBarScreenState extends State<SearchBarScreen> {
     for (int i=0; i<albums.length; i++){
       devol.add(albums[i].titulo);
     }
+    Navigator.push(context, MaterialPageRoute(builder: (context) => SearchWrapper(
+      pls: playlists,
+      songs: songs,
+      albums: albums,
+      artists: artists,
+      //TODO: arreglar
+      podchaps: null,
+      pods: null,
+    )));
     return devol;
+  }
+
+  _loader(){
+    return Center(
+      child: Container(
+        height: 40,
+        width: 200,
+        decoration: BoxDecoration(
+          color: Colors.black,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Center(
+          child: Row(
+            children: <Widget>[
+              Expanded(
+                flex: 1,
+                child: Container(
+                  margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      backgroundColor: Colors.black,
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 2,
+                child: Container(
+                  child: Center(
+                    child: Text(
+                        'Loading...',
+                        style: GoogleFonts.roboto(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: 2,
+                        )),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      )
+    );
+  }
+
+  _cancelButton(){
+    return Container(
+      margin: EdgeInsets.fromLTRB(15, 10, 0, 10),
+      decoration: BoxDecoration(
+        color: Colors.black,
+        borderRadius: BorderRadius.circular(5),
+      ),
+      child: Center(
+        child: Text(
+          'CANCEL',
+          style: GoogleFonts.roboto(
+            fontWeight: FontWeight.w500,
+            color: Colors.white
+          ),
+        )
+      ),
+    );
   }
 
   @override
@@ -81,7 +153,7 @@ class _SearchBarScreenState extends State<SearchBarScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Expanded(
-              flex: 5,
+              flex: 4,
               child: Container(
                 padding: EdgeInsets.fromLTRB(90, 140, 90, 0),
                 color: Colors.white,
@@ -94,7 +166,7 @@ class _SearchBarScreenState extends State<SearchBarScreen> {
                 onSearch: search,
                 searchBarPadding: EdgeInsets.fromLTRB(30, 90, 30, 0),
                 searchBarController: _searchCtrl,
-                cancellationText: Text("Cancelar"),
+                cancellationWidget: _cancelButton(),
                 textStyle: TextStyle(
                   color: Colors.white
                 ),
@@ -102,9 +174,17 @@ class _SearchBarScreenState extends State<SearchBarScreen> {
                   Icons.search,
                   color: Colors.white,
                 ),
-                loader: Center(child: Text('loading....')),
+//                loader: _loader(),
                 onItemFound: (String s, int index) {
-                  return Text(s);
+                  /*Navigator.push(context, MaterialPageRoute(builder: (context) => SearchWrapper(
+                    pls: playlists,
+                    songs: songs,
+                    albums: albums,
+                    artists: artists,
+                    podchaps: null,
+                    pods: null,
+                  )));*/
+                  return Text('');
                 },
                 searchBarStyle: SearchBarStyle(
                   backgroundColor: Colors.black,
@@ -112,7 +192,7 @@ class _SearchBarScreenState extends State<SearchBarScreen> {
               ),
             ),
             Expanded(
-              flex: 5,
+              flex: 4,
               child: GestureDetector(
                 onTap: (){
                   Navigator.pushNamed(context, '/recomendations');

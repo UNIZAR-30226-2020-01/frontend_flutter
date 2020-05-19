@@ -47,6 +47,7 @@ class _HomeScreenWrapperState extends State<HomeScreenWrapper>
             Align(
               alignment: Alignment.topCenter,
               child: Container(
+                padding: EdgeInsets.fromLTRB(50, 0, 0, 0),
                 width: MediaQuery.of(context).size.width,
                 color: Colors.black,
                 child: PreferredSize(
