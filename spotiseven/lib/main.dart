@@ -8,7 +8,17 @@ import 'package:spotiseven/screens/loginScreen/login.dart';
 import 'package:spotiseven/screens/podcast/newpodcast.dart';
 import 'package:spotiseven/screens/register/register.dart';
 import 'package:spotiseven/screens/search/recomendations.dart';
+import 'package:spotiseven/screens/search/searchWrapper.dart';
 import 'package:spotiseven/screens/splashScreen/splash_screen.dart';
+import 'package:spotiseven/screens/search/searchBar.dart';
+import 'package:spotiseven/screens/search/searchResult/albumsFound.dart';
+import 'package:spotiseven/screens/search/searchResult/artistFound.dart';
+import 'package:spotiseven/screens/search/searchResult/podcastChapters.dart';
+import 'package:spotiseven/screens/search/searchResult/podcastFound.dart';
+import 'package:spotiseven/screens/search/searchResult/songFound.dart';
+import 'package:spotiseven/screens/search/searchResult/playlistFound.dart';
+
+
 
 const MaterialColor white = const MaterialColor(
   0xFFFFFFFF,
@@ -59,6 +69,13 @@ void main() => runApp(MaterialApp(
           '/home': (context) => MainScreenWrapper(),
           '/playing': (context) => PlayingScreen(),
           '/podcast': (context) => NewPodcast(),
+          '/searchWrapper': (context) => SearchWrapper(),
+          '/podfound': (context) => PodcastFound(),
+          '/podchfound': (context) => ChaptersFound(),
+          '/artistfound': (context) => ArtistFound(),
+          '/songfound': (context) => SongFound(),
+          '/playlistfound': (context) => PlaylistFound(),
+          '/artistifound': (context) => ArtistFound(),
         }
       )
 );

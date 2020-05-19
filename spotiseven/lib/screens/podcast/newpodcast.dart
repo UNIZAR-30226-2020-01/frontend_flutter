@@ -42,23 +42,6 @@ class _NewPodcastState extends State<NewPodcast> {
     super.initState();
   }
 
-  //static CanalPodcast canal1 = CanalPodcast(title: 'RTVE', author: 'ESPAÑITA', photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Logo_RTVE.svg/1200px-Logo_RTVE.svg.png');
-
-  /*static Podcast pod = Items.pod1(canal1, 'noticias', 6, 'https://static.foxnews.com/static/orion/styles/img/fox-news/og/og-fox-news.png');
-  PodcastChapter chap1 = Items.ch1(pod);
-  PodcastChapter chap2 = Items.ch1(pod);
-  PodcastChapter chap3 = Items.ch1(pod);
-  PodcastChapter chap4 = Items.ch2(pod);
-  PodcastChapter chap5 = Items.ch2(pod);
-  PodcastChapter chap6 = Items.ch2(pod);
-*/
-//
-//   List<PodcastChapter> lista1 = Items.devoLists(pod);
-//
-//   static List<PodcastChapter> lista2 = Items.devoLists(pod);
-//   Podcast pod2 = Items.addChapters(pod, lista2);
-
-
 
 
   @override
