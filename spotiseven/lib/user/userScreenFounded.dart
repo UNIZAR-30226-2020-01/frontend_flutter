@@ -1,5 +1,10 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:spotiseven/generic_components/GenericElementList.dart';
+import 'package:spotiseven/usefullMethods.dart';
 import 'package:spotiseven/user/user.dart';
 import 'package:spotiseven/user/userDAO.dart';
 
@@ -17,54 +22,74 @@ class _UserScreenFoundState extends State<UserScreenFound> {
   User get user => widget.user;
   List<User> following;
   List<User> followers;
-  Text followersAsText = new Text('');
-  Text followingAsText = new Text('');
+  Widget followersWid ;
+  Widget followingWid;
+  bool hayFollowers = false;
+  bool hayFollowing = false;
 
-  getFollowers()
-  {
-    String x = 'FOLLOWERS: ';
-    if (followers.length > 0){
-      for(var i = 0; i < followers.length; i++){
-        x = x+(followers[i].username);
-        x = x+ ' - ';
-      }
+
+
+  void checkFollowing(){
+    if (following.length > 0){
+      hayFollowing = true;
     }
-    else x = 'User has no followers';
-    setState(() {
-      followersAsText = Text(x);
-    });
-//    followersAsText = Text(x);
+  }
+  void checkFollowers(){
+    if (following.length > 0){
+      hayFollowers = true;
+    }
   }
 
-  getFollowing()
+
+  Widget getFollowers()
+  {
+    String x = 'FOLLOWERS: ';
+    if (hayFollowers){
+        return GenericElementList(lista: followers);
+    }
+    else return Text('no hay followers');
+
+  }
+
+
+  Widget getFollowing()
   {
     String x = 'FOLLOWIN: ';
-    if (following.length > 0){
-      for(var i = 0; i < following.length; i++){
-        x = x+(following[i].username);
-        x = x+ ' - ';
-      }
+    if (hayFollowing){
+        return GenericElementList(lista: following);
     }
-    else x = 'User doesnt follow other users';
-    setState(() {
-      followingAsText = Text(x);
-    });
-//    followingAsText = Text(x);
+    else return Text('no hay following');
   }
 
   @override
   void initState(){
     super.initState();
     _fetchData();
+//    sleep(Duration(seconds: 2));
   }
 
   Future _fetchData() async{
     following = await UserDAO.following(user);
     followers = await UserDAO.followers(user);
-    getFollowing();
-    getFollowers();
+    checkFollowing();
+    checkFollowers();
   }
 
+  _bar(String s) {
+
+    return Container(
+      color: Colors.black,
+      padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+      height: MediaQuery.of(context).size.width * 0.01,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          UsefulMethods.text(s, 14.0, 0.0, 255,255,255,1.0),
+        ],
+      ),
+    );
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -76,7 +101,7 @@ class _UserScreenFoundState extends State<UserScreenFound> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Expanded(
-              flex: 2,
+              flex: 5,
               child: Container(
                 decoration: BoxDecoration(
                   image: DecorationImage(
@@ -87,7 +112,7 @@ class _UserScreenFoundState extends State<UserScreenFound> {
             ),
             Divider(color: Colors.black,thickness: 5,),
             Expanded(
-              flex: 1,
+              flex: 2,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
@@ -109,75 +134,85 @@ class _UserScreenFoundState extends State<UserScreenFound> {
                       ),
                     ),
                   ),
-                  Container(
-                    height: 30,
-                    color: Colors.pink,
-                    child: followingAsText,
-                  ),
-                  Container(
-                    height: 30,
-                    color: Colors.blue,
-                    child: followersAsText,
+                  SizedBox(height: 10,),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: <Widget>[
+                      FlatButton(
+                        onPressed: (){
+                          UserDAO.followUser(user);
+                          print('User has been followed');
+                        },
+                        child: Container(
+                          width: MediaQuery.of(context).size.width*0.3,
+                          height: MediaQuery.of(context).size.height*0.04,
+                          decoration: BoxDecoration(
+                            color: Colors.black,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Center(
+                            child: Text(
+                              'FOLLOW',
+                              style: GoogleFonts.roboto(
+                                color: Colors.white,
+                                fontSize: 25,
+                                fontWeight: FontWeight.w300,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      FlatButton(
+                        onPressed: (){
+                          UserDAO.unfollowUser(user);
+                          print('User has been unfollowed');
+                        },
+                        child: Container(
+                          width: MediaQuery.of(context).size.width*0.3,
+                          height: MediaQuery.of(context).size.height*0.04,
+                          decoration: BoxDecoration(
+                            color: Colors.black,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Center(
+                            child: Text(
+                              'UNFOLLOW',
+                              style: GoogleFonts.roboto(
+                                color: Colors.white,
+                                fontSize: 25,
+                                fontWeight: FontWeight.w300,
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
                   ),
                 ],
                 )
               ),
             Expanded(
+              flex: 1,
+              child: _bar('FOLLOWING'),
+            ),
+            Expanded(
               flex: 2,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  FlatButton(
-                    onPressed: (){
-                      UserDAO.followUser(user);
-                      print('User has been followed');
-                    },
-                    child: Container(
-                      width: MediaQuery.of(context).size.width*0.4,
-                      height: MediaQuery.of(context).size.height*0.05,
-                      decoration: BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Center(
-                        child: Text(
-                          'FOLLOW',
-                          style: GoogleFonts.roboto(
-                            color: Colors.white,
-                            fontSize: 25,
-                            fontWeight: FontWeight.w300,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  FlatButton(
-                    onPressed: (){
-                      UserDAO.unfollowUser(user);
-                      print('User has been unfollowed');
-                    },
-                    child: Container(
-                      width: MediaQuery.of(context).size.width*0.4,
-                      height: MediaQuery.of(context).size.height*0.05,
-                      decoration: BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Center(
-                        child: Text(
-                          'UNFOLLOW',
-                          style: GoogleFonts.roboto(
-                            color: Colors.white,
-                            fontSize: 25,
-                            fontWeight: FontWeight.w300,
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
-                ],
+              child: Container(
+                color: Colors.white,
+                child: getFollowing()
               ),
-            )
+            ),
+            Expanded(
+              flex: 1,
+              child: _bar('FOLLOWERS'),
+            ),
+            Expanded(
+              flex: 2,
+              child: Container(
+                color: Colors.white,
+                child: getFollowers()
+              ),
+            ),
           ],
         ),
       ),
