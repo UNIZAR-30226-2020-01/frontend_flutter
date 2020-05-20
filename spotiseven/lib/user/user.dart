@@ -4,10 +4,20 @@ class User {
 
   // Username
   String username;
+  String imageUrl;
 
-  User({this.url, this.username});
+
+  User({this.url, this.username,  this.imageUrl});
+
+
+  addImage(String u){
+    imageUrl=u;
+  }
 
   static User fromJSON(Map<String, Object> json) {
-    return User(url: json['url'], username: json['username']);
+    return User(
+        url: json['url'],
+        username: json['username']
+    );
   }
 }
