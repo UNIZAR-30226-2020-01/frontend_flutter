@@ -23,6 +23,8 @@ class TokenSingleton {
   // Atributos
   String _token;
   String _type;
+  // Token de intercambio
+  String _refreshToken;
 
   // Constructor interno
   TokenSingleton._internal() {
@@ -31,6 +33,7 @@ class TokenSingleton {
       _token = sec_token;
       print('EL TOKEN VALE: $_token');
       print('EL TIPO DEL TOKEN ES: $_type');
+      print('EL REFRESH TOKEN VALE: $_refreshToken');
     });
   }
 
@@ -49,6 +52,7 @@ class TokenSingleton {
       print('GUARDANDO: $_token');
       await _storage.write(key: 'token', value: '$_token');
       await _storage.write(key: 'type', value: '$_type');
+      await _storage.write(key: 'refresh', value: '$_refreshToken');
 //      print('${await _storage.read(key: 'token')}');
     }else{
       throw Exception('SAVETOKEN: El token es NULL');
@@ -59,6 +63,7 @@ class TokenSingleton {
   Future<String> _getTokenFromSecure() async {
     String auth_token = await _storage.read(key: 'token');
     _type = await _storage.read(key: 'type');
+    _refreshToken = await _storage.read(key: 'refresh');
     return auth_token;
 //    if(auth_token != null){
 //      return auth_token;
@@ -81,6 +86,7 @@ class TokenSingleton {
     if(response.statusCode == 200){
       _token = (jsonDecode(response.body) as Map)['token'];
       _type = 'Token';
+      _refreshToken = null;
       // Comprobamos que el token no es null
       if(_token != null){
         // Guardamos el codigo en el almacenamiento seguro
@@ -106,31 +112,40 @@ class TokenSingleton {
         Map<String, String> auth = await gsa.authHeaders;
         _token = auth['Authorization'].split(' ').last;
         _type = 'Bearer';
-        print('TOKEN: $_token');
-        // Peticion de conversion del token
-        Response response = await _client.post('$_url/auth/convert-token/', body: {
-          "grant_type": 'convert_token',
-          "client_id": 'rPllY8pG9tdFdROaiX7ZwIsCdQ4xzwhskdW1oCaH',
-          "client_secret": 'GSBMVcRbAjz6C3l2QbfNhXs0jIF3uvBXGqNTdJ27d0fhuGeAJg4YoTMaqOeMS9HqDJtk9Kd8yar8ZVMZOOG5PZJKaRPQwvMnhnp7R1H3TixGA1ZYWPigRUUx2uOv9FkW',
-          "backend": 'google-oauth2',
-          "token": _token.trim()
-        });
-        if(response.statusCode == 200){
-          // Ha ido bien la conversion
-          print('Ha ido bien con el backend');
-          _token = (jsonDecode(utf8.decode(response.bodyBytes)) as Map)['access_token'];
-          _saveTokenToSecure();
-          return true;
-        }else{
-          print('${response.body}');
-          throw Exception('Error en la comunicacion con el backend para la conversion del token. Codigo de error ${response.statusCode}');
-        }
+        return await _refreshAccessToken('convert-token');
       }else{
         // No se ha autentificado
         print('No se ha autentificado');
       }
     } catch (error){
       print('$error');
+    }
+  }
+
+  /// [endpoint] puede ser 'convert-token' o 'token'. Para registro por
+  /// primera vez usar 'convert-token'. Para refrescar 'token'.
+  Future<bool> _refreshAccessToken(String endpoint) async {
+    print('TOKEN: $_token');
+    // Peticion de conversion del token
+    String token_type = endpoint == 'token' ? "refresh_token" : "token";
+    String token_value = endpoint == 'token' ? _refreshToken.trim() : _token.trim();
+    Response response = await _client.post('$_url/auth/$endpoint/', body: {
+      "grant_type": endpoint == 'token' ? 'refresh_token' : 'convert_token',
+      "client_id": 'rPllY8pG9tdFdROaiX7ZwIsCdQ4xzwhskdW1oCaH',
+      "client_secret": 'GSBMVcRbAjz6C3l2QbfNhXs0jIF3uvBXGqNTdJ27d0fhuGeAJg4YoTMaqOeMS9HqDJtk9Kd8yar8ZVMZOOG5PZJKaRPQwvMnhnp7R1H3TixGA1ZYWPigRUUx2uOv9FkW',
+      "backend": 'google-oauth2',
+      token_type: token_value
+    });
+    if(response.statusCode == 200){
+      // Ha ido bien la conversion
+      print('Ha ido bien con el backend');
+      _token = (jsonDecode(utf8.decode(response.bodyBytes)) as Map)['access_token'];
+      _refreshToken = (jsonDecode(utf8.decode(response.bodyBytes)) as Map)['refresh_token'];
+      _saveTokenToSecure();
+      return true;
+    }else{
+      print('${response.body}');
+      throw Exception('Error en la comunicacion con el backend para la conversion del token. Codigo de error ${response.statusCode}');
     }
   }
 
@@ -141,7 +156,26 @@ class TokenSingleton {
     if(_token != null){
       await _storage.delete(key: 'token');
       await _storage.delete(key: 'type');
+      await _storage.delete(key: 'refresh');
       _token = null;
+    }
+  }
+
+  Future<bool> accessRefresh() async {
+    print('$_refreshToken');
+    if(_refreshToken != null){
+      // Nueva peticion a /auth/token
+      print('Peticion de refresco del token');
+      try {
+        return await _refreshAccessToken('token');
+      } on Exception catch (e) {
+        print('${e.toString()}');
+        return false;
+      }
+    }else{
+      // No es aplicable
+      print('Access Token no aplicable');
+      return true;
     }
   }
 
