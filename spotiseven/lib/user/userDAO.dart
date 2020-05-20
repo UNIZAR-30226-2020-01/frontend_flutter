@@ -92,6 +92,38 @@ class UserDAO {
     }
   }
 
+  static Future<List<User>> following(User user) async {
+    Response resp = await _client.get('$_url/current-user/', headers: TokenSingleton()
+        .authHeader);
+    if(resp.statusCode == 200){
+      print('RESPONE: ${resp.body}');
+      Map<String, dynamic> map = (jsonDecode(utf8.decode(resp.bodyBytes)) as List)[0];
+      List<dynamic> lista = map['following'];
+      return lista.map((dynamic d) => User.fromJSON(d)).toList();
+//      return lista['following'].map((dynamic d) => User.fromJSON(d)).toList();
+    }
+    else{
+      throw Exception('Error al coger los followed de ${user.username}. Codigo de error ${resp
+          .statusCode}');
+    }
+  }
+
+  static Future<List<User>> followers(User user) async {
+    Response resp = await _client.get('$_url/current-user/', headers: TokenSingleton()
+        .authHeader);
+    if(resp.statusCode == 200){
+      print('RESPONE: ${resp.body}');
+      Map<String, dynamic> map = (jsonDecode(utf8.decode(resp.bodyBytes)) as List)[0];
+      List<dynamic> lista = map['followers'];
+      return lista.map((dynamic d) => User.fromJSON(d)).toList();
+//      return lista['followers'].map((dynamic d) => User.fromJSON(d) ).toList();
+    }
+    else{
+      throw Exception('Error al coger los followers de ${user.username}. Codigo de error ${resp
+          .statusCode}');
+    }
+  }
+
   // Follow User
   static Future<void> followUser(User user) async {
     Response resp = await _client.get('${user.url}follow/', headers: TokenSingleton().authHeader);
@@ -128,8 +160,9 @@ class UserDAO {
     Response resp = await _client.get('$_url/s7_user/?search=$query');
     if (resp.statusCode == 200) {
       // Ha ido bien, devolvemos las listas
-      return jsonDecode(utf8.decode(resp.bodyBytes)).map((dynamic d) =>
-          User.fromJSON(d)).toList();
+      List<dynamic> lista = jsonDecode(utf8.decode(resp.bodyBytes));
+      List<User> users =  lista.map((dynamic d) => User.fromJSON(d) ).toList();
+      return users;
     } else {
       throw Exception(
           'La busqueda de Song ha ido mal. Codigo de error ${resp.statusCode}');
