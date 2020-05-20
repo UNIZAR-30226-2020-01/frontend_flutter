@@ -15,6 +15,7 @@ import 'package:spotiseven/screens/search/searchResult/podcastChapters.dart';
 import 'package:spotiseven/screens/search/searchResult/podcastFound.dart';
 import 'package:spotiseven/screens/search/searchResult/songFound.dart';
 import 'package:spotiseven/screens/search/searchResult/usersFound.dart';
+import 'package:spotiseven/user/user.dart';
 
 class SearchWrapper extends StatefulWidget {
   List<Playlist> pls;
@@ -23,6 +24,7 @@ class SearchWrapper extends StatefulWidget {
   List<Album> albums;
   List<Podcast> pods;
   List<PodcastChapter> podchaps;
+  List<User> users;
 
   SearchWrapper({
     @required this.pls,
@@ -30,7 +32,8 @@ class SearchWrapper extends StatefulWidget {
     @required this.artists,
     @required this.albums,
     @required this.pods,
-    @required this.podchaps
+    @required this.podchaps,
+    @required this.users
 });
   @override
   _SearchWrapper createState() => _SearchWrapper();
@@ -57,6 +60,7 @@ class _SearchWrapper extends State<SearchWrapper>
       ArtistFound(foundArtist: widget.artists,),
       PodcastFound(),
       ChaptersFound(),
+      UserFound(founduser: widget.users,)
     ];
     _tabController =
         TabController(vsync: this, length: _myTabs.length, initialIndex: 0);
@@ -114,7 +118,8 @@ class _SearchWrapper extends State<SearchWrapper>
                         buildTextTab('ALBUMS'),
                         buildTextTab('ARTISTS'),
                         buildTextTab('PODCASTS'),
-                        buildTextTab('PODCAST CHAPTERS')
+                        buildTextTab('PODCAST CHAPTERS'),
+                        buildTextTab('USERS')
                       ],
                     ),
                   ),

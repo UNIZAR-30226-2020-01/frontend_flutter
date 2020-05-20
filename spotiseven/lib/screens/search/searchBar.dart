@@ -12,6 +12,7 @@ import 'package:spotiseven/audio/utils/playlist.dart';
 import 'package:spotiseven/audio/utils/song.dart';
 import 'package:spotiseven/screens/search/searchWrapper.dart';
 import 'package:spotiseven/usefullMethods.dart';
+import 'package:spotiseven/user/user.dart';
 
 class SearchBarScreen extends StatefulWidget {
   @override
@@ -24,6 +25,8 @@ class _SearchBarScreenState extends State<SearchBarScreen> {
   List<Song> songs = List();
   List<Artist> artists = List();
   List<Album> albums = List();
+  List<User> users = List();
+//todo: podcasts
 
   final SearchBarController<String> _searchCtrl = SearchBarController();
 
@@ -42,6 +45,7 @@ class _SearchBarScreenState extends State<SearchBarScreen> {
     print("artists number: " + artists.length.toString());
     print("songs number: " +  songs.length.toString());
     print("albums number: " +  albums.length.toString());
+    print("users number: " + users.length.toString());
     /*return List.generate(playlists.length, (int index) {
       return playlists;
     }
@@ -71,9 +75,10 @@ class _SearchBarScreenState extends State<SearchBarScreen> {
       songs: songs,
       albums: albums,
       artists: artists,
-      //TODO: arreglar
+      //TODO: arreglar podcasts
       podchaps: null,
       pods: null,
+      users: users,
     )));
     return devol;
   }

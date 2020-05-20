@@ -25,7 +25,9 @@ class SongCardWidget extends StatelessWidget {
       // TODO: Integrar con la pantalla de album
       onPressedFunction: () {
         var playingSingleton = PlayingSingleton();
-        playingSingleton.play(song);
+        playingSingleton.addSongNext(song);
+        playingSingleton.next();
+//        playingSingleton.play(song);
         print('Reproduciendo ' + song.title);
       },
     );
