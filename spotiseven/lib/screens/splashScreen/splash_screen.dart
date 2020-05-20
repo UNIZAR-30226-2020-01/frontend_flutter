@@ -12,50 +12,46 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-
-
   TokenSingleton _tokenSingleton = TokenSingleton();
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
 
-    _checkForSession().then(
-            (bool status) {
-          if (status) {
-            _navigateToHome();
-          } else {
-            _navigateToLogin();
-          }
-        }
-    );
+    _checkForSession().then((bool status) {
+      if (status) {
+        _navigateToHome();
+      } else {
+        _navigateToLogin();
+      }
+    });
   }
 
-  Future<bool> _checkForSession() async{
+  Future<bool> _checkForSession() async {
     //TODO: check de si el usuario está logeado
     await Future.delayed(Duration(milliseconds: 500), () {});
-    /*if(FirebaseAuth.instance.currentUser() != null) return true;
-    else return false;*/
+    print('Iniciando la comprobación de la sesión');
     // Comprobamos si existe el token de conexion, y además comprobamos si es valido.
-    return (_tokenSingleton.token != null) && ((await UserDAO.getUserData()) != null);
+    return (_tokenSingleton.token != null) &&
+        (await _tokenSingleton.accessRefresh()) &&
+        ((await UserDAO.getUserData()) != null);
   }
 
-  void _navigateToHome(){
-     /* Navigator.of(context).pushReplacement(MaterialPageRoute(
+  void _navigateToHome() {
+    /* Navigator.of(context).pushReplacement(MaterialPageRoute(
           builder: (context) => MainScreenWrapper()
         ));*/
 //    Navigator.popAndPushNamed(context, '/home');
-      Navigator.pushReplacementNamed(context, '/home');
+    Navigator.pushReplacementNamed(context, '/home');
   }
 
-  void _navigateToLogin(){
+  void _navigateToLogin() {
     /*Navigator.of(context).pushReplacement(MaterialPageRoute(
         builder: (context) => Login()
     ));*/
 //    Navigator.popAndPushNamed(context, '/login');
-      Navigator.pushReplacementNamed(context, '/login');
+    Navigator.pushReplacementNamed(context, '/login');
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -69,18 +65,13 @@ class _SplashScreenState extends State<SplashScreen> {
             ),
             Container(
               decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('assets/images/gif.gif'),
-                )
-              ),
+                  image: DecorationImage(
+                image: AssetImage('assets/images/gif.gif'),
+              )),
             )
           ],
         ),
       ),
     );
   }
-
-
-
-
 }
