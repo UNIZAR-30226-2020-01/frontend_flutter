@@ -35,7 +35,6 @@ class Playlist {
       this.user,
       this.num_songs});
 
-  // TODO: Cambiar esto para que coincida con la API REST
   factory Playlist.fromJSONDetail(Map<String, Object> json) {
     return Playlist(
       url: (json['url'] as String).replaceAll('http://', 'https://'),
@@ -45,6 +44,17 @@ class Playlist {
       // TODO: Comprobar esto cuando existan los usuarios
       user: (json['user'] as Map)['username'],
       num_songs: json['number_songs'],
+    );
+  }
+
+  factory Playlist.fromJSONDetailReduced(Map<String, Object> json) {
+    return Playlist(
+      url: (json['url'] as String).replaceAll('http://', 'https://'),
+      title: json['title'],
+      playlist: (json['songs'] as List).map((d) => Song.fromJSONReduced(d)).toList(),
+      photoUrl: json['icon'],
+      // TODO: Comprobar esto cuando existan los usuarios
+      user: (json['user'] as Map)['username'],
     );
   }
 
@@ -89,7 +99,7 @@ class Playlist {
   }
 
   Future<void> fetchRemote() async {
-    Playlist pl = await PlaylistDAO.getByURL(this.url);
+    Playlist pl = await PlaylistDAO.getByURLReduced(this.url);
     // Actualizamos los campos
     this.playlist = pl.playlist;
     this.photoUrl = pl.photoUrl;

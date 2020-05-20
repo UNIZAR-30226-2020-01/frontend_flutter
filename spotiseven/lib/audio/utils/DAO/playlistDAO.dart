@@ -50,6 +50,23 @@ class PlaylistDAO {
     }
   }
 
+  static Future<Playlist> getByURLReduced(String url) async {
+//    return Future.delayed(Duration(seconds: 3), () => _listPlaylist);
+    // TODO: Revisar cual sera la URL final
+//    Response response = await _client.get('$_url/playlists');
+    Response response =
+    await _client.get('$url', headers: TokenSingleton().authHeader);
+    // Convertimos los json a playlist
+    // TODO: Comprobar el campo de las playlist
+    if (response.statusCode == 200) {
+      print('RESPONSE: ${response.body}');
+      return Playlist.fromJSONDetailReduced(jsonDecode(utf8.decode(response.bodyBytes)) as Map);
+    } else {
+      throw Exception(
+          "Error al buscar en la URL: $url . Codigo de error: ${response.statusCode}");
+    }
+  }
+
   static Future<Playlist> createPlaylist(Playlist p, File image) async {
 
     print('${image.path}');
