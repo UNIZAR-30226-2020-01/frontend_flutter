@@ -12,6 +12,8 @@ import 'package:spotiseven/audio/utils/playlist.dart';
 import 'package:spotiseven/audio/utils/song.dart';
 import 'package:spotiseven/screens/search/searchWrapper.dart';
 import 'package:spotiseven/usefullMethods.dart';
+import 'package:spotiseven/user/user.dart';
+import 'package:spotiseven/user/userDAO.dart';
 
 class SearchBarScreen extends StatefulWidget {
   @override
@@ -24,6 +26,8 @@ class _SearchBarScreenState extends State<SearchBarScreen> {
   List<Song> songs = List();
   List<Artist> artists = List();
   List<Album> albums = List();
+  List<User> users = List();
+//todo: podcasts
 
   final SearchBarController<String> _searchCtrl = SearchBarController();
 
@@ -35,6 +39,7 @@ class _SearchBarScreenState extends State<SearchBarScreen> {
     artists = await ArtistDAO.searchArtist(search);
     songs = await SongDAO.searchSong(search);
     albums = await AlbumDAO.searchAlbum(search);
+    users = await UserDAO.searchUser(search);
     //todo: meter los podcast bro
 
     print("awaits ok");
@@ -42,40 +47,20 @@ class _SearchBarScreenState extends State<SearchBarScreen> {
     print("artists number: " + artists.length.toString());
     print("songs number: " +  songs.length.toString());
     print("albums number: " +  albums.length.toString());
-    /*return List.generate(playlists.length, (int index) {
-      return playlists;
-    }
-    );*/
-    List<String> devol = List();
-    devol.add("PLAYLISTS: ");
-    for (int i=0; i<playlists.length; i++){
-      devol.add(playlists[i].title);
-    }
-    devol.add(" ");
-    devol.add("SONGS:");
-    for (int i=0; i<songs.length; i++){
-      devol.add(songs[i].title);
-    }
-    devol.add(" ");
-    devol.add("ARTISTS:");
-    for (int i=0; i<artists.length; i++){
-      devol.add(artists[i].name);
-    }
-    devol.add(" ");
-    devol.add("ALBUMS:");
-    for (int i=0; i<albums.length; i++){
-      devol.add(albums[i].titulo);
-    }
+    print("users number: " + users.length.toString());
+
     Navigator.push(context, MaterialPageRoute(builder: (context) => SearchWrapper(
       pls: playlists,
       songs: songs,
       albums: albums,
       artists: artists,
-      //TODO: arreglar
+      //TODO: arreglar podcasts
       podchaps: null,
       pods: null,
+      users: users,
+      word: search,
     )));
-    return devol;
+    return [''];
   }
 
   _loader(){
@@ -164,6 +149,12 @@ class _SearchBarScreenState extends State<SearchBarScreen> {
               flex: 5,
               child: SearchBar<String>(
                 onSearch: search,
+                hintText: 'Write hear your search',
+                hintStyle: TextStyle(color: Colors.white70),
+                onCancelled: (){_searchCtrl.clear();
+                _searchCtrl.removeFilter(); },
+                debounceDuration: Duration(seconds: 2),
+                minimumChars: 2,
                 searchBarPadding: EdgeInsets.fromLTRB(30, 90, 30, 0),
                 searchBarController: _searchCtrl,
                 cancellationWidget: _cancelButton(),
@@ -176,14 +167,6 @@ class _SearchBarScreenState extends State<SearchBarScreen> {
                 ),
 //                loader: _loader(),
                 onItemFound: (String s, int index) {
-                  /*Navigator.push(context, MaterialPageRoute(builder: (context) => SearchWrapper(
-                    pls: playlists,
-                    songs: songs,
-                    albums: albums,
-                    artists: artists,
-                    podchaps: null,
-                    pods: null,
-                  )));*/
                   return Text('');
                 },
                 searchBarStyle: SearchBarStyle(

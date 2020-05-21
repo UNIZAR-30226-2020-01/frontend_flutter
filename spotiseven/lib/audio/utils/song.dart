@@ -1,6 +1,7 @@
 // Clase Album
 import 'package:spotiseven/audio/utils/album.dart';
 import 'package:spotiseven/audio/utils/DAO/songDAO.dart';
+import 'package:spotiseven/audio/utils/artist.dart';
 
 // TODO: Cambiar esto para que coincida con los campos de la BD.
 class Song {
@@ -51,6 +52,25 @@ class Song {
       // El servidor es https, no http
       url: json['file'].toString().replaceAll('http://', 'https://'),
       album: Album.fromJSONListed(json['album']),
+      // TODO: Cambiar esto para que coincida con la API REST
+      favorite: json['is_fav'] ?? false,
+      urlApi: json['url'].toString().replaceAll('http://', 'https://'),
+      lyrics: json['lyrics'] ?? '',
+    );
+  }
+
+  static Song fromJSONReduced(Map<String, Object> json) {
+    return Song(
+      title: json['title'],
+      // El servidor es https, no http
+      url: json['file'].toString().replaceAll('http://', 'https://'),
+      album: Album(
+        photoUrl: (json['album'] as Map)['icon'],
+        titulo: (json['album'] as Map)['title'],
+        artista: Artist(
+          name: ((json['album'] as Map)['artist'] as Map)['name'],
+        )
+      ),
       // TODO: Cambiar esto para que coincida con la API REST
       favorite: json['is_fav'] ?? false,
       urlApi: json['url'].toString().replaceAll('http://', 'https://'),
