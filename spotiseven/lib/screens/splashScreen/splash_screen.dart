@@ -29,7 +29,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<bool> _checkForSession() async {
     //TODO: check de si el usuario está logeado
-    await Future.delayed(Duration(milliseconds: 500), () {});
+    await Future.delayed(Duration(milliseconds: 1000), () {});
     print('Iniciando la comprobación de la sesión');
     // Comprobamos si existe el token de conexion, y además comprobamos si es valido.
     return (_tokenSingleton.token != null) &&

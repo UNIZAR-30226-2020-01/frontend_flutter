@@ -162,8 +162,8 @@ class TokenSingleton {
   }
 
   Future<bool> accessRefresh() async {
-    print('$_refreshToken');
-    if(_refreshToken != null){
+    print('RefreshToken: $_refreshToken');
+    if(_refreshToken != "null"){
       // Nueva peticion a /auth/token
       print('Peticion de refresco del token');
       try {

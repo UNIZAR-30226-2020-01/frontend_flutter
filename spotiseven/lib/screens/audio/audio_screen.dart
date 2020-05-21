@@ -108,12 +108,7 @@ class _PlayingScreenState extends State<PlayingScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        buildIconButton(Icons.share, () => print('share')),
-                      ],
-                    ),
+                    SizedBox(),
                     CircleAvatar(
                       backgroundImage: NetworkImage(_player.song.photoUrl),
                       radius: 90,
@@ -145,9 +140,13 @@ class _PlayingScreenState extends State<PlayingScreen> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
                                   // -30 segundos
-                                  (snapshot.data as Duration).inSeconds > 10 * 60 ?  buildIconButton(Icons.replay_30, () {
-                                    _player.seekPosition(_time - 30 <= 0 ? 0 : _time - 30);
-                                  }) : SizedBox(),
+                                  (snapshot.data as Duration).inSeconds >
+                                          10 * 60
+                                      ? buildIconButton(Icons.replay_30, () {
+                                          _player.seekPosition(
+                                              _time - 30 <= 0 ? 0 : _time - 30);
+                                        })
+                                      : SizedBox(),
                                   Slider(
                                     activeColor: Colors.black,
                                     inactiveColor: Colors.black12,
@@ -159,9 +158,13 @@ class _PlayingScreenState extends State<PlayingScreen> {
                                     onChanged: (value) => seekPlayerTime(value),
                                   ),
                                   // +30 segundos
-                                  (snapshot.data as Duration).inSeconds > 10 * 60 ?  buildIconButton(Icons.forward_30, () {
-                                    _player.seekPosition(_time + 30 <= 0 ? 0 : _time + 30);
-                                  }) : SizedBox(),
+                                  (snapshot.data as Duration).inSeconds >
+                                          10 * 60
+                                      ? buildIconButton(Icons.forward_30, () {
+                                          _player.seekPosition(
+                                              _time + 30 <= 0 ? 0 : _time + 30);
+                                        })
+                                      : SizedBox(),
                                 ],
                               );
                             } else {
@@ -170,25 +173,39 @@ class _PlayingScreenState extends State<PlayingScreen> {
                                 builder: (context, snapshot) {
                                   if (snapshot.hasData) {
                                     return Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: <Widget>[
                                         // -30 segundos
-                                        (snapshot.data as int) > 10 * 60 ?  buildIconButton(Icons.replay_30, () {
-                                          _player.seekPosition(_time - 30 <= 0 ? 0 : _time - 30);
-                                        }) : SizedBox(),
+                                        (snapshot.data as int) > 10 * 60
+                                            ? buildIconButton(Icons.replay_30,
+                                                () {
+                                                _player.seekPosition(
+                                                    _time - 30 <= 0
+                                                        ? 0
+                                                        : _time - 30);
+                                              })
+                                            : SizedBox(),
                                         Slider(
                                           activeColor: Colors.black,
                                           inactiveColor: Color(0xff73afc5),
                                           min: 0,
-                                          max: (snapshot.data as int).toDouble(),
+                                          max:
+                                              (snapshot.data as int).toDouble(),
                                           value: _time.toDouble(),
                                           onChanged: (value) =>
                                               seekPlayerTime(value),
                                         ),
                                         // +30 segundos
-                                        (snapshot.data as int) > 10 * 60 ?  buildIconButton(Icons.forward_30, () {
-                                          _player.seekPosition(_time + 30 <= 0 ? 0 : _time + 30);
-                                        }) : SizedBox(),
+                                        (snapshot.data as int) > 10 * 60
+                                            ? buildIconButton(Icons.forward_30,
+                                                () {
+                                                _player.seekPosition(
+                                                    _time + 30 <= 0
+                                                        ? 0
+                                                        : _time + 30);
+                                              })
+                                            : SizedBox(),
                                       ],
                                     );
                                   } else {
@@ -254,6 +271,15 @@ class _PlayingScreenState extends State<PlayingScreen> {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => LyricsScreen()));
         }),
+        buildIconButton(
+            _player.repeatActual
+                ? Icons.repeat_one
+                : Icons.repeat, () {
+          setState(() {
+            _player.repeatActual = !_player.repeatActual;
+          });
+          print('Repeat');
+        }),
         buildIconButton(Icons.playlist_add, () {
           print('playlist_add');
           Navigator.push(
@@ -271,13 +297,6 @@ class _PlayingScreenState extends State<PlayingScreen> {
     return ButtonBar(
       alignment: MainAxisAlignment.center,
       children: <Widget>[
-        buildIconButton(_player.repeatActual ? Icons.repeat_one : Icons.repeat,
-            () {
-          setState(() {
-            _player.repeatActual = !_player.repeatActual;
-          });
-          print('Repeat');
-        }),
         buildIconButton(Icons.skip_previous, () async {
           print('skip_previous');
           // Si han pasado menos de 2 segundos desde el inicio de una cancion, pasamos a la anterior
@@ -312,7 +331,6 @@ class _PlayingScreenState extends State<PlayingScreen> {
             _time = 0;
           });
         }),
-        buildIconButton(Icons.volume_up, () => print('volume_up')),
       ],
     );
   }
