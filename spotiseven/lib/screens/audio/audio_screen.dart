@@ -67,6 +67,7 @@ class _PlayingScreenState extends State<PlayingScreen> {
   Widget build(BuildContext context) {
     final double border_radius = 45;
     return Scaffold(
+
       body: SafeArea(
         child: Stack(
           children: <Widget>[
@@ -74,19 +75,22 @@ class _PlayingScreenState extends State<PlayingScreen> {
               top: 0,
               width: MediaQuery.of(context).size.width,
               height: 120,
-              child: Container(
-                padding: EdgeInsets.fromLTRB(
-                    MediaQuery.of(context).size.width / 5,
-                    30,
-                    MediaQuery.of(context).size.width / 5,
-                    0),
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    // TODO: Change this dinamically (playlist photo)
-                    image: NetworkImage(
+              child: Opacity(
+                opacity: 0.7,
+                child: Container(
+                  padding: EdgeInsets.fromLTRB(
+                      MediaQuery.of(context).size.width / 5,
+                      30,
+                      MediaQuery.of(context).size.width / 5,
+                      0),
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      // TODO: Change this dinamically (playlist photo)
+                      image: NetworkImage(
 //                        'https://image.shutterstock.com/image-photo/serious-computer-hacker-dark-clothing-600w-1557297230.jpg'
-                        '${_player.song.photoUrl}'),
-                    fit: BoxFit.cover,
+                          '${_player.song.photoUrl}'),
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ),

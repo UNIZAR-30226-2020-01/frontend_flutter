@@ -10,7 +10,8 @@ import 'package:spotiseven/user/userDAO.dart';
 
 class UserScreenFound extends StatefulWidget {
   User user;
-
+  List<User> following;
+  List<User> followers;
 
   UserScreenFound({@required this.user});
 
@@ -31,11 +32,13 @@ class _UserScreenFoundState extends State<UserScreenFound> {
 
   void checkFollowing(){
     if (following.length > 0){
+      print('check: hay following');
       hayFollowing = true;
     }
   }
   void checkFollowers(){
     if (following.length > 0){
+      print('check: hay followers');
       hayFollowers = true;
     }
   }
@@ -56,6 +59,7 @@ class _UserScreenFoundState extends State<UserScreenFound> {
   {
     String x = 'FOLLOWIN: ';
     if (hayFollowing){
+        print('get Following: hay followeers');
         return GenericElementList(lista: following);
     }
     else return Text('no hay following');
@@ -65,7 +69,6 @@ class _UserScreenFoundState extends State<UserScreenFound> {
   void initState(){
     super.initState();
     _fetchData();
-//    sleep(Duration(seconds: 2));
   }
 
   Future _fetchData() async{
@@ -73,18 +76,21 @@ class _UserScreenFoundState extends State<UserScreenFound> {
     followers = await UserDAO.followers(user);
     checkFollowing();
     checkFollowers();
+    setState(() {
+
+    });
   }
 
   _bar(String s) {
 
     return Container(
       color: Colors.black,
+      margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
       padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-      height: MediaQuery.of(context).size.width * 0.01,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          UsefulMethods.text(s, 14.0, 0.0, 255,255,255,1.0),
+          UsefulMethods.text(s, 25.0, 2.0, 255,255,255,1.0),
         ],
       ),
     );
@@ -112,7 +118,7 @@ class _UserScreenFoundState extends State<UserScreenFound> {
             ),
             Divider(color: Colors.black,thickness: 5,),
             Expanded(
-              flex: 2,
+              flex: 3,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
@@ -124,12 +130,17 @@ class _UserScreenFoundState extends State<UserScreenFound> {
                       borderRadius: BorderRadius.circular(10)
                     ),
                     child: Center(
-                      child: Text(
-                        'Username: '+ user.username,
-                        style: GoogleFonts.roboto(
-                          fontSize: 35,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.white
+                      child: FittedBox(
+                        child: Container(
+                          padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                          child: Text(
+                            'Username: '+ user.username,
+                            style: GoogleFonts.roboto(
+                              fontSize: 35,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.white
+                            ),
+                          ),
                         ),
                       ),
                     ),
@@ -142,6 +153,9 @@ class _UserScreenFoundState extends State<UserScreenFound> {
                         onPressed: (){
                           UserDAO.followUser(user);
                           print('User has been followed');
+                          setState(() {
+
+                          });
                         },
                         child: Container(
                           width: MediaQuery.of(context).size.width*0.3,
@@ -156,7 +170,7 @@ class _UserScreenFoundState extends State<UserScreenFound> {
                               style: GoogleFonts.roboto(
                                 color: Colors.white,
                                 fontSize: 25,
-                                fontWeight: FontWeight.w300,
+                                fontWeight: FontWeight.w400,
                               ),
                             ),
                           ),
@@ -166,6 +180,9 @@ class _UserScreenFoundState extends State<UserScreenFound> {
                         onPressed: (){
                           UserDAO.unfollowUser(user);
                           print('User has been unfollowed');
+                          setState(() {
+                            
+                          });
                         },
                         child: Container(
                           width: MediaQuery.of(context).size.width*0.3,
@@ -180,7 +197,7 @@ class _UserScreenFoundState extends State<UserScreenFound> {
                               style: GoogleFonts.roboto(
                                 color: Colors.white,
                                 fontSize: 25,
-                                fontWeight: FontWeight.w300,
+                                fontWeight: FontWeight.w400,
                               ),
                             ),
                           ),

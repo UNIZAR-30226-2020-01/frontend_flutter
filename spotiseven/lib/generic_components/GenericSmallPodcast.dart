@@ -14,6 +14,7 @@ class GenericSmallPodcast extends StatelessWidget {
 
   Future<Podcast> coger() async{
     p_detallado =  await PodcastDAO.getFromUrl(podcast.url);
+
     return p_detallado;
   }
 

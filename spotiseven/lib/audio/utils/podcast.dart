@@ -42,6 +42,20 @@ class Podcast {
   }
 
 
+  static Podcast popularJSON(Map<String, Object> json) {
+    Podcast p = Podcast(
+        title: json['title'],
+        photoUrl: json['image'],
+        numChapters: json['total_episodes'],
+    );
+    if (p.title.length > 25){
+      var str = p.title;
+      p.title = str.substring(0,25) + '...';
+    }
+    return p;
+  }
+
+
   static Podcast fromJSONListed(Map<String, Object> json) {
     Podcast p = Podcast(
         title: json['title'],

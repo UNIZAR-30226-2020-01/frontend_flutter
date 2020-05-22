@@ -26,6 +26,21 @@ class PodcastDAO{
     return response.map((d) => Podcast.fromJSONListed(d)).toList();
   }
 
+  static Future<List<Podcast>> getPopular() async {
+    List<dynamic> response =
+    await _client.get('$_url/trending-podcast/', headers: TokenSingleton().authHeader).then(
+            (Response resp) {
+      if (resp.statusCode == 200) {
+//        return jsonDecode(resp.body);
+        return jsonDecode(utf8.decode(resp.bodyBytes));
+      } else {
+        throw Exception('No tienes permisos para acceder a este recurso' + resp.statusCode.toString());
+      }
+    });
+//    print(response);
+    return response.map((d) => Podcast.popularJSON(d)).toList();
+  }
+
   static Future<Podcast> getFromUrl(String Url) async {
     dynamic response =
     await _client.get(Url, headers: TokenSingleton().authHeader).then((Response resp) {
