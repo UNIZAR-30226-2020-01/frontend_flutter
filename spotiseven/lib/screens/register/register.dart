@@ -24,6 +24,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
         backgroundColor: Colors.white,
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
@@ -117,7 +118,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               Expanded(
                 flex: 1,
-                child: SizedBox(height: 1,),
+                child: SizedBox(
+                  height: 1,
+                ),
               ),
               Expanded(
                 flex: 6,
@@ -193,8 +196,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
     print('Registrando al usuario');
     if (_formKey.currentState.validate()) {
       // Los campos han ido bien
-      bool ok = await UserDAO.registerUserWithPassword(
-          User(username: _username.trim()), _password);
+      bool ok = false;
+      try {
+        ok = await UserDAO.registerUserWithPassword(
+            User(username: _username.trim()), _password);
+      } on Exception catch (e) {
+        // Capturamos la excepcion
+        print('${e.toString()}');
+        ok = false;
+      }
       if (ok) {
         // Pedimos el token al remoto
         ok = await TokenSingleton()
@@ -227,7 +237,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget _buildErrors() {
     // TODO: Implementar con los
     if (_error) {
-      return Text('Error. El nombre de usuario no está disponible');
+      return Container(
+        margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        child: Center(
+          child: Text(
+            'Error. El nombre de usuario no está disponible o la contraseña no es válida.',
+            style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+          ),
+        ),
+      );
     } else {
       return SizedBox();
     }

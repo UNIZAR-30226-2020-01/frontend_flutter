@@ -53,10 +53,12 @@ class _NewPodcastState extends State<NewPodcast> {
   @override
   Widget build(BuildContext context) {
     if(_episodios == null){
-      print('=========================ME CAGO EN TODO');
+        return Center (
+          child: CircularProgressIndicator(),
+        );
     }
 //    List<PodcastChapter> lista2 = [chap1,chap2,chap3,chap4,chap5,chap6, chap1,chap2,chap3,chap4,chap5,chap6];
-    return CustomScrollView(
+    else return CustomScrollView(
       controller: _scrollController,
       slivers: <Widget>[
         SliverList(

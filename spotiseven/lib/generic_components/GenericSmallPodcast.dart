@@ -1,6 +1,3 @@
-
-
-
 import 'package:flutter/material.dart';
 import 'package:spotiseven/audio/utils/DAO/podcastDAO.dart';
 import 'package:spotiseven/audio/utils/podcast.dart';
@@ -17,6 +14,7 @@ class GenericSmallPodcast extends StatelessWidget {
 
   Future<Podcast> coger() async{
     p_detallado =  await PodcastDAO.getFromUrl(podcast.url);
+
     return p_detallado;
   }
 

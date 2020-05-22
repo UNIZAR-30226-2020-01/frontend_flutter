@@ -17,12 +17,21 @@ class SubscriptionPodcast extends StatefulWidget {
 class _SubscriptionPodcastState extends State<SubscriptionPodcast> {
 
   List<Podcast> _listPodcasts;
-
+  List<Podcast> _popular;
+  bool haySubs;
+  bool hayPopulares;
   @override
   void initState() {
+    hayPopulares = false;
+    haySubs = false;
     _listPodcasts = List();
     PodcastDAO.getAllPodcasts().then((List<Podcast> list) => setState(() {
       _listPodcasts = list;
+      haySubs =true;
+    }));
+    PodcastDAO.getPopular().then((List<Podcast> list) => setState(() {
+      _popular=list;
+      hayPopulares =true;
     }));
     super.initState();
   }
@@ -35,35 +44,20 @@ class _SubscriptionPodcastState extends State<SubscriptionPodcast> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          UsefulMethods.text('MY SUBSCRIPTIONS', 14.0, 0.0, 255,255,255,1.0),
+          UsefulMethods.text('MY SUBSCRIPTIONS', 20.0, 0.0, 255,255,255,1.0),
         ],
       ),
     );
   }
   _mysubsItems() {
-    return GenericHorizontalListView(lista: _listPodcasts,);
+    if (!hayPopulares){
+      return Center (
+        child: CircularProgressIndicator(),
+      );
+    }
+    else return GenericHorizontalListView(lista: _listPodcasts,);
   }
 
-
-
-  _liveBar() {
-    return Container(
-      color: Colors.black,
-      padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-      height: MediaQuery.of(context).size.width * 0.08,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          UsefulMethods.text('LIVE', 14.0, 0.0, 255,255,255,1.0),
-        ],
-      ),
-    );
-  }
-
-
-  _liveBarItems() {
-    return GenericHorizontalListView(lista: _listPodcasts,);
-  }
 
   _popularBar() {
     return Container(
@@ -73,14 +67,19 @@ class _SubscriptionPodcastState extends State<SubscriptionPodcast> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          UsefulMethods.text('POPULAR', 14.0, 0.0, 255,255,255,1.0),
+          UsefulMethods.text('POPULAR', 20.0, 0.0, 255,255,255,1.0),
         ],
       ),
     );
   }
 
   _popularItems() {
-    return GenericHorizontalListView(lista: _listPodcasts,);
+    if (!hayPopulares){
+      return Center (
+        child: CircularProgressIndicator(),
+      );
+    }
+    else return GenericHorizontalListView(lista: _popular,);
   }
 
   @override
@@ -108,15 +107,6 @@ class _SubscriptionPodcastState extends State<SubscriptionPodcast> {
             Expanded(
               flex: 5,
               child: _mysubsItems(),
-            ),
-
-            Expanded(
-              flex: 1,
-              child:_liveBar(),
-            ),
-            Expanded(
-              flex: 5,
-              child: _liveBarItems(),
             ),
 
           ],

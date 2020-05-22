@@ -1,50 +1,64 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:spotiseven/audio/utils/artist.dart';
-import 'package:spotiseven/screens/home/details/artist_detail.dart';
+import 'package:spotiseven/audio/utils/DAO/songDAO.dart';
+import 'package:spotiseven/audio/utils/song.dart';
+import 'package:spotiseven/screens/home/details/song_detail.dart';
 
-class ArtistFound extends StatefulWidget {
-  List<Artist> foundArtist;
+class MostPlayed extends StatefulWidget {
 
-
-  ArtistFound({@required this.foundArtist});
   @override
-  _ArtistFoundState createState() => _ArtistFoundState();
+  _MostPlayedState createState() => _MostPlayedState();
 }
 
-class _ArtistFoundState extends State<ArtistFound> {
+class _MostPlayedState extends State<MostPlayed> {
+  List<Song> foundsong;
   ScrollController _scrollController;
+  bool cargado;
 
   @override
-  void initState() {
+  void initState(){
+    cargado = false;
+    foundsong = List();
+    SongDAO.mostPlayed()
+        .then((List<Song> list) => setState(() {
+          foundsong = list;
+          cargado = true;
+        }));
     _scrollController = ScrollController();
     super.initState();
   }
-
   @override
-  void dispose() {
+  void dispose(){
     _scrollController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (widget.foundArtist.isNotEmpty) {
+    if(foundsong.isNotEmpty){
       return CustomScrollView(
-        controller: _scrollController,
-        slivers: <Widget>[
-          SliverList(
-            delegate: SliverChildListDelegate(
-              widget.foundArtist
-                  .map((el) => ArtistCardWidget(
-                artista: el,
-              ))
-                  .toList(),
+          controller: _scrollController,
+          slivers: <Widget>[
+            SliverList(
+              delegate: SliverChildListDelegate(
+                foundsong
+                    .map((el) => SongCardWidget(
+                  song: el,
+                ))
+                    .toList(),
+              ),
             ),
-          ),
-        ],
+          ],
+        );
+    }
+    else if (!cargado){
+      return Center(
+        child: CircularProgressIndicator(
+
+        ),
       );
-    } else {
+    }
+    else {
       return Center(
         child: Center(
             child: Container(

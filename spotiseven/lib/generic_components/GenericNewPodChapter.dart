@@ -133,7 +133,7 @@ class GenericNewPodChapter extends StatelessWidget {
             playingSingleton.setPlayList(PodcastChapterWrapper(podcastChapter));
             print('Reproduciendo ${playingSingleton.song.title}');
             print('Pulsado en un new chapter');
-            Navigator.push(context, MaterialPageRoute(builder: (context) => PodcastChapterInfo(podcastChapter: podcastChapter,)));
+//            Navigator.push(context, MaterialPageRoute(builder: (context) => PodcastChapterInfo(podcastChapter: podcastChapter,)));
           },
           child: _elementoPodcastChapter(context),
     );

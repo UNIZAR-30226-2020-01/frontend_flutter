@@ -74,8 +74,8 @@ class GenericHorizontalWidget extends StatelessWidget {
                     child: Divider(
                       color: Color.fromRGBO(255, 255, 255, 1),
                       thickness: 2.0,
-                      endIndent: 100,
-                      indent: 100,
+                      endIndent: 80,
+                      indent: 80,
                     ),
                   ),
                   Expanded(

@@ -64,6 +64,10 @@ class PodcastChapter {
         uri: json['URI'],
         podcast: p
     );
+    if (chap.title.length > 20){
+      var str = chap.title;
+      chap.title = str.substring(1,20) + '...';
+    }
     return chap;
   }
 }

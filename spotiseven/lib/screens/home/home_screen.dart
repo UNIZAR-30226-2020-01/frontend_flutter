@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:spotiseven/screens/home/albums.dart';
 import 'package:spotiseven/screens/home/artist_home.dart';
 import 'package:spotiseven/screens/home/following.dart';
+import 'package:spotiseven/screens/home/most_kwon.dart';
 import 'package:spotiseven/screens/home/your_playlists.dart';
 
 class HomeScreenWrapper extends StatefulWidget {
@@ -21,6 +22,7 @@ class _HomeScreenWrapperState extends State<HomeScreenWrapper>
     AlbumScreen(),
     ArtistScreen(),
     FollowingScreen(),
+    MostPlayed(),
   ];
 
   @override
@@ -47,7 +49,7 @@ class _HomeScreenWrapperState extends State<HomeScreenWrapper>
             Align(
               alignment: Alignment.topCenter,
               child: Container(
-                padding: EdgeInsets.fromLTRB(50, 0, 0, 0),
+                padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
                 width: MediaQuery.of(context).size.width,
                 color: Colors.black,
                 child: PreferredSize(
@@ -79,6 +81,7 @@ class _HomeScreenWrapperState extends State<HomeScreenWrapper>
                         buildTextTab('Albums'),
                         buildTextTab('Artists'),
                         buildTextTab('Following'),
+                        buildTextTab('Most Played')
                       ],
                     ),
                   ),

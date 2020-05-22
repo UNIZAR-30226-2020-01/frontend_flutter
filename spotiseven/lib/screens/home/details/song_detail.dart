@@ -25,7 +25,9 @@ class SongCardWidget extends StatelessWidget {
       // TODO: Integrar con la pantalla de album
       onPressedFunction: () {
         var playingSingleton = PlayingSingleton();
-        playingSingleton.play(song);
+        playingSingleton.addSongNext(song);
+        playingSingleton.next();
+//        playingSingleton.play(song);
         print('Reproduciendo ' + song.title);
       },
     );
@@ -35,7 +37,7 @@ class SongCardWidget extends StatelessWidget {
     // TODO: Obtener el numero de canciones de un album
     return [
       song.title.toString(),
-      song.album.artista.toString(),
+      song.album.artista.name.toString(),
       song.album.toString(),
     ];
     //return ['${album.titulo}', '${album.artista.name}', '${album.numberSongs} songs'];
