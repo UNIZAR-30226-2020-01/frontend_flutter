@@ -33,7 +33,7 @@ class _LoginState extends State<Login> {
         print('Login con google');
         if(await TokenSingleton().getTokenFromGoogle()){
           // Se ha logueado bien
-          Navigator.pushNamed(context, '/home');
+          Navigator.pushReplacementNamed(context, '/home');
         }
       },
       child: Container(

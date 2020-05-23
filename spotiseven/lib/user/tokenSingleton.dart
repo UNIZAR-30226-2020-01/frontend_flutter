@@ -118,7 +118,7 @@ class TokenSingleton {
         print('No se ha autentificado');
       }
     } catch (error){
-      print('$error');
+      print('GOOGLE SIGN IN $error');
     }
   }
 
