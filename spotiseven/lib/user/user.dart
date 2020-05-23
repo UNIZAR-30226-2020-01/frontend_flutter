@@ -20,4 +20,10 @@ class User {
         username: json['username']
     );
   }
+  static User imageJSON(Map<String, Object> json) {
+    return User(
+        url: json['url'],
+        imageUrl: json['icon']
+    );
+  }
 }

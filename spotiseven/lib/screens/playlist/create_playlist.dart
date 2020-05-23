@@ -38,7 +38,7 @@ class _CreatePlaylistScreenState extends State<CreatePlaylistScreen> {
       ),
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
-        child: Column(
+        child: ListView(
           children: <Widget>[
             _imagePicker(),
             TextField(
@@ -69,7 +69,14 @@ class _CreatePlaylistScreenState extends State<CreatePlaylistScreen> {
       // La imagen tiene valor.
       return GestureDetector(
         onTap: _uploadImage,
-        child: Image.file(_image),);
+        child: Container(
+            width: MediaQuery.of(context).size.width*0.7,
+            height: MediaQuery.of(context).size.height*0.5,
+            child: AspectRatio(
+              aspectRatio: 1,
+                child: Image.file(_image))
+        ),
+      );
     }else{
       // Boton de seleccionar una imagen
       return FlatButton(

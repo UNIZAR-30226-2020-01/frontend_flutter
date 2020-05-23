@@ -1,6 +1,9 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:http/http.dart';
+import 'package:dio/dio.dart' as dio;
+
 import 'package:spotiseven/audio/utils/playlist.dart';
 import 'package:spotiseven/audio/utils/song.dart';
 import 'package:spotiseven/user/tokenSingleton.dart';
@@ -168,4 +171,37 @@ class UserDAO {
           'La busqueda de Song ha ido mal. Codigo de error ${resp.statusCode}');
     }
   }
+
+  static Future<User> putImage(File image) async {
+
+    print('${image.path}');
+
+    var file = await dio.MultipartFile.fromFile(image.path);
+
+    print('${file.toString()}');
+
+    dio.FormData fd = dio.FormData.fromMap({
+      'icon': file,
+    });
+
+    print('$_url/update-user/');
+    print('FormData = ${fd.fields}');
+
+    dio.Response response = await dio.Dio().post('$_url/update-user/',
+        data: fd, options: dio.Options(headers: TokenSingleton().authHeader));
+
+    if (response.statusCode == 201) {
+      // Ha ido bien
+      print('El update de foto ha ido bien');
+      print('Respuesta ==> ${response.data}');
+      print('${response.data.runtimeType}');
+      // TODO: Actualizar la información de la playlist
+      return User.imageJSON(response.data);
+    } else {
+      print('${response.data}');
+      throw Exception(
+          'Error al subir un user. Codigo de error: ${response.statusCode}');
+    }
+  }
+
 }
