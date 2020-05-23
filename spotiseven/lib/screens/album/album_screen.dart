@@ -338,6 +338,7 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
                                       return AlertDialog(
                                         title: Text('Select Playlist to add'),
                                         elevation: 0,
+                                        scrollable: true,
                                         actions: [
                                               FlatButton(
                                                 onPressed: () {
@@ -366,8 +367,13 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
                                           builder: (context) =>
                                               CreatePlaylistScreen()));
                                   if (nueva != null) {
-                                    // TODO: Cambiar esto para que nueva tenga url
                                     PlaylistDAO.addSongToPlaylist(nueva, s);
+                                    PlaylistDAO.getAllPlaylists().then((List<Playlist> playlist) {
+                                      print('listas: ${playlist.length}');
+                                      setState(() {
+                                        _playlists = playlist;
+                                      });
+                                    });
                                   }
                                 }
                                 break;
