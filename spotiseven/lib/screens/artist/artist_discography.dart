@@ -222,7 +222,8 @@ class _ArtistDiscographyState extends State<ArtistDiscography> {
                         padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
                         child: _text(context, 'ALBUMS', 15.0, 0, 0, 0, 1.0),
                       ),
-                      _botonFollow(),
+//                      _botonFollow(),
+                      SizedBox(height: 40,)
                     ],
                   ),
                 ),

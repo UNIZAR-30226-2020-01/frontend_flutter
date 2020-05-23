@@ -108,19 +108,12 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
                           : [
                               Padding(
                                 padding: const EdgeInsets.symmetric(
-                                    horizontal: 150, vertical: 50),
+                                    horizontal: 200, vertical: 50),
                                 child: AspectRatio(
                                     aspectRatio: 1,
                                     child: CircularProgressIndicator()),
                               )
                             ]),
-//                      delegate: SliverChildBuilderDelegate(
-//                        (BuildContext context, int index) {
-//                          return buildSongPreview_v2(
-//                              widget.album.list[index], widget.album, context);
-//                        },
-//                        childCount: widget.album.list.length,
-//                      ),
                     ),
                   ],
                 ),
@@ -135,7 +128,7 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
   }
 
   _name() {
-    final double defaultTopMargin = 271 - 0.0;
+    final double defaultTopMargin = 271 - 15.0;
     double top = defaultTopMargin;
     return Positioned(
       top: top,
@@ -153,7 +146,7 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
 
   Widget _fabReproduction() {
     //starting fab position
-    final double defaultTopMargin = 270 - 4.0;
+    final double defaultTopMargin = 271 - 20.0;
     //pixels from top where scaling should start
     final double scaleStart = 96.0;
     //pixels from top where scaling should end
@@ -185,19 +178,8 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
-            /*Container(
-              margin: EdgeInsets.fromLTRB(0, 0, 90, 0),
-              padding: EdgeInsets.fromLTRB(2, 2, 2, 2),
-              height: MediaQuery.of(context).size.width*0.08,
-              decoration: BoxDecoration(
-                color:  Colors.white,
-                borderRadius: BorderRadius.circular(10)
-              ),
-              child: UsefulMethods.text(widget.album.titulo, 20.0, 0.0, 0, 0, 0, 1.0)
-            ),*/
             RaisedButton(
               onPressed: () => PlayingSingleton()
-                // TODO: Integrar la reproduccion de un album como playlist (poner como lista de canciones las del album)
                 ..setPlayList(Playlist(
                     title: widget.album.titulo,
                     photoUrl: widget.album.photoUrl,

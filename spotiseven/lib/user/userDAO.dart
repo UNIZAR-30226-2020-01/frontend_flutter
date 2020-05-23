@@ -185,17 +185,16 @@ class UserDAO {
     });
 
     print('$_url/update-user/');
-    print('FormData = ${fd.fields}');
+    print('FormData = ${fd.files}');
 
-    dio.Response response = await dio.Dio().post('$_url/update-user/',
+    dio.Response response = await dio.Dio().put('$_url/update-user/',
         data: fd, options: dio.Options(headers: TokenSingleton().authHeader));
 
-    if (response.statusCode == 201) {
+    if (response.statusCode == 200) {
       // Ha ido bien
       print('El update de foto ha ido bien');
       print('Respuesta ==> ${response.data}');
       print('${response.data.runtimeType}');
-      // TODO: Actualizar la información de la playlist
       return User.imageJSON(response.data);
     } else {
       print('${response.data}');

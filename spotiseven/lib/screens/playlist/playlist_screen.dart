@@ -6,6 +6,7 @@ import 'package:spotiseven/audio/utils/DAO/playlistDAO.dart';
 import 'package:spotiseven/audio/utils/DAO/songDAO.dart';
 import 'package:spotiseven/audio/utils/playlist.dart';
 import 'package:spotiseven/audio/utils/song.dart';
+import 'package:spotiseven/popUpSong.dart';
 import 'package:spotiseven/screens/playlist/create_playlist.dart';
 import 'package:spotiseven/screens/playlist/playlist_screen_options.dart';
 
@@ -28,7 +29,6 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
   void initState() {
     _scrollController = ScrollController()..addListener(() => setState(() {}));
     PlaylistDAO.getAllPlaylists().then((List<Playlist> playlist) {
-//      print('listas: ${playlist.length}');
       setState(() {
         _playlists = playlist;
       });
@@ -134,15 +134,6 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
                                       child: CircularProgressIndicator()),
                                 )
                               ]),
-//                    delegate: SliverChildBuilderDelegate(
-//                      (BuildContext context, int index) {
-//                        return buildSongPreview_v2(
-//                            widget.playlist.playlist[index],
-//                            widget.playlist,
-//                            context);
-//                      },
-//                      childCount: numSongs,
-//                    ),
                   ),
                 ],
               ),
@@ -296,74 +287,7 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
                             color: s.favorite ? Colors.yellow : Colors.white,
                           ),
                         ),
-                        PopupMenuButton<String>(
-                          icon: Icon(
-                            Icons.more_vert,
-                            color: Colors.white,
-                          ),
-                          color: Colors.white,
-                          itemBuilder: (context) => <PopupMenuEntry<String>>[
-                            PopupMenuItem<String>(
-                              value: 'add_next',
-                              child: Text('Play Next'),
-                            ),
-                            PopupMenuItem<String>(
-                              value: 'add_to_playlist',
-                              child: Text('Add to playlist'),
-                            ),
-                          ],
-                          onSelected: (String value) async {
-                            switch (value) {
-                              case 'add_next':
-                                PlayingSingleton().addSongNext(s);
-                                break;
-                              case 'add_to_playlist':
-                                print('Añadiendo a playlist');
-                                String opt = await showDialog<String>(
-                                    context: context,
-                                    barrierDismissible: true,
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        title: Text('Select Playlist to add'),
-                                        elevation: 0,
-                                        actions: [
-                                              FlatButton(
-                                                onPressed: () {
-                                                  Navigator.pop(context, 'new');
-                                                },
-                                                child: Text(
-                                                  'New Playlist',
-                                                  style: TextStyle(
-                                                    color: Colors.black,
-                                                  ),
-                                                ),
-                                              )
-                                            ] +
-                                            _playlists
-                                                .map((Playlist pl) =>
-                                                    _createPlaylistFlatButton(
-                                                        context, pl, s))
-                                                .toList(),
-                                      );
-                                    });
-                                print('$opt');
-                                if (opt == 'new') {
-                                  Playlist nueva = await Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              CreatePlaylistScreen()));
-                                  if (nueva != null) {
-                                    // TODO: Cambiar esto para que nueva tenga url
-                                    PlaylistDAO.addSongToPlaylist(nueva, s);
-                                  }
-                                }
-                                break;
-                              default:
-                                print('No action?');
-                            }
-                          },
-                        ),
+                        PopUpSong(s: s, playlist: _playlists,),
                       ],
                     ),
                   ],

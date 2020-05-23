@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:spotiseven/audio/playingSingleton.dart';
-import 'package:spotiseven/audio/utils/album.dart';
 import 'package:spotiseven/audio/utils/song.dart';
-import 'package:spotiseven/generic_components/GenericCardWidget.dart';
-import 'package:spotiseven/generic_components/GenericHorizontalWidget.dart';
-import 'package:spotiseven/screens/album/album_screen.dart';
-import 'package:spotiseven/usefullMethods.dart';
+import 'package:spotiseven/generic_components/GenericHoriSong.dart';
+
 
 class SongCardWidget extends StatelessWidget {
 
@@ -18,9 +15,10 @@ class SongCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //List<Widget> lista_widget = getStrings().map((String s) => Text(s)).toList();
-    return GenericHorizontalWidget(
+    return GenericHoriSong(
       // TODO: Imagen del album
       imageUrl: '${song.photoUrl}',
+      s: song,
       args: getStrings(),
       // TODO: Integrar con la pantalla de album
       onPressedFunction: () {

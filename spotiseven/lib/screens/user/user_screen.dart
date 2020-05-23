@@ -14,6 +14,7 @@ class UserScreen extends StatefulWidget {
 
 class _UserScreenState extends State<UserScreen> {
   // Campos de la playlist
+  User u;
   String _title;
   // Imagen de la playlist
   File _image;
@@ -38,6 +39,16 @@ class _UserScreenState extends State<UserScreen> {
               _buildUserDetails(),
               _buildLogoutButton(context),
               _imagePicker(),
+              Container(
+                color: Colors.pink,
+                child: RaisedButton(
+                  onPressed: () async {
+                    u = await UserDAO.putImage(_image);
+                    Navigator.pop(context, u);
+                  },
+                  child: Text('ADD Image'),
+                ),
+              ),
             ],
           ),
         ),
@@ -50,6 +61,7 @@ class _UserScreenState extends State<UserScreen> {
       future: UserDAO.getUserData(),
       builder: (context, snapshot) {
         if(snapshot.hasData){
+          u = User(username: (snapshot.data as User).username);
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,

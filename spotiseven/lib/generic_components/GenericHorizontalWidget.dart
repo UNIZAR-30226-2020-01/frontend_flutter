@@ -10,7 +10,7 @@ class GenericHorizontalWidget extends StatelessWidget {
 
 
 
-  GenericHorizontalWidget({this.args, this.imageUrl, this.onPressedFunction});
+  GenericHorizontalWidget({this.args, this.imageUrl, this.onPressedFunction,});
 
   _image(context) {
     final String url = args[2].toString();

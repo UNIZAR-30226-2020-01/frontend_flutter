@@ -151,8 +151,6 @@ class _SearchBarScreenState extends State<SearchBarScreen> {
                 onSearch: search,
                 hintText: 'Write hear your search',
                 hintStyle: TextStyle(color: Colors.white70),
-                onCancelled: (){_searchCtrl.clear();
-                _searchCtrl.removeFilter(); },
                 debounceDuration: Duration(seconds: 2),
                 minimumChars: 2,
                 searchBarPadding: EdgeInsets.fromLTRB(30, 90, 30, 0),
