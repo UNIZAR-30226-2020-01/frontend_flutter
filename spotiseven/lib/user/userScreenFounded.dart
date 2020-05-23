@@ -82,7 +82,6 @@ class _UserScreenFoundState extends State<UserScreenFound> {
   }
 
   _bar(String s) {
-
     return Container(
       color: Colors.black,
       margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
