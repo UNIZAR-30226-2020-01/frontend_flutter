@@ -48,7 +48,7 @@ class _UserEditScreenState extends State<UserEditScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 _buildImage(),
-                _buildUserDetails(),
+                //_buildUserDetails(),
                 _buildSubmitButton()
                 //_buildLogoutButton(context),
 //                _imagePicker(),
@@ -89,7 +89,7 @@ class _UserEditScreenState extends State<UserEditScreen> {
       im = NetworkImage(networkImage);
     }
     return Expanded(
-      flex: 2,
+      flex: 4,
       child: GestureDetector(
         onTap: _selectImage,
         child: Container(
@@ -115,20 +115,27 @@ class _UserEditScreenState extends State<UserEditScreen> {
   }
 
   Widget _buildSubmitButton() {
-    return RaisedButton(
-      onPressed: () async {
-        print('Submit');
-        if(_image != null){
-          // Ha cambiado la imagen
-          User us = await UserDAO.putImage(_image);
-          us.username = widget.user.username;
-          Navigator.pop(context, us);
-        }
-        if(_name.trim() != ""){
-          // Ha cambiado el nombre
-        }
-      },
-      child: UsefulMethods.text("save", 20.0, 1.0, 0, 0, 0, 1.0),
+    return Expanded(
+      flex: 1,
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 50),
+        child: RaisedButton(
+          // Si onPressed == null -> Botón deshabilitado
+          onPressed: _image != null ? () async {
+            print('Submit');
+            if(_image != null){
+              // Ha cambiado la imagen
+              User us = await UserDAO.putImage(_image);
+              us.username = widget.user.username;
+              Navigator.pop(context, us);
+            }
+//            if(_name.trim() != ""){
+//              // Ha cambiado el nombre
+//            }
+          } : null  ,
+          child: UsefulMethods.text("save", 20.0, 1.0, 0, 0, 0, 1.0),
+        ),
+      ),
     );
   }
 }
