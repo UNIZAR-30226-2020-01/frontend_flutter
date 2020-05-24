@@ -41,7 +41,6 @@ class _HomeScreenWrapperState extends State<HomeScreenWrapper>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // TODO: Change this color
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Stack(
@@ -64,14 +63,12 @@ class _HomeScreenWrapperState extends State<HomeScreenWrapper>
                       ),*/
                       controller: _tabController,
                       isScrollable: true,
-                      // TODO: Use <indicator> property to change indicator
                       indicatorPadding:
                           EdgeInsets.symmetric(horizontal: 30, vertical: 5),
 //                  indicatorColor: Colors.yellow[800],
                       indicatorColor: Colors.white,
                       indicatorWeight: 7,
                       indicatorSize: TabBarIndicatorSize.tab,
-                      // TODO: change labelStyle -> By the moment changed in tab's text
                       labelStyle: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
@@ -89,9 +86,8 @@ class _HomeScreenWrapperState extends State<HomeScreenWrapper>
               ),
             ),
             // Contenido principal de la pantalla
-            // TODO: Cambiar a ListView (Hacer en otro widget)
             Container(
-              margin: EdgeInsets.only(top: 60),
+              margin: EdgeInsets.only(top: 60, bottom: 20),
               child: Center(
                 child: TabBarView(
                   controller: _tabController,
