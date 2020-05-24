@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:spotiseven/generic_components/GenericElementList.dart';
 import 'package:spotiseven/screens/splashScreen/splash_screen.dart';
+import 'package:spotiseven/screens/user/user_edit_screen.dart';
 import 'package:spotiseven/user/tokenSingleton.dart';
 import 'package:spotiseven/user/user.dart';
 import 'package:spotiseven/user/userDAO.dart';
@@ -158,47 +159,6 @@ class _UserScreenState extends State<UserScreen> {
     );
   }
 
-//  Widget _imagePicker() {
-//    if (_image != null) {
-//      // La imagen tiene valor.
-//      return GestureDetector(
-//        onTap: _uploadImage,
-//        child: Container(
-//            width: MediaQuery.of(context).size.width * 0.7,
-//            height: MediaQuery.of(context).size.height * 0.5,
-//            child: AspectRatio(aspectRatio: 1, child: Image.file(_image))),
-//      );
-//    } else {
-//      // Boton de seleccionar una imagen
-//      return FlatButton(
-//        onPressed: _uploadImage,
-//        child: Row(
-//          mainAxisAlignment: MainAxisAlignment.center,
-//          children: <Widget>[
-//            Expanded(
-//              flex: 5,
-//              child: Icon(Icons.image),
-//            ),
-//            Expanded(
-//              flex: 10,
-//              child: Text('Select image to upload'),
-//            )
-//          ],
-//        ),
-//      );
-//    }
-//  }
-//
-//  void _uploadImage() async {
-//    print('upload image');
-//    File im = await ImagePicker.pickImage(source: ImageSource.gallery);
-//    if (im != null) {
-//      setState(() {
-//        _image = im;
-//      });
-//    }
-//  }
-
   Widget _bar(String s) {
     return Container(
       color: Colors.black,
@@ -237,8 +197,15 @@ class _UserScreenState extends State<UserScreen> {
       elevation: 0,
       backgroundColor: Colors.black,
       leading: IconButton(
-        onPressed: () {
+        onPressed: () async {
           print('Editar usuario');
+          User us = await Navigator.push(context, MaterialPageRoute(builder: (context) => UserEditScreen(user: _user,)));
+          if(us != null){
+            print('Ha habido cambios. Recargando');
+            setState(() {
+              _user = us;
+            });
+          }
         },
         icon: Icon(Icons.edit),
         color: Colors.white,
