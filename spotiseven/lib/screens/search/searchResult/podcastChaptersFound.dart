@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:spotiseven/audio/utils/podcast.dart';
-import 'package:spotiseven/generic_components/GenericHorizontalListView.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:spotiseven/audio/utils/podcastChapter.dart';
 import 'package:spotiseven/generic_components/GenericNewPodChapter.dart';
 
-class PodcastFound extends StatefulWidget {
-  List<Podcast> pods;
+class ChaptersFound extends StatefulWidget {
+  List<PodcastChapter> chapsFound;
 
-  PodcastFound({@required this.pods});
+  ChaptersFound({@required this.chapsFound});
+
   @override
-  _PodcastFoundState createState() => _PodcastFoundState();
+  _ChaptersFoundState createState() => _ChaptersFoundState();
 }
 
-class _PodcastFoundState extends State<PodcastFound> {
-  List<Podcast> get podsFound => widget.pods;
+class _ChaptersFoundState extends State<ChaptersFound> {
+  List<PodcastChapter> get chapsFound => widget.chapsFound;
 
   ScrollController _scrollController;
   @override
@@ -31,8 +32,20 @@ class _PodcastFoundState extends State<PodcastFound> {
 
   @override
   Widget build(BuildContext context) {
-    if(podsFound.isNotEmpty){
-      return GenericHorizontalListView(lista: podsFound,);
+    if(chapsFound.isNotEmpty){
+      return CustomScrollView(
+        controller: _scrollController,
+        slivers: <Widget>[
+          SliverList(
+            delegate: SliverChildListDelegate(
+              chapsFound.map((el) => GenericNewPodChapter(
+                podcastChapter: el,
+              ))
+                  .toList(),
+            ),
+          ),
+        ],
+      );
     }else{
       return Center(
         child: Center(
@@ -60,6 +73,5 @@ class _PodcastFoundState extends State<PodcastFound> {
         ),
       );
     }
+  }
 }
-
-

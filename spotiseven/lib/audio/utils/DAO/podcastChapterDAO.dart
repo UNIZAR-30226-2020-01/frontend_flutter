@@ -20,4 +20,17 @@ class PodcastChapterDAO{
     print(response);
     return PodcastChapter.fromJSON(response);
   }
+  static Future<List<PodcastChapter>> searchPodChap(String query) async {
+    Response resp = await _client.get('$_url/podcast-episodes/?search=$query');
+    if(resp.statusCode == 200) {
+      // Ha ido bien, devolvemos las listas
+      List<dynamic> lista = jsonDecode(utf8.decode(resp.bodyBytes));
+      List<PodcastChapter> songs = lista.map((dynamic d) => (PodcastChapter.fromJSON(d) as PodcastChapter ))
+          .toList();
+      return songs;
+    }else{
+      throw Exception('La busqueda de podcast episodes ha ido mal. Codigo de error ${resp
+          .statusCode}');
+    }
+  }
 }

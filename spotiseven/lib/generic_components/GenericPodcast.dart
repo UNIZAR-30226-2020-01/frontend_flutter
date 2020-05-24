@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:spotiseven/audio/PodcastChapterWrapper.dart';
+import 'package:spotiseven/audio/playingSingleton.dart';
 import 'package:spotiseven/audio/utils/podcast.dart';
 import 'package:spotiseven/generic_components/GenericHorizontalWidget.dart';
 import 'package:spotiseven/generic_components/GenericNewPodChapter.dart';
@@ -26,7 +28,7 @@ class _GenericPodcastState extends State<GenericPodcast> {
 
   @override
   void initState() {
-    print("Podcast: "+widget.podcast.chapters.toString());
+    print("Podcast: "+widget.podcast.title);
     _scrollController = ScrollController()..addListener(() => setState(() {}));
     super.initState();
   }
@@ -153,7 +155,6 @@ class _GenericPodcastState extends State<GenericPodcast> {
         height: 30,
         margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
         padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
-//        margin: EdgeInsets.all(),
         decoration: _borderBlack(),
         child: _text(context, '+SUBSCRIBE', 40.0,  255, 255, 255, 1.0),
       ),
@@ -219,9 +220,40 @@ class _GenericPodcastState extends State<GenericPodcast> {
     );
   }
 
+
+  _alert(context){
+    return  showDialog(
+        context: context,
+        builder: (context) {
+          Future.delayed(Duration(milliseconds: 1500), () {
+            Navigator.of(context).pop(true);
+          });
+          return Container(
+            height: MediaQuery.of(context).size.height*0.1,
+            width: MediaQuery.of(context).size.width*0.1,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(50),
+            ),
+            child: AlertDialog(
+
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              backgroundColor: Colors.white,
+              title: Center(
+                child: Text('Playing...',
+                  style: GoogleFonts.roboto(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w800
+                  ),),
+              ),
+            ),
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     var pod = widget.podcast;
+    print(pod.chapters[0].title);
     return Scaffold(
       body: Stack(
         children: <Widget>[
@@ -240,13 +272,14 @@ class _GenericPodcastState extends State<GenericPodcast> {
                     delegate: SliverChildListDelegate(
                       widget.podcast.chapters
                         .map( (el) => GenericHorizontalWidget(
-                        args: [el.title, pod.canal.title, ''],
-                        imageUrl: pod.photoUrl ,
-                        onPressedFunction: (){
-                          Navigator.push(context,MaterialPageRoute(builder: (context) =>
-                              PodcastChapterInfo(podcastChapter: el,),
-                          )
-                          );
+                            args: [el.title, pod.canal.title, ''],
+                            imageUrl: pod.photoUrl ,
+                            onPressedFunction: (){
+                              _alert(context);
+                              var playingSingleton = PlayingSingleton();
+                              playingSingleton.setPlayList(PodcastChapterWrapper(el));
+                              print('Reproduciendo ${playingSingleton.song.title}');
+                              print('Pulsado en un new chapter');
                         },
                       )
                       ).toList()

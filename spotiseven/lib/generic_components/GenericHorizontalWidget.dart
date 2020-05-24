@@ -99,7 +99,6 @@ class GenericHorizontalWidget extends StatelessWidget {
         alignment: Alignment.center,
         //tamaño del contenedor princiapl que contiene las filasc
         height: MediaQuery.of(context).size.height * 0.15,
-        //width  : MediaQuery.of(context).size.width,
         child: Column(
           children: <Widget>[
             _elementoEvento(context),

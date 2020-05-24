@@ -192,8 +192,8 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
         color: Colors.black,
         border: Border(
           bottom: BorderSide(
-            color: Colors.white,
-            width: 3.0,
+            color: Colors.yellow,
+            width: 1.0,
           ),
         )
       ),

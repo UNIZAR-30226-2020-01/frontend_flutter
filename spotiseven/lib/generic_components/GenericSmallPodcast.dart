@@ -7,15 +7,23 @@ import 'package:spotiseven/usefullMethods.dart';
 class GenericSmallPodcast extends StatelessWidget {
   Podcast podcast;
   Podcast p_detallado;
+
  
   GenericSmallPodcast({@required this.podcast}){
     coger();
   }
 
   Future<Podcast> coger() async{
-    p_detallado =  await PodcastDAO.getFromUrl(podcast.url);
-
-    return p_detallado;
+    print(podcast.title + '  ' + podcast.id.toString());
+    if (podcast.id != null) {
+      print('es un trending');
+      p_detallado = await PodcastDAO.getTrending(podcast.id);
+    }
+    else {
+      p_detallado= await PodcastDAO.getFromUrl(podcast.url);
+      print('no es trending');
+    }
+      return p_detallado;
   }
 
   @override
@@ -23,7 +31,8 @@ class GenericSmallPodcast extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Navigator.push(context,MaterialPageRoute(builder: (context) {
-          print("Chapters:" + p_detallado.chapters.toString());
+          print("Chapters:" + p_detallado.chapters.length.toString());
+          print(p_detallado.chapters[1].title);
           return GenericPodcast(podcast: p_detallado,);
         },
         ));

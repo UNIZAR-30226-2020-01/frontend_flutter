@@ -33,12 +33,14 @@ class GenericCardWidget extends StatelessWidget {
                   border: Border.all(color: Colors.white, width: 3),
                   borderRadius: BorderRadius.circular(13),
                 ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: Image.network(
-                    imageUrl,
+                child: Center(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Image.network(
+                      imageUrl,
 //                    width: MediaQuery.of(context).size.width / 2.5,
-                    fit: BoxFit.cover,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ),

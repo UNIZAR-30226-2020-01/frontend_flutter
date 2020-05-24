@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 
 import 'package:spotiseven/audio/utils/podcast.dart';
@@ -10,19 +11,28 @@ class PodcastDAO{
   static final Client _client = Client();
   static final String _url = 'https://s7-rest.francecentral.cloudapp.azure.com';
 
-  
-  
+  static Future<List<Podcast>> getUserPods() async {
+    List<dynamic> response =
+    await _client.get('$_url/user/podcasts/', headers: TokenSingleton().authHeader).then((Response
+    resp) {
+      if (resp.statusCode == 200) {
+        return jsonDecode(utf8.decode(resp.bodyBytes));
+      } else {
+        throw Exception('No tienes permisos para acceder a este recurso ${resp.statusCode}');
+      }
+    });
+    return response.map((d) => Podcast.fromJSONListed(d)).toList();
+  }
+
   static Future<List<Podcast>> getAllPodcasts() async {
     List<dynamic> response =
     await _client.get('$_url/podcasts/', headers: TokenSingleton().authHeader).then((Response resp) {
       if (resp.statusCode == 200) {
-//        return jsonDecode(resp.body);
         return jsonDecode(utf8.decode(resp.bodyBytes));
       } else {
         throw Exception('No tienes permisos para acceder a este recurso');
       }
     });
-//    print(response);
     return response.map((d) => Podcast.fromJSONListed(d)).toList();
   }
 
@@ -31,29 +41,51 @@ class PodcastDAO{
     await _client.get('$_url/trending-podcast/', headers: TokenSingleton().authHeader).then(
             (Response resp) {
       if (resp.statusCode == 200) {
-//        return jsonDecode(resp.body);
         return jsonDecode(utf8.decode(resp.bodyBytes));
       } else {
         throw Exception('No tienes permisos para acceder a este recurso' + resp.statusCode.toString());
       }
     });
-//    print(response);
     return response.map((d) => Podcast.popularJSON(d)).toList();
   }
 
   static Future<Podcast> getFromUrl(String Url) async {
+    print(Url);
     dynamic response =
     await _client.get(Url, headers: TokenSingleton().authHeader).then((Response resp) {
       if (resp.statusCode == 200) {
-        print('HEADERS: ${resp.headers}');
-//        return jsonDecode(resp.body);
         return jsonDecode(utf8.decode(resp.bodyBytes));
       } else {
-        throw Exception('No tienes permisos para acceder a este recurso');
+        throw Exception('No tienes permisos para acceder a este recurso ${resp.statusCode}');
       }
     });
-//    print(response);
     return Podcast.fromJSONDetailed(response);
+  }
+
+  static Future<Podcast> getTrending(String id) async {
+    print('getting trending podcast info');
+    dynamic response =
+    await _client.get('$_url/podcast/$id', headers: TokenSingleton().authHeader).then((Response
+    resp) {
+      if (resp.statusCode == 200) {
+        return jsonDecode(utf8.decode(resp.bodyBytes));
+      } else {
+        throw Exception('No tienes permisos para acceder a este recurso ${resp.statusCode}');
+      }
+    });
+    return Podcast.fromTrending(response);
+  }
+
+  static Future<List<Podcast>> searchPod(String query) async {
+    Response resp = await _client.get('$_url/podcasts/?search=$query');
+    if(resp.statusCode == 200) {
+      // Ha ido bien, devolvemos las listas
+      List<dynamic> lista = jsonDecode(utf8.decode(resp.bodyBytes));
+      List<Podcast> songs = lista.map((dynamic d) => (Podcast.fromJSON(d) as Podcast )).toList();
+      return songs;
+    }else{
+      throw Exception('La busqueda de Podcast ha ido mal. Codigo de error ${resp.statusCode}');
+    }
   }
 
 }

@@ -1,27 +1,21 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_exoplayer/audioplayer.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:spotiseven/audio/playingSingleton.dart';
 import 'package:spotiseven/audio/utils/album.dart';
 import 'package:spotiseven/audio/utils/artist.dart';
 import 'package:spotiseven/audio/utils/playlist.dart';
 import 'package:spotiseven/audio/utils/podcast.dart';
 import 'package:spotiseven/audio/utils/podcastChapter.dart';
 import 'package:spotiseven/audio/utils/song.dart';
-import 'package:spotiseven/screens/podcast/discoverpodcast.dart';
-import 'package:spotiseven/screens/podcast/subscriptionpodcast.dart';
 import 'package:spotiseven/screens/search/searchResult/albumsFound.dart';
 import 'package:spotiseven/screens/search/searchResult/artistFound.dart';
 import 'package:spotiseven/screens/search/searchResult/playlistFound.dart';
-import 'package:spotiseven/screens/search/searchResult/podcastChapters.dart';
+import 'package:spotiseven/screens/search/searchResult/podcastChaptersFound.dart';
 import 'package:spotiseven/screens/search/searchResult/podcastFound.dart';
 import 'package:spotiseven/screens/search/searchResult/songFound.dart';
 import 'package:spotiseven/screens/search/searchResult/usersFound.dart';
 import 'package:spotiseven/user/user.dart';
-import 'package:spotiseven/screens/main_screen.dart';
-import 'package:spotiseven/user/userDAO.dart';
 
 class SearchWrapper extends StatefulWidget {
   List<Playlist> pls;
@@ -66,7 +60,7 @@ class _SearchWrapper extends State<SearchWrapper>
     AlbumsFound(foundAlbum: widget.albums,),
     ArtistFound(foundArtist: widget.artists,),
     PodcastFound(),
-    ChaptersFound(),
+    ChaptersFound(chapsFound: widget.podchaps),
     UserFound(founduser: widget.users,)
   ];
     _tabController =

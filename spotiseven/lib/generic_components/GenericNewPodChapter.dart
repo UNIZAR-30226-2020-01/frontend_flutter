@@ -19,7 +19,7 @@ class GenericNewPodChapter extends StatelessWidget {
 
   _description(context){
     return Container(
-      padding: EdgeInsets.fromLTRB(30, 10, 30, 0),
+      margin: EdgeInsets.fromLTRB(30, 0, 30, 0),
         child: AutoSizeText(
           podcastChapter.description,
           textAlign: TextAlign.justify,
@@ -67,12 +67,12 @@ class GenericNewPodChapter extends StatelessWidget {
         children: <Widget>[
           Container(
             margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
-            child: UsefulMethods.text(podcastChapter.title, 10.0, 0.0, 255,255,255,1.0),
+            child: UsefulMethods.text(podcastChapter.podcast.title, 20.0, 0.0, 255,255,255,1.0),
           ),
 //          SizedBox(height: 5,),
           Container(
               margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
-              child: UsefulMethods.text(podcastChapter.podcast.title, 14.0, 0.0, 255,255,255,1.0)
+              child: UsefulMethods.text(podcastChapter.title, 15.0, 0.0, 255,255,255,1.0)
           )
         ],
       ),
@@ -80,6 +80,15 @@ class GenericNewPodChapter extends StatelessWidget {
   }
 
   _elementoPodcastChapter(context){
+    var time = Duration(seconds: podcastChapter.duration).toString();
+    var hora = time.substring(0,1).toString();
+    var min  = time.substring(2,4);
+    var mostrar = '';
+    if (hora != '0')
+      mostrar = hora + ' horas y '+ min + ' minutos';
+    else
+      mostrar = min + ' minutos';
+    print(mostrar);
     return Container(
         height: MediaQuery.of(context).size.height * 0.20,
         margin: EdgeInsets.all(10),
@@ -91,7 +100,7 @@ class GenericNewPodChapter extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Expanded(
-              flex: 6,
+              flex: 9,
               child: Container(
                 child: Row(
                   children: <Widget>[
@@ -102,6 +111,23 @@ class GenericNewPodChapter extends StatelessWidget {
               ),
             ),
             Expanded(
+              flex: 2,
+              child: Container(
+                margin: EdgeInsets.fromLTRB(30, 5, 0, 0),
+                child: Text(
+                  'DESCRIPCIÓN',
+                  style: GoogleFonts.roboto(
+                    fontSize: 15,
+                    color: Colors.white,
+                  )
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 1,
+              child: Divider(thickness: 1, color: Colors.white, endIndent: 300, indent: 30,),
+            ),
+            Expanded(
               flex: 3,
               child: _description(context),
             ),
@@ -110,11 +136,10 @@ class GenericNewPodChapter extends StatelessWidget {
               child: Container(
                 margin: EdgeInsets.fromLTRB(30, 0, 30, 0),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
-                    UsefulMethods.text('Duration: ${Duration(seconds: podcastChapter.duration).toString().split('.')[0]}'
+                    UsefulMethods.text('Duration: $mostrar'
                         , 10.0, 0.0,  255,255,255,1.0),
-//                  todo: la fecha bro  UsefulMethods.text(podcastChapter.date, 10.0, 0.0,  255,255,255,1.0),
                   ],
                 ),
               ),
@@ -123,11 +148,42 @@ class GenericNewPodChapter extends StatelessWidget {
         )
     );
   }
+
+  _alert(context){
+    return  showDialog(
+        context: context,
+        builder: (context) {
+          Future.delayed(Duration(milliseconds: 500), () {
+            Navigator.of(context).pop(true);
+          });
+          return Container(
+            height: MediaQuery.of(context).size.height*0.1,
+            width: MediaQuery.of(context).size.width*0.1,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(50),
+            ),
+            child: AlertDialog(
+
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              backgroundColor: Colors.white,
+              title: Center(
+                child: Text('Playing...',
+                style: GoogleFonts.roboto(
+                  color: Colors.black,
+                  fontWeight: FontWeight.w800
+                ),),
+              ),
+            ),
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     print('capitulo del podcast');
     return GestureDetector(
           onTap: ()  {
+            _alert(context);
             print('=====URI:'+podcastChapter.uri);
             var playingSingleton = PlayingSingleton();
             playingSingleton.setPlayList(PodcastChapterWrapper(podcastChapter));

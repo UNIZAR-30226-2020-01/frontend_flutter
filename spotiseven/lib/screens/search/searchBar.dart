@@ -5,10 +5,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:spotiseven/audio/utils/DAO/albumDAO.dart';
 import 'package:spotiseven/audio/utils/DAO/artistDAO.dart';
 import 'package:spotiseven/audio/utils/DAO/playlistDAO.dart';
+import 'package:spotiseven/audio/utils/DAO/podcastChapterDAO.dart';
+import 'package:spotiseven/audio/utils/DAO/podcastDAO.dart';
 import 'package:spotiseven/audio/utils/DAO/songDAO.dart';
 import 'package:spotiseven/audio/utils/album.dart';
 import 'package:spotiseven/audio/utils/artist.dart';
 import 'package:spotiseven/audio/utils/playlist.dart';
+import 'package:spotiseven/audio/utils/podcast.dart';
+import 'package:spotiseven/audio/utils/podcastChapter.dart';
 import 'package:spotiseven/audio/utils/song.dart';
 import 'package:spotiseven/screens/search/searchWrapper.dart';
 import 'package:spotiseven/usefullMethods.dart';
@@ -27,6 +31,8 @@ class _SearchBarScreenState extends State<SearchBarScreen> {
   List<Artist> artists = List();
   List<Album> albums = List();
   List<User> users = List();
+  List<PodcastChapter> podChaps = List();
+  List<Podcast> pods = List();
 //todo: podcasts
 
   final SearchBarController<String> _searchCtrl = SearchBarController();
@@ -40,6 +46,8 @@ class _SearchBarScreenState extends State<SearchBarScreen> {
     songs = await SongDAO.searchSong(search);
     albums = await AlbumDAO.searchAlbum(search);
     users = await UserDAO.searchUser(search);
+    podChaps = await PodcastChapterDAO.searchPodChap(search);
+    pods = await PodcastDAO.searchPod(search);
     //todo: meter los podcast bro
 
     print("awaits ok");
@@ -48,6 +56,8 @@ class _SearchBarScreenState extends State<SearchBarScreen> {
     print("songs number: " +  songs.length.toString());
     print("albums number: " +  albums.length.toString());
     print("users number: " + users.length.toString());
+    print("podcast number: " + pods.length.toString());
+    print("podcast chapter number: " + podChaps.length.toString());
 
     Navigator.push(context, MaterialPageRoute(builder: (context) => SearchWrapper(
       pls: playlists,
@@ -55,8 +65,8 @@ class _SearchBarScreenState extends State<SearchBarScreen> {
       albums: albums,
       artists: artists,
       //TODO: arreglar podcasts
-      podchaps: null,
-      pods: null,
+      podchaps: podChaps,
+      pods: pods,
       users: users,
       word: search,
     )));
