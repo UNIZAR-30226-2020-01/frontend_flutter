@@ -17,7 +17,8 @@ class User {
   static User fromJSON(Map<String, Object> json) {
     return User(
         url: json['url'],
-        username: json['username']
+        username: json['username'],
+        imageUrl: json['icon']
     );
   }
   static User imageJSON(Map<String, Object> json) {

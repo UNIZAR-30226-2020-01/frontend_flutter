@@ -80,16 +80,22 @@ class _UserEditScreenState extends State<UserEditScreen> {
   }
 
   Widget _buildImage() {
+    ImageProvider im = null;
     String networkImage = widget.user.imageUrl ??
         'https://pngimage.net/wp-content/uploads/2018/05/default-user-profile-image-png-7.png';
+    if(_image != null){
+      im = FileImage(_image);
+    }else{
+      im = NetworkImage(networkImage);
+    }
     return Expanded(
       flex: 2,
       child: GestureDetector(
-        onTap: _uploadImage,
+        onTap: _selectImage,
         child: Container(
           decoration: BoxDecoration(
               image: DecorationImage(
-            image: NetworkImage(networkImage),
+            image: im,
             fit: BoxFit.cover,
           )),
           width: double.infinity,
@@ -98,7 +104,7 @@ class _UserEditScreenState extends State<UserEditScreen> {
     );
   }
 
-  void _uploadImage() async {
+  void _selectImage() async {
     print('upload image');
     File im = await ImagePicker.pickImage(source: ImageSource.gallery);
     if (im != null) {
@@ -110,10 +116,13 @@ class _UserEditScreenState extends State<UserEditScreen> {
 
   Widget _buildSubmitButton() {
     return RaisedButton(
-      onPressed: () {
+      onPressed: () async {
         print('Submit');
         if(_image != null){
           // Ha cambiado la imagen
+          User us = await UserDAO.putImage(_image);
+          us.username = widget.user.username;
+          Navigator.pop(context, us);
         }
         if(_name.trim() != ""){
           // Ha cambiado el nombre
