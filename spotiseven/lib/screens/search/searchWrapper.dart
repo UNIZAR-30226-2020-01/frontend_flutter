@@ -45,7 +45,7 @@ class _SearchWrapper extends State<SearchWrapper>
 
   @override
   void initState() {_myTabs = [
-    PlaylistFound(foundpl: widget.pls,),
+    PlaylistFound(foundpl: widget.pls,word: word,),
     SongFound(word: word,),
     AlbumsFound(word: word,),
     ArtistFound(word: word,),

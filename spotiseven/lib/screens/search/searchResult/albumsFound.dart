@@ -15,16 +15,20 @@ class AlbumsFound extends StatefulWidget {
 }
 
 class _AlbumsFoundState extends State<AlbumsFound> {
-
+  String get word => widget.word;
   List<Album> foundAlbum;
 
   ScrollController _scrollController;
-  bool loading = true;
+  int items = 4;
+  int offset = 0;
+
+  bool fetching = false;
+
   @override
   void initState(){
-    AlbumDAO.searchAlbum(widget.word).then((List<Album> list) =>  setState(() {
+    AlbumDAO.searchAlbum(8,0,word).then((List<Album> list) =>  setState(() {
       foundAlbum = list;
-      loading = false;
+      offset = offset + 8;
     }));
 
     _scrollController = ScrollController();
@@ -39,13 +43,27 @@ class _AlbumsFoundState extends State<AlbumsFound> {
 
   @override
   Widget build(BuildContext context) {
-    if (loading){
-      return Center(
-        child: CircularProgressIndicator(),
-      );
-    }
-    else if(!loading && foundAlbum != null) {
-      return CustomScrollView(
+    if (foundAlbum.isNotEmpty) {
+      return NotificationListener<ScrollNotification>(
+          onNotification: (ScrollNotification sn) {
+        if (sn is ScrollEndNotification &&
+            sn.metrics.pixels >= 0.7 * sn.metrics.maxScrollExtent && !fetching) {
+          fetching = true;
+          UsefulMethods.snack(context);
+          AlbumDAO.searchAlbum(items, offset, word).then((List<Album> list) {
+            if (list.length > 0) {
+              setState(() {
+                print('fetching more items');
+                foundAlbum.addAll(list);
+                offset = offset + items;
+                fetching= false;
+              });
+            }
+          });
+        }
+        return true;
+      },
+    child: CustomScrollView(
         controller: _scrollController,
         slivers: <Widget>[
           SliverGrid.count(
@@ -57,9 +75,15 @@ class _AlbumsFoundState extends State<AlbumsFound> {
                 .toList(),
           ),
         ],
-      );
-    } else {
+      ));
+    }
+    else if(foundAlbum == null){
       return UsefulMethods.noItems(context);
+    }
+    else {
+      return Center(
+        child: CircularProgressIndicator(),
+      );
     }
   }
 }

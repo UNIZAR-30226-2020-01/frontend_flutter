@@ -61,7 +61,7 @@ class ArtistDAO {
   }
 
   /// Busca el parámetro en: nombre del artista
-  static Future<List<Artist>> searchArtist(String query) async {
+  /*static Future<List<Artist>> searchArtist(String query) async {
     print('searching artists $query');
     Response resp = await _client.get('$_url/artists/?search=$query');
     if(resp.statusCode == 200) {
@@ -69,9 +69,33 @@ class ArtistDAO {
       List<dynamic> lista = jsonDecode(utf8.decode(resp.bodyBytes));
       List<Artist> artists = lista.map((dynamic d) => (Artist.fromJSONListed(d) as Artist )).toList();
       return artists;
-//      return jsonDecode(utf8.decode(resp.bodyBytes)).map((dynamic d) => Artist.fromJSONListed(d)).toList();
     }else{
       throw Exception('La busqueda de Artist ha ido mal. Codigo de error ${resp.statusCode}');
     }
+  }*/
+
+  static Future<List<Artist>> searchArtist(int limit, int offset, String query) async {
+    print('ilimit: $limit & offset: $offset');
+    Response response = await _client.get
+      ('$_url/artists/?search=$query&limit=$limit&offset=$offset',
+        headers: TokenSingleton().authHeader);
+    if (response.statusCode == 200) {
+      print('RESPONSE: ${response.body}');
+      Map<String, dynamic> map = (jsonDecode(utf8.decode(response.bodyBytes)) as Map);
+      List<dynamic> lista = map['results'];
+      print(lista);
+      if (map['next'] == null && lista.isEmpty){
+        //=======================================
+        // DEVOLVEMOS NULL PQ SE HAN ACABADO LOS RECURSOS DE LA PAGINACIÓN
+        // SOMOS UNOS GUARRROS
+        //=======================================
+        return [];
+      }
+      else return lista.map((dynamic d) => Artist.fromJSONListed(d)).toList();
+    }
+    else {
+      throw Exception('La busqueda de Artist ha ido mal. Codigo de error ${response.statusCode}');
+    }
   }
+
 }

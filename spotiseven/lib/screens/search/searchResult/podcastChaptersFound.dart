@@ -15,15 +15,23 @@ class ChaptersFound extends StatefulWidget {
 }
 
 class _ChaptersFoundState extends State<ChaptersFound> {
+  String get word => widget.word;
   List<PodcastChapter> chapsFound;
 
+  int items = 4;
+  int offset = 0;
+
+  bool fetching = false;
+
+
   ScrollController _scrollController;
-  bool loading=true;
   @override
   void initState(){
-    PodcastChapterDAO.searchPodChap(widget.word).then((List<PodcastChapter> list) => setState(() {
-      chapsFound = list;
-      loading = false;
+    chapsFound = List();
+    PodcastChapterDAO.searchPodChap(8,0,word).then((List<PodcastChapter> list) =>
+      setState(() {
+        chapsFound = list;
+        offset = offset + 8;
     }));
     _scrollController = ScrollController();
     super.initState();
@@ -38,13 +46,27 @@ class _ChaptersFoundState extends State<ChaptersFound> {
 
   @override
   Widget build(BuildContext context) {
-    if (loading){
-      return Center(
-        child: CircularProgressIndicator(),
-      );
-    }
-    else if(!loading && chapsFound != null ){
-      return CustomScrollView(
+    if (chapsFound.isNotEmpty) {
+      return NotificationListener<ScrollNotification>(
+          onNotification: (ScrollNotification sn) {
+        if (sn is ScrollEndNotification &&
+            sn.metrics.pixels >= 0.7 * sn.metrics.maxScrollExtent && !fetching) {
+          fetching = true;
+          UsefulMethods.snack(context);
+          PodcastChapterDAO.searchPodChap(items, offset,word).then((List<PodcastChapter> list) {
+            if (list.length > 0) {
+              setState(() {
+                print('fetching more items');
+                chapsFound.addAll(list);
+                offset = offset + items;
+                fetching= false;
+              });
+            }
+          });
+        }
+        return true;
+      },
+    child:  CustomScrollView(
         controller: _scrollController,
         slivers: <Widget>[
           SliverList(
@@ -56,9 +78,15 @@ class _ChaptersFoundState extends State<ChaptersFound> {
             ),
           ),
         ],
-      );
-    }else{
+      ));
+    }
+    else if(chapsFound == null){
       return UsefulMethods.noItems(context);
+    }
+    else {
+      return Center(
+        child: CircularProgressIndicator(),
+      );
     }
   }
 }

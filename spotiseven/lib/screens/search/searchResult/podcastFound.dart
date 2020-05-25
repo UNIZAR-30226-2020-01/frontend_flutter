@@ -15,13 +15,15 @@ class PodcastFound extends StatefulWidget {
 }
 
 class _PodcastFoundState extends State<PodcastFound> {
+  String get word => widget.word;
   List<Podcast> pods;
 
   ScrollController _scrollController;
+
   bool loading = true;
   @override
   void initState() {
-    PodcastDAO.searchPod(widget.word).then((List<Podcast> list) => setState(() {
+    PodcastDAO.searchPod(9,0,word).then((List<Podcast> list) => setState(() {
           pods = list;
           loading = false;
         }));

@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:http/http.dart';
+import 'package:spotiseven/audio/utils/DAO/podcastDAO.dart';
+import 'package:spotiseven/audio/utils/podcast.dart';
 import 'package:spotiseven/audio/utils/podcastChapter.dart';
 import 'package:spotiseven/user/tokenSingleton.dart';
 
@@ -20,18 +22,33 @@ class PodcastChapterDAO{
     print(response);
     return PodcastChapter.fromJSON(response);
   }
-  static Future<List<PodcastChapter>> searchPodChap(String query) async {
+
+
+
+  static Future<List<PodcastChapter>> searchPodChap(int limit, int offset, String query) async {
     print('searching podChaps $query');
-    Response resp = await _client.get('$_url/podcast-episodes/?search=$query');
+    Response resp = await _client.get('$_url/podcast-episodes/?search=$query&limit=$limit&offset'
+        '=$offset');
+    Podcast p;
 
     if(resp.statusCode == 200) {
-      // Ha ido bien, devolvemos las listas
-      List<dynamic> lista = jsonDecode(utf8.decode(resp.bodyBytes));
-      List<PodcastChapter> songs = lista.map((dynamic d) => (PodcastChapter.fromJSON(d) as PodcastChapter ))
+      Map<String, dynamic> map = (jsonDecode(utf8.decode(resp.bodyBytes)) as Map);
+      List<dynamic> lista = map['results'];
+      p = await PodcastDAO.getFromUrl(map['AQUI URL DEL POD PADRE']);
+      if (map['next'] == null && lista.isEmpty){
+        //=======================================
+        // DEVOLVEMOS NULL PQ SE HAN ACABADO LOS RECURSOS DE LA PAGINACIÓN
+        // SOMOS UNOS GUARRROS
+        //=======================================
+        return [];
+      }
+      else {
+        return lista.map((dynamic d) => (PodcastChapter.fromJSONwithPodcast(d,p)) as PodcastChapter)
           .toList();
-      return songs;
-    }else{
-      throw Exception('La busqueda de podcast episodes ha ido mal. Codigo de error ${resp
+      }
+    }
+    else {
+      throw Exception('La busqueda de episodios de podcast ha ido mal. Codigo de error ${resp
           .statusCode}');
     }
   }

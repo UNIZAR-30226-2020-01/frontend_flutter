@@ -76,7 +76,7 @@ class PodcastDAO{
     return Podcast.fromTrending(response);
   }
 
-  static Future<List<Podcast>> searchPod(String query) async {
+ /* static Future<List<Podcast>> searchPod(String query) async {
     Response resp = await _client.get('$_url/podcasts/?search=$query');
     if(resp.statusCode == 200) {
       // Ha ido bien, devolvemos las listas
@@ -85,6 +85,28 @@ class PodcastDAO{
       return songs;
     }else{
       throw Exception('La busqueda de Podcast ha ido mal. Codigo de error ${resp.statusCode}');
+    }
+  }*/
+
+  static Future<List<Podcast>> searchPod(int limit, int offset, String query) async {
+    print('searching podChaps $query');
+    Response resp = await _client.get('$_url/podcasts/?search=$query&limit=$limit&offset=offset'
+        '=$offset', headers: TokenSingleton().authHeader);
+
+    if(resp.statusCode == 200) {
+      Map<String, dynamic> map = (jsonDecode(utf8.decode(resp.bodyBytes)) as Map);
+      List<dynamic> lista = map['results'];
+      if (map['next'] == null && lista.isEmpty){
+        //=======================================
+        // DEVOLVEMOS NULL PQ SE HAN ACABADO LOS RECURSOS DE LA PAGINACIÓN
+        // SOMOS UNOS GUARRROS
+        //=======================================
+        return [];
+      }
+      else return lista.map((dynamic d) => Podcast.fromJSON(d)).toList();
+    }
+    else {
+      throw Exception('La busqueda de Artist ha ido mal. Codigo de error ${resp.statusCode}');
     }
   }
 

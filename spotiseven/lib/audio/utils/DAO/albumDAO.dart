@@ -58,17 +58,40 @@ class AlbumDAO {
     });
   }
 
+
   /// Busca el parámetro en: título o nombre del artista
-  static Future<List<Album>> searchAlbum(String query) async {
+  static Future<List<Album>> searchAlbum(int limit, int offset, String query) async {
+    print('searching podChaps $query');
+    Response resp = await _client.get('$_url/albums/?search=$query&limit=$limit&offset'
+        '=$offset', headers: TokenSingleton().authHeader);
+
+    if(resp.statusCode == 200) {
+      Map<String, dynamic> map = (jsonDecode(utf8.decode(resp.bodyBytes)) as Map);
+      List<dynamic> lista = map['results'];
+      if (map['next'] == null && lista.isEmpty){
+        //=======================================
+        // DEVOLVEMOS NULL PQ SE HAN ACABADO LOS RECURSOS DE LA PAGINACIÓN
+        // SOMOS UNOS GUARRROS
+        //=======================================
+        return [];
+      }
+      else return lista.map((dynamic d) => Album.fromJSONListed(d)).toList();
+    }
+    else {
+      throw Exception('La busqueda de Artist ha ido mal. Codigo de error ${resp.statusCode}');
+    }
+  }
+
+
+  /*static Future<List<Album>> searchAlbum(String query) async {
     Response resp = await _client.get('$_url/albums/?search=$query');
     if(resp.statusCode == 200) {
       // Ha ido bien, devolvemos las listas
       List<dynamic> lista = jsonDecode(utf8.decode(resp.bodyBytes));
       List<Album> albums = lista.map((dynamic d) => (Album.fromJSONListed(d) as Album )).toList();
       return albums;
-//      return jsonDecode(utf8.decode(resp.bodyBytes)).map((dynamic d) => Album.fromJSONListed(d)).toList();
     }else{
       throw Exception('La busqueda de Album ha ido mal. Codigo de error ${resp.statusCode}');
     }
-  }
+  }*/
 }

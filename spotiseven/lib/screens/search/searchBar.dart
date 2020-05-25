@@ -23,7 +23,7 @@ class _SearchBarScreenState extends State<SearchBarScreen> {
   Future<List<String>> search(String search) async {
     await Future.delayed(Duration(seconds: 1));
     print("search started");
-    playlists = await PlaylistDAO.searchPlaylist(search);
+    playlists = await PlaylistDAO.searchPlaylist(8,0, search);
 
     print("awaits ok");
 

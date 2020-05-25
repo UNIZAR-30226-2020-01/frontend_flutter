@@ -138,17 +138,41 @@ class PlaylistDAO {
   }
 
   /// Busca el parámetro en: título o nombre del usuario creador
-  static Future<List<Playlist>> searchPlaylist(String query) async {
+
+
+  static Future<List<Playlist>> searchPlaylist(int limit, int offset, String query) async {
+        print('searching podChaps $query');
+        Response resp = await _client.get
+          ('$_url/playlists/?search=$query&limit=$limit&offset=$offset'
+            '=$offset', headers: TokenSingleton().authHeader);
+
+        if(resp.statusCode == 200) {
+          Map<String, dynamic> map = (jsonDecode(utf8.decode(resp.bodyBytes)) as Map);
+          List<dynamic> lista = map['results'];
+          if (map['next'] == null && lista.isEmpty){
+            //=======================================
+            // DEVOLVEMOS NULL PQ SE HAN ACABADO LOS RECURSOS DE LA PAGINACIÓN
+            // SOMOS UNOS GUARRROS
+            //=======================================
+            return [];
+          }
+          else return lista.map((dynamic d) => Playlist.fromJSONListed(d) ).toList();
+        }
+        else {
+          throw Exception('La busqueda de Artist ha ido mal. Codigo de error ${resp.statusCode}');
+        }
+      }
+
+ /* static Future<List<Playlist>> searchPlaylist(String query) async {
     print("DAO: BUSCANDO" + query);
     Response resp = await _client.get('$_url/playlists/?search=$query');
     if(resp.statusCode == 200) {
       // Ha ido bien, devolvemos las listas
       List<dynamic> lista = jsonDecode(utf8.decode(resp.bodyBytes));
-      List<Playlist> platlists = lista.map((dynamic d) => (Playlist.fromJSONListed(d) as Playlist )).toList();
+      List<Playlist> platlists = lista.map((dynamic d) => Playlist.fromJSONListed(d) ).toList();
       return platlists;
-//      return jsonDecode(utf8.decode(resp.bodyBytes)).map((dynamic d) => (Playlist.fromJSONListed(d) as Playlist )).toList();
     }else{
       throw Exception('La busqueda de Playlist ha ido mal. Codigo de error ${resp.statusCode}');
     }
-  }
+  }*/
 }

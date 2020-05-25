@@ -28,19 +28,7 @@ class PodcastChapter {
     @required this.photoUrl,
     @required this.uri
 });
-/*<<<<<<< HEAD
 
-  factory PodcastChapter.fromJSON(Map<String, Object> json) {
-    return PodcastChapter(
-      title: json['title'],
-      description: json['description'],
-      duration: json['duration'],
-      date: json['date'],
-      photoUrl: json['image'],
-      podcast: Podcast.fromJSON(json['podcast']),
-    );
-  }
-=======*/
   static fromJSON(Map<String, Object> json){
     PodcastChapter chap = PodcastChapter(
         title: json['title'],

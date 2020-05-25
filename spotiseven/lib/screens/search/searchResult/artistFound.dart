@@ -15,16 +15,20 @@ class ArtistFound extends StatefulWidget {
 }
 
 class _ArtistFoundState extends State<ArtistFound> {
+  String get word => widget.word;
   ScrollController _scrollController;
 
   List<Artist> foundArtist;
 
-  bool loading = true;
+  int items = 4;
+  int offset = 0;
+
+  bool fetching = false;
   @override
   void initState() {
-    ArtistDAO.searchArtist(widget.word).then((List<Artist> list) => setState(() {
+    ArtistDAO.searchArtist(6,0,word).then((List<Artist> list) => setState(() {
       foundArtist = list;
-      loading = false;
+      offset = offset + 6;
     }));
     _scrollController = ScrollController();
     super.initState();
@@ -38,13 +42,27 @@ class _ArtistFoundState extends State<ArtistFound> {
 
   @override
   Widget build(BuildContext context) {
-    if (loading){
-      return Center(
-        child: CircularProgressIndicator(),
-      );
-    }
-    else if ( !loading && foundArtist != null) {
-      return CustomScrollView(
+    if (foundArtist.isNotEmpty) {
+      return NotificationListener<ScrollNotification>(
+          onNotification: (ScrollNotification sn) {
+        if (sn is ScrollEndNotification &&
+            sn.metrics.pixels >= 0.7 * sn.metrics.maxScrollExtent && !fetching) {
+          fetching = true;
+          UsefulMethods.snack(context);
+          ArtistDAO.searchArtist(items, offset, word).then((List<Artist> list) {
+            if (list.length > 0) {
+              setState(() {
+                print('fetching more items');
+                foundArtist.addAll(list);
+                offset = offset + items;
+                fetching= false;
+              });
+            }
+          });
+        }
+        return true;
+      },
+    child: CustomScrollView(
         controller: _scrollController,
         slivers: <Widget>[
           SliverList(
@@ -57,9 +75,15 @@ class _ArtistFoundState extends State<ArtistFound> {
             ),
           ),
         ],
-      );
-    } else {
+      ));
+    }
+    else if(foundArtist == null){
       return UsefulMethods.noItems(context);
+    }
+    else {
+      return Center(
+        child: CircularProgressIndicator(),
+      );
     }
   }
 }
