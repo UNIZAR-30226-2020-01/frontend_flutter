@@ -1,21 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:spotiseven/audio/utils/DAO/playlistDAO.dart';
-import 'package:spotiseven/audio/utils/playlist.dart';
-import 'package:spotiseven/screens/home/details/playlist_detail.dart';
+import 'package:spotiseven/audio/utils/DAO/songDAO.dart';
+import 'package:spotiseven/audio/utils/song.dart';
+import 'package:spotiseven/screens/home/details/song_detail.dart';
 import 'package:spotiseven/usefullMethods.dart';
-import 'package:spotiseven/user/userDAO.dart';
 
-class FollowingScreen extends StatefulWidget {
+class MostPlayed extends StatefulWidget {
   @override
-  _FollowingScreenState createState() => _FollowingScreenState();
+  _MostPlayedState createState() => _MostPlayedState();
 }
 
-class _FollowingScreenState extends State<FollowingScreen> {
-  bool _initialized;
-
-  List<Playlist> _followingUserPlaylist;
-
+class _MostPlayedState extends State<MostPlayed> {
+  List<Song> foundsong;
   ScrollController _scrollController;
 
   int items = 4;
@@ -25,14 +21,12 @@ class _FollowingScreenState extends State<FollowingScreen> {
 
   @override
   void initState() {
-    _initialized = false;
-    _followingUserPlaylist = List();
-    _scrollController = ScrollController();
-    UserDAO.followingPlaylists(8, 0).then((List<Playlist> lp) => setState(() {
-          _initialized = true;
-          _followingUserPlaylist = lp;
+    foundsong = List();
+    SongDAO.mostPlayed(8, 0).then((List<Song> list) => setState(() {
+          foundsong = list;
           offset = offset + 8;
         }));
+    _scrollController = ScrollController();
     super.initState();
   }
 
@@ -44,7 +38,7 @@ class _FollowingScreenState extends State<FollowingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (_followingUserPlaylist.isNotEmpty) {
+    if (foundsong.isNotEmpty) {
       return NotificationListener<ScrollNotification>(
           onNotification: (ScrollNotification sn) {
             if (sn is ScrollEndNotification &&
@@ -52,11 +46,11 @@ class _FollowingScreenState extends State<FollowingScreen> {
                 !fetching) {
               fetching = true;
               UsefulMethods.snack(context);
-              UserDAO.followingPlaylists(items, offset).then((List<Playlist> list) {
+              SongDAO.mostPlayed(items, offset).then((List<Song> list) {
                 if (list.length > 0) {
                   setState(() {
                     print('fetching more items');
-                    _followingUserPlaylist.addAll(list);
+                    foundsong.addAll(list);
                     offset = offset + items;
                     fetching = false;
                   });
@@ -68,19 +62,22 @@ class _FollowingScreenState extends State<FollowingScreen> {
           child: CustomScrollView(
             controller: _scrollController,
             slivers: <Widget>[
-              SliverGrid.count(
-                crossAxisCount: 2,
-                children: _followingUserPlaylist
-                    .map((el) => PlaylistCardWidget(
-                          playlist: el,
-                        ))
-                    .toList(),
+              SliverList(
+                delegate: SliverChildListDelegate(
+                  foundsong
+                      .map((el) => SongCardWidget(
+                            song: el,
+                          ))
+                      .toList(),
+                ),
               ),
             ],
           ));
-    } else if (_followingUserPlaylist == null) {
+    }
+    else if (foundsong == null) {
       return UsefulMethods.noItems(context);
-    } else {
+    }
+    else {
       return Center(
         child: CircularProgressIndicator(),
       );

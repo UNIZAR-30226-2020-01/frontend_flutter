@@ -114,12 +114,6 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
           BottomNavigationBarItem(icon: Icon(Icons.home), title: Text('')),
           // TODO: Change 'hearing' icon to podcast
           BottomNavigationBarItem(icon: Icon(Icons.cast), title: Text('')),
-          /*BottomNavigationBarItem(
-              icon: Transform.scale(
-                  scale: 0.2,
-                  child: Image.asset("assets/images/pod.png")),
-            title: Text(''),
-          ),*/
           BottomNavigationBarItem(icon: Icon(Icons.search), title: Text('')),
           BottomNavigationBarItem(icon: Icon(Icons.person), title: Text('')),
         ],
@@ -144,6 +138,7 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
                 setState(() {
                   _showReprBar = true;
                 });
+//                Navigator.pushNamed(context, '/playing');
               },
               // TODO: Change this color
 //              backgroundColor: Colors.black,

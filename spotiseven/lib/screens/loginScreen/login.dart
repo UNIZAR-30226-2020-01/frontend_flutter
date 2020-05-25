@@ -50,14 +50,6 @@ class _LoginState extends State<Login> {
                     )
                 ),
               ),
-//                        SizedBox(width: 10,),
-              /*Container(
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: AssetImage('assets/images/google.png'),
-                            ),
-                          ),
-                        ),*/
               Expanded(
                 flex: 12,
                 child: Container(

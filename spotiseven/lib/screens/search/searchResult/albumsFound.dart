@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:spotiseven/audio/utils/DAO/albumDAO.dart';
 import 'package:spotiseven/audio/utils/album.dart';
 import 'package:spotiseven/screens/home/details/album_detail.dart';
-
-
-
-
+import 'package:spotiseven/usefullMethods.dart';
 
 class AlbumsFound extends StatefulWidget {
-  List<Album> foundAlbum;
 
-  AlbumsFound({@required this.foundAlbum});
+  String word;
+  AlbumsFound({@required this.word});
 
   @override
   _AlbumsFoundState createState() => _AlbumsFoundState();
@@ -18,14 +16,41 @@ class AlbumsFound extends StatefulWidget {
 
 class _AlbumsFoundState extends State<AlbumsFound> {
 
+  List<Album> foundAlbum;
+
+  ScrollController _scrollController;
+  bool loading = true;
+  @override
+  void initState(){
+    AlbumDAO.searchAlbum(widget.word).then((List<Album> list) =>  setState(() {
+      foundAlbum = list;
+      loading = false;
+    }));
+
+    _scrollController = ScrollController();
+    super.initState();
+  }
+
+  @override
+  void dispose(){
+    _scrollController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    if (widget.foundAlbum.isNotEmpty) {
+    if (loading){
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+    else if(!loading && foundAlbum != null) {
       return CustomScrollView(
+        controller: _scrollController,
         slivers: <Widget>[
           SliverGrid.count(
             crossAxisCount: 2,
-            children: widget.foundAlbum
+            children: foundAlbum
                 .map((el) => AlbumCardWidget(
               album: el,
             ))
@@ -34,31 +59,7 @@ class _AlbumsFoundState extends State<AlbumsFound> {
         ],
       );
     } else {
-      return Center(
-        child: Center(
-            child: Container(
-              height: MediaQuery.of(context).size.height*.05,
-              width: MediaQuery.of(context).size.width*0.5,
-              decoration: BoxDecoration(
-                color: Colors.black,
-                borderRadius: BorderRadius.circular(10)
-              ),
-              child: Center(
-                child: FittedBox(
-                  fit: BoxFit.fitHeight,
-                  child: Text(
-                    'No items found',
-                    style: GoogleFonts.roboto(
-                      fontSize: 25,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ),
-            )
-        ),
-      );
+      return UsefulMethods.noItems(context);
     }
   }
 }

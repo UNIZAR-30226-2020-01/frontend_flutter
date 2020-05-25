@@ -1,24 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:spotiseven/audio/utils/DAO/podcastChapterDAO.dart';
 import 'package:spotiseven/audio/utils/podcastChapter.dart';
 import 'package:spotiseven/generic_components/GenericNewPodChapter.dart';
+import 'package:spotiseven/usefullMethods.dart';
 
 class ChaptersFound extends StatefulWidget {
-  List<PodcastChapter> chapsFound;
+  String word;
 
-  ChaptersFound({@required this.chapsFound});
+  ChaptersFound({@required this.word});
 
   @override
   _ChaptersFoundState createState() => _ChaptersFoundState();
 }
 
 class _ChaptersFoundState extends State<ChaptersFound> {
-  List<PodcastChapter> get chapsFound => widget.chapsFound;
+  List<PodcastChapter> chapsFound;
 
   ScrollController _scrollController;
+  bool loading=true;
   @override
   void initState(){
-//    _listPlaylist = List();
+    PodcastChapterDAO.searchPodChap(widget.word).then((List<PodcastChapter> list) => setState(() {
+      chapsFound = list;
+      loading = false;
+    }));
     _scrollController = ScrollController();
     super.initState();
   }
@@ -32,7 +38,12 @@ class _ChaptersFoundState extends State<ChaptersFound> {
 
   @override
   Widget build(BuildContext context) {
-    if(chapsFound.isNotEmpty){
+    if (loading){
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+    else if(!loading && chapsFound != null ){
       return CustomScrollView(
         controller: _scrollController,
         slivers: <Widget>[
@@ -47,31 +58,7 @@ class _ChaptersFoundState extends State<ChaptersFound> {
         ],
       );
     }else{
-      return Center(
-        child: Center(
-            child: Container(
-              height: MediaQuery.of(context).size.height*.05,
-              width: MediaQuery.of(context).size.width*0.5,
-              decoration: BoxDecoration(
-                  color: Colors.black,
-                  borderRadius: BorderRadius.circular(10)
-              ),
-              child: Center(
-                child: FittedBox(
-                  fit: BoxFit.fitHeight,
-                  child: Text(
-                    'No items found',
-                    style: GoogleFonts.roboto(
-                      fontSize: 25,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ),
-            )
-        ),
-      );
+      return UsefulMethods.noItems(context);
     }
   }
 }

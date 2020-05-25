@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:dio/dio.dart' as dio;
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
 import 'package:spotiseven/audio/utils/album.dart';
 import 'package:spotiseven/audio/utils/artist.dart';
@@ -14,22 +15,43 @@ class PlaylistDAO {
   static final Client _client = Client();
   static final String _url = 'https://s7-rest.francecentral.cloudapp.azure.com';
 
+  static Future<List<Playlist>> pagedPlaylist(int limit, int offset) async {
+    print('ilimit: $limit & offset: $offset');
+    Response response = await _client.get('$_url/user/playlists/?limit=$limit&offset=$offset',
+        headers: TokenSingleton().authHeader);
+    if (response.statusCode == 200) {
+      print('RESPONSE: ${response.body}');
+      Map<String, dynamic> map = (jsonDecode(utf8.decode(response.bodyBytes)) as Map);
+      List<dynamic> lista = map['results'];
+      print(lista);
+      if (map['next'] == null && lista.isEmpty){
+        //=======================================
+        // DEVOLVEMOS NULL PQ SE HAN ACABADO LOS RECURSOS DE LA PAGINACIÓN
+        // SOMOS UNOS GUARRROS
+        //=======================================
+        return [];
+      }
+      else return lista.map((dynamic d) => Playlist.fromJSONListed(d)).toList();
+    }
+    else {
+      throw Exception(
+          'Error al buscar playlist Código: ${response.statusCode}'
+      );
+    }
+  }
+
   static Future<List<Playlist>> getAllPlaylists() async {
-//    return Future.delayed(Duration(seconds: 3), () => _listPlaylist);
-    // TODO: Revisar cual sera la URL final
-//    Response response = await _client.get('$_url/playlists');
     Response response = await _client.get('$_url/user/playlists',
         headers: TokenSingleton().authHeader);
-    // Convertimos los json a playlist
-    // TODO: Comprobar el campo de las playlist
     if (response.statusCode == 200) {
       print('RESPONSE: ${response.body}');
       return (jsonDecode(utf8.decode(response.bodyBytes)) as List<dynamic>)
           .map((d) => Playlist.fromJSONListed(d))
           .toList();
     } else {
-      // TODO: Lanzar excepcion si no?
-      return [];
+      throw Exception(
+        'Error al buscar playlist Código: ${response.statusCode}'
+      );
     }
   }
 
@@ -65,6 +87,8 @@ class PlaylistDAO {
       throw Exception(
           "Error al buscar en la URL: $url . Codigo de error: ${response.statusCode}");
     }
+
+
   }
 
   static Future<Playlist> createPlaylist(Playlist p, File image) async {

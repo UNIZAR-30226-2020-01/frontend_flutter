@@ -48,7 +48,7 @@ class UserDAO {
     Response response = await _client.get('$_url/current-user/', headers: tokenSingleton.authHeader);
     if(response.statusCode == 200){
 //      print('GETUSERDATA: ${response.body}');
-      // TODO: Cuidado que esto esta devolviendo una lista.
+      //  Cuidado que esto esta devolviendo una lista.
       return User.fromJSON((jsonDecode(response.body) as List)[0]);
     }else{
       print('RESPONSE EN ELSE de getUserData: ${response.body}');
@@ -78,7 +78,7 @@ class UserDAO {
     if(resp.statusCode == 200){
       // En playing   -> song en forma de detalle (DINAMICO. Puede ser un podcast chapter)
       // En timestamp -> entero en segundos
-      // TODO: Cuidado que esto devuelve una lista
+      // Cuidado que esto devuelve una lista
       dynamic map = (jsonDecode(utf8.decode(resp.bodyBytes)) as List)[0];
       if(map['playing'] != null && map['timestamp'] != null){
         // Ha ido bien
@@ -148,15 +148,31 @@ class UserDAO {
   }
 
   // Playlist de los usuarios que sigues
-  static Future<List<Playlist>> followingPlaylists() async {
-    Response resp = await _client.get('$_url/user/followed/playlists/',headers: TokenSingleton().authHeader);
-    if(resp.statusCode == 200){
-      // Ha ido bien
-      return (jsonDecode(utf8.decode(resp.bodyBytes)) as List).map((dynamic d) => Playlist.fromJSONListed(d)).toList();
-    }else{
-      throw Exception('Error al obtener las playlist de los siguiendo. Codigo de error ${resp.statusCode}');
+  static Future<List<Playlist>> followingPlaylists(int limit, int offset) async {
+    print('ilimit: $limit & offset: $offset');
+    Response response = await _client.get('$_url/user/followed/playlists/?limit=$limit&offset=$offset',
+        headers: TokenSingleton().authHeader);
+    if (response.statusCode == 200) {
+      print('RESPONSE: ${response.body}');
+      Map<String, dynamic> map = (jsonDecode(utf8.decode(response.bodyBytes)) as Map);
+      List<dynamic> lista = map['results'];
+      print(lista);
+      if (map['next'] == null && lista.isEmpty){
+        //=======================================
+        // DEVOLVEMOS NULL PQ SE HAN ACABADO LOS RECURSOS DE LA PAGINACIÓN
+        // SOMOS UNOS GUARRROS
+        //=======================================
+        return [];
+      }
+      else return lista.map((dynamic d) => Playlist.fromJSONListed(d)).toList();
+    }
+    else {
+      throw Exception(
+          'Error al obtener las playlist de los siguiendo. Codigo de error ${response.statusCode}'
+      );
     }
   }
+
 
   /// Busca el parámetro en: nombre del usuario y en sus playlists
   static Future<List<User>> searchUser(String query) async {

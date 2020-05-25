@@ -2,22 +2,11 @@ import 'package:flappy_search_bar/flappy_search_bar.dart';
 import 'package:flappy_search_bar/search_bar_style.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:spotiseven/audio/utils/DAO/albumDAO.dart';
-import 'package:spotiseven/audio/utils/DAO/artistDAO.dart';
 import 'package:spotiseven/audio/utils/DAO/playlistDAO.dart';
-import 'package:spotiseven/audio/utils/DAO/podcastChapterDAO.dart';
-import 'package:spotiseven/audio/utils/DAO/podcastDAO.dart';
-import 'package:spotiseven/audio/utils/DAO/songDAO.dart';
-import 'package:spotiseven/audio/utils/album.dart';
-import 'package:spotiseven/audio/utils/artist.dart';
 import 'package:spotiseven/audio/utils/playlist.dart';
-import 'package:spotiseven/audio/utils/podcast.dart';
-import 'package:spotiseven/audio/utils/podcastChapter.dart';
-import 'package:spotiseven/audio/utils/song.dart';
 import 'package:spotiseven/screens/search/searchWrapper.dart';
 import 'package:spotiseven/usefullMethods.dart';
-import 'package:spotiseven/user/user.dart';
-import 'package:spotiseven/user/userDAO.dart';
+
 
 class SearchBarScreen extends StatefulWidget {
   @override
@@ -27,47 +16,19 @@ class SearchBarScreen extends StatefulWidget {
 
 class _SearchBarScreenState extends State<SearchBarScreen> {
   List<Playlist> playlists = List();
-  List<Song> songs = List();
-  List<Artist> artists = List();
-  List<Album> albums = List();
-  List<User> users = List();
-  List<PodcastChapter> podChaps = List();
-  List<Podcast> pods = List();
-//todo: podcasts
 
   final SearchBarController<String> _searchCtrl = SearchBarController();
 
 
   Future<List<String>> search(String search) async {
     await Future.delayed(Duration(seconds: 1));
-    print("search starteed");
+    print("search started");
     playlists = await PlaylistDAO.searchPlaylist(search);
-    artists = await ArtistDAO.searchArtist(search);
-    songs = await SongDAO.searchSong(search);
-    albums = await AlbumDAO.searchAlbum(search);
-    users = await UserDAO.searchUser(search);
-    podChaps = await PodcastChapterDAO.searchPodChap(search);
-    pods = await PodcastDAO.searchPod(search);
-    //todo: meter los podcast bro
 
     print("awaits ok");
-    print("playlists number: " + playlists.length.toString());
-    print("artists number: " + artists.length.toString());
-    print("songs number: " +  songs.length.toString());
-    print("albums number: " +  albums.length.toString());
-    print("users number: " + users.length.toString());
-    print("podcast number: " + pods.length.toString());
-    print("podcast chapter number: " + podChaps.length.toString());
 
     Navigator.push(context, MaterialPageRoute(builder: (context) => SearchWrapper(
       pls: playlists,
-      songs: songs,
-      albums: albums,
-      artists: artists,
-      //TODO: arreglar podcasts
-      podchaps: podChaps,
-      pods: pods,
-      users: users,
       word: search,
     )));
     return [''];

@@ -21,7 +21,9 @@ class PodcastChapterDAO{
     return PodcastChapter.fromJSON(response);
   }
   static Future<List<PodcastChapter>> searchPodChap(String query) async {
+    print('searching podChaps $query');
     Response resp = await _client.get('$_url/podcast-episodes/?search=$query');
+
     if(resp.statusCode == 200) {
       // Ha ido bien, devolvemos las listas
       List<dynamic> lista = jsonDecode(utf8.decode(resp.bodyBytes));

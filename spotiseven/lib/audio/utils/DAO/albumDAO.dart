@@ -9,6 +9,31 @@ class AlbumDAO {
   static final Client _client = Client();
   static final String _url = 'https://s7-rest.francecentral.cloudapp.azure.com';
 
+  static Future<List<Album>> pagedAlbum(int limit, int offset) async {
+    print('ilimit: $limit & offset: $offset');
+    Response response = await _client.get('$_url/albums/?limit=$limit&offset=$offset',
+        headers: TokenSingleton().authHeader);
+    if (response.statusCode == 200) {
+      print('RESPONSE: ${response.body}');
+      Map<String, dynamic> map = (jsonDecode(utf8.decode(response.bodyBytes)) as Map);
+      List<dynamic> lista = map['results'];
+      print(lista);
+      if (map['next'] == null && lista.isEmpty){
+        //=======================================
+        // DEVOLVEMOS NULL PQ SE HAN ACABADO LOS RECURSOS DE LA PAGINACIÓN
+        // SOMOS UNOS GUARRROS
+        //=======================================
+        return [];
+      }
+      else return lista.map((dynamic d) => Album.fromJSONListed(d)).toList();
+    }
+    else {
+      throw Exception(
+          'Error al buscar playlist Código: ${response.statusCode}'
+      );
+    }
+  }
+
   static Future<List<Album>> getAllAlbums() async {
     List<dynamic> response =
         await _client.get('$_url/albums', headers: TokenSingleton().authHeader).then((Response resp) {

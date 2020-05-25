@@ -1,21 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:spotiseven/screens/home/details/user_detail.dart';
+import 'package:spotiseven/usefullMethods.dart';
 import 'package:spotiseven/user/user.dart';
+import 'package:spotiseven/user/userDAO.dart';
 
 class UserFound extends StatefulWidget {
-  final List<User> founduser;
+  final String word;
 
-   UserFound({this.founduser});
+   UserFound({this.word});
 
   @override
   _UserFoundState createState() => _UserFoundState();
 }
 
 class _UserFoundState extends State<UserFound> {
+
+  List<User> founduser;
+
   ScrollController _scrollController;
+  bool loading = true;
   @override
   void initState(){
+    UserDAO.searchUser(widget.word).then((List<User> list) => setState(() {
+      founduser = list;
+      loading = false;
+    }));
     _scrollController = ScrollController();
     super.initState();
   }
@@ -28,14 +38,19 @@ class _UserFoundState extends State<UserFound> {
 
   @override
   Widget build(BuildContext context) {
-    if(widget.founduser.isNotEmpty){
+    if (loading){
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+    else if(!loading && founduser != null){
       return Scaffold(
         body: CustomScrollView(
           controller: _scrollController,
           slivers: <Widget>[
             SliverList(
               delegate: SliverChildListDelegate(
-                widget.founduser
+                founduser
                     .map((el) => UserCardWidget(
                   user: el,
                 ))
@@ -47,31 +62,7 @@ class _UserFoundState extends State<UserFound> {
       );
     }
     else {
-      return Center(
-        child: Center(
-            child: Container(
-              height: MediaQuery.of(context).size.height*.05,
-              width: MediaQuery.of(context).size.width*0.5,
-              decoration: BoxDecoration(
-                  color: Colors.black,
-                  borderRadius: BorderRadius.circular(10)
-              ),
-              child: Center(
-                child: FittedBox(
-                  fit: BoxFit.fitHeight,
-                  child: Text(
-                    'No items found',
-                    style: GoogleFonts.roboto(
-                      fontSize: 25,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ),
-            )
-        ),
-      );
+      return UsefulMethods.noItems(context);
     }
   }
 }

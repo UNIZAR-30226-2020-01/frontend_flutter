@@ -24,7 +24,6 @@ class GenericCardWidget extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            // TODO: Cambiar estos expanded si la cosa va mal
             Expanded(
               flex: 4,
               child: Container(

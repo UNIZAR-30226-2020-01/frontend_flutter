@@ -1,25 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:spotiseven/audio/utils/DAO/songDAO.dart';
 import 'package:spotiseven/audio/utils/song.dart';
 import 'package:spotiseven/screens/home/details/album_detail.dart';
 import 'package:spotiseven/screens/home/details/artist_detail.dart';
 import 'package:spotiseven/screens/home/details/song_detail.dart';
+import 'package:spotiseven/usefullMethods.dart';
 
 class SongFound extends StatefulWidget {
-  final List<Song> foundsong;
-
-  SongFound({@required this.foundsong}){
-    print('tamano lista canciones'+foundsong.length.toString());
-  }
+  String word;
+  SongFound({@required this.word});
   @override
   _SongFoundState createState() => _SongFoundState();
 }
 
 class _SongFoundState extends State<SongFound> {
 
+  List<Song> foundsong;
+  bool loading;
+
   ScrollController _scrollController;
   @override
   void initState(){
+    SongDAO.searchSong(widget.word).then((List<Song> list) => setState(() {
+      foundsong = list;
+      loading = false;
+    }));
     _scrollController = ScrollController();
     super.initState();
   }
@@ -33,14 +39,19 @@ class _SongFoundState extends State<SongFound> {
 
   @override
   Widget build(BuildContext context) {
-    if(widget.foundsong.isNotEmpty){
+    if (loading){
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+    else if(!loading && foundsong != null){
       return Scaffold(
         body: CustomScrollView(
           controller: _scrollController,
           slivers: <Widget>[
             SliverList(
               delegate: SliverChildListDelegate(
-                widget.foundsong
+                foundsong
                     .map((el) => SongCardWidget(
                   song: el,
                 ))
@@ -52,31 +63,7 @@ class _SongFoundState extends State<SongFound> {
       );
     }
     else {
-      return Center(
-        child: Center(
-            child: Container(
-              height: MediaQuery.of(context).size.height*.05,
-              width: MediaQuery.of(context).size.width*0.5,
-              decoration: BoxDecoration(
-                  color: Colors.black,
-                  borderRadius: BorderRadius.circular(10)
-              ),
-              child: Center(
-                child: FittedBox(
-                  fit: BoxFit.fitHeight,
-                  child: Text(
-                    'No items found',
-                    style: GoogleFonts.roboto(
-                      fontSize: 25,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ),
-            )
-        ),
-      );
+      return UsefulMethods.noItems(context);
     }
   }
 }

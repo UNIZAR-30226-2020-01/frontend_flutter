@@ -35,6 +35,48 @@ class UsefulMethods {
     );
   }
 
+  static Widget snack(context){
+    Scaffold.of(context).showSnackBar(SnackBar(
+      content: Text(
+        'LOADING MORE ITEMS...',
+        style: GoogleFonts.roboto(
+          fontSize: 20,
+          color: Colors.white,
+          fontWeight: FontWeight.w700,
+        ),
+      ),
+      duration: Duration(milliseconds: 200),
+      backgroundColor: Colors.black,
+    ));
+  }
+  static Widget noItems(context){
+    return Center(
+      child: Center(
+          child: Container(
+            height: MediaQuery.of(context).size.height*.05,
+            width: MediaQuery.of(context).size.width*0.5,
+            decoration: BoxDecoration(
+                color: Colors.black,
+                borderRadius: BorderRadius.circular(10)
+            ),
+            child: Center(
+              child: FittedBox(
+                fit: BoxFit.fitHeight,
+                child: Text(
+                  'No items found',
+                  style: GoogleFonts.roboto(
+                    fontSize: 25,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          )
+      ),
+    );
+  }
+
   static Widget imageContainer(context, url, fw, fh){
     return Container(
       margin: EdgeInsets.fromLTRB(10, 0, 0, 0),

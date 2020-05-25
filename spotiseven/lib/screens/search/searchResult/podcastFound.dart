@@ -1,65 +1,52 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:spotiseven/audio/utils/DAO/podcastDAO.dart';
 import 'package:spotiseven/audio/utils/podcast.dart';
 import 'package:spotiseven/generic_components/GenericHorizontalListView.dart';
 import 'package:spotiseven/generic_components/GenericNewPodChapter.dart';
+import 'package:spotiseven/usefullMethods.dart';
 
 class PodcastFound extends StatefulWidget {
-  List<Podcast> pods;
+  String word;
 
-  PodcastFound({@required this.pods});
+  PodcastFound({@required this.word});
   @override
   _PodcastFoundState createState() => _PodcastFoundState();
 }
 
 class _PodcastFoundState extends State<PodcastFound> {
-  List<Podcast> get podsFound => widget.pods;
+  List<Podcast> pods;
 
   ScrollController _scrollController;
+  bool loading = true;
   @override
-  void initState(){
-//    _listPlaylist = List();
+  void initState() {
+    PodcastDAO.searchPod(widget.word).then((List<Podcast> list) => setState(() {
+          pods = list;
+          loading = false;
+        }));
     _scrollController = ScrollController();
     super.initState();
   }
 
   @override
-  void dispose(){
+  void dispose() {
     _scrollController.dispose();
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
-    if(podsFound.isNotEmpty){
-      return GenericHorizontalListView(lista: podsFound,);
-    }else{
+    if (loading) {
       return Center(
-        child: Center(
-            child: Container(
-              height: MediaQuery.of(context).size.height*.05,
-              width: MediaQuery.of(context).size.width*0.5,
-              decoration: BoxDecoration(
-                  color: Colors.black,
-                  borderRadius: BorderRadius.circular(10)
-              ),
-              child: Center(
-                child: FittedBox(
-                  fit: BoxFit.fitHeight,
-                  child: Text(
-                    'No items found',
-                    style: GoogleFonts.roboto(
-                      fontSize: 25,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ),
-            )
-        ),
+        child: CircularProgressIndicator(),
       );
+    } else if (!loading && pods != null) {
+      return GenericHorizontalListView(
+        lista: pods,
+      );
+    } else {
+      return UsefulMethods.noItems(context);
     }
+  }
 }
-
-
