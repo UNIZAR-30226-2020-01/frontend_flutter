@@ -205,7 +205,8 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
           _subscriptionState.cancel();
           _subscriptionState = subscribeStateEvents();
           // TODO: Recargar el estado a la vuelta para cambios.
-          setState(() {});
+          setState(() {
+          });
         },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -218,23 +219,30 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
                 backgroundImage: NetworkImage(_player.song.photoUrl),
               ),
             ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  '${_player.song.title}',
-                  style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.bold),
-                ),
-//              SizedBox(height: 10),
-                Text(
-                  '${_player.song.album.artista.name}',
-                  style: TextStyle(
-                    color: Colors.white,
+            Container(
+              margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                    width: MediaQuery.of(context).size.width*0.5,
+                    child: Text(
+                      '${_player.song.title}',
+                      overflow: TextOverflow.fade,
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
                   ),
-                ),
-              ],
+//              SizedBox(height: 10),
+                  Text(
+                    '${_player.song.album.artista.name}',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
             ),
             Align(
               alignment: Alignment.center,

@@ -37,8 +37,9 @@ class Podcast {
       title: json['title'],
       canal: json['canal'],
       photoUrl: json['image'],
-      numChapters: null,
-      //podcast: (json['podcast']as Map)['title']
+      numChapters: json['number_episodes'],
+      url: json['url'],
+      id: json['id_listenotes']
     );
   }
 
@@ -57,7 +58,7 @@ class Podcast {
   static Podcast fromJSONListed(Map<String, Object> json) {
     Podcast p = Podcast(
         title: json['title'],
-        id: null,
+        id: json['id_listenotes'],
         canal: CanalPodcast.fromJSON(json['channel']),
         photoUrl: json['image'],
         numChapters: json['number_episodes'],
@@ -69,7 +70,7 @@ class Podcast {
   static Podcast fromJSONDetailed(Map<String, Object> json) {
     Podcast p = Podcast(
         title: json['title'],
-        id: null,
+      id: json['id_listenotes'],
         canal: CanalPodcast.fromJSON(json['channel']),
         photoUrl: json['image'],
         numChapters: json['number_episodes'],
@@ -86,9 +87,12 @@ class Podcast {
       canal: canal,
       photoUrl: json['image'],
       numChapters: json['total_episodes'],
+      id: json['id'],
     );
     p.chapters = (json['episodes'] as List).map((j) => (PodcastChapter.trendingWithPodcast(j, p) as PodcastChapter)
     ).toList();
+    print('AJJASDJADSJADS ${p.chapters.first.title}');
     return p;
   }
+
 }

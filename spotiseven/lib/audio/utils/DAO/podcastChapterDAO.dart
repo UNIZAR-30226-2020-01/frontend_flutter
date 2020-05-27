@@ -52,4 +52,19 @@ class PodcastChapterDAO{
           .statusCode}');
     }
   }
+
+  static Future<String> reproducir(String Url) async {
+    dynamic response =
+    await _client.get(Url, headers: TokenSingleton().authHeader).then((Response resp) {
+      if (resp.statusCode == 200) {
+        return jsonDecode(resp.body);
+      } else {
+        throw Exception('No tienes permisos para acceder a realurl ${resp.statusCode} ');
+      }
+    });
+    print(response);
+    return PodcastChapter.realUrl(response);
+  }
+
+
 }

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:spotiseven/audio/PodcastChapterWrapper.dart';
 import 'package:spotiseven/audio/playingSingleton.dart';
+import 'package:spotiseven/audio/utils/DAO/podcastDAO.dart';
 import 'package:spotiseven/audio/utils/podcast.dart';
 import 'package:spotiseven/generic_components/GenericHorizontalWidget.dart';
 import 'package:spotiseven/generic_components/GenericNewPodChapter.dart';
@@ -22,15 +23,27 @@ class GenericPodcast extends StatefulWidget {
 }
 
 class _GenericPodcastState extends State<GenericPodcast> {
-
+  static const String sub = 'SUBSCRIBE';
+  static const String unsub = 'UNSUBSCRIBE';
+  String estadoPod = '';
+  Podcast get podcast => widget.podcast;
+  bool sigue = false;
 
   ScrollController _scrollController;
 
   @override
   void initState() {
+    estado();
     print("Podcast: "+widget.podcast.title);
     _scrollController = ScrollController()..addListener(() => setState(() {}));
     super.initState();
+  }
+  Future<void> estado() async {
+    sigue = await PodcastDAO.amISusbscribed(podcast);
+    setState(() {
+      if (sigue) estadoPod = unsub;
+      else estadoPod = sub;
+    });
   }
 
   @override
@@ -156,9 +169,17 @@ class _GenericPodcastState extends State<GenericPodcast> {
         margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
         padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
         decoration: _borderBlack(),
-        child: _text(context, '+SUBSCRIBE', 40.0,  255, 255, 255, 1.0),
+        child: _text(context, 'sub', 40.0,  255, 255, 255, 1.0),
       ),
-      onPressed: () => Navigator.of(context).pop(),
+      onPressed: () async {
+        if (await PodcastDAO.subscribePod(podcast, sigue)){
+          sigue = !sigue;
+          setState(() {
+            if (sigue) estadoPod = unsub;
+            else estadoPod = sub;
+          });
+        }
+      },
     );
   }
   _appBar(context){

@@ -58,7 +58,6 @@ class _NewPodcastState extends State<NewPodcast> {
           child: CircularProgressIndicator(),
         );
     }
-//    List<PodcastChapter> lista2 = [chap1,chap2,chap3,chap4,chap5,chap6, chap1,chap2,chap3,chap4,chap5,chap6];
     else return CustomScrollView(
       controller: _scrollController,
       slivers: <Widget>[

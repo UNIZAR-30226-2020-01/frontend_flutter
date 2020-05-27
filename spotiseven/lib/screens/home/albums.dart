@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:spotiseven/audio/utils/DAO/albumDAO.dart';
 import 'package:spotiseven/audio/utils/album.dart';
 import 'package:spotiseven/screens/home/details/album_detail.dart';
+import 'package:spotiseven/usefullMethods.dart';
 
 class AlbumScreen extends StatefulWidget {
   @override
@@ -54,17 +55,7 @@ class _AlbumScreenState extends State<AlbumScreen> {
                 sn.metrics.pixels >= 0.7 * sn.metrics.maxScrollExtent &&
                 !fetching) {
               fetching = true;
-              Scaffold.of(context).showSnackBar(SnackBar(
-                content: Text(
-                  'loading more items',
-                  style: GoogleFonts.roboto(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                duration: Duration(milliseconds: 200),
-                backgroundColor: Colors.black,
-              ));
+              UsefulMethods.noItems(context);
               AlbumDAO.pagedAlbum(items, offset).then((List<Album> list) {
                 if (list.length > 0) {
                   setState(() {

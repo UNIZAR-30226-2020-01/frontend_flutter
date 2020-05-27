@@ -67,4 +67,11 @@ class PodcastChapter {
 
     return chap;
   }
+
+  static String realUrl(Map<String, Object> json) {
+    print('real Url ${json['URI']}');
+    return json['URI'];
+  }
+
+
 }

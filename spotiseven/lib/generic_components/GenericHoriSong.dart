@@ -4,6 +4,7 @@ import 'package:spotiseven/audio/utils/DAO/playlistDAO.dart';
 import 'package:spotiseven/audio/utils/playlist.dart';
 import 'package:spotiseven/audio/utils/song.dart';
 import 'package:spotiseven/popUpSong.dart';
+import 'package:spotiseven/usefullMethods.dart';
 
 class GenericHoriSong extends StatefulWidget {
   final String imageUrl;
@@ -24,7 +25,7 @@ class _GenericHoriSongState extends State<GenericHoriSong> {
   List<Playlist> _playlist = List();
 
   @override
-  void initState(){
+  void initState() {
     PlaylistDAO.getAllPlaylists().then((List<Playlist> playlist) {
       setState(() {
         _playlist = playlist;
@@ -47,11 +48,11 @@ class _GenericHoriSongState extends State<GenericHoriSong> {
       fit: BoxFit.fitWidth,
       child: Text(
         id.toUpperCase(),
+        overflow: TextOverflow.ellipsis,
         textAlign: TextAlign.end,
         style: GoogleFonts.roboto(
           fontWeight: FontWeight.w500,
-          letterSpacing: 5,
-          fontSize: 100,
+          fontSize: 20,
           wordSpacing: 2,
           color: Colors.white,
         ),
@@ -59,7 +60,7 @@ class _GenericHoriSongState extends State<GenericHoriSong> {
     );
   }
 
-  _options(){
+  _options() {
     return [
       IconButton(
         onPressed: () {
@@ -72,12 +73,14 @@ class _GenericHoriSongState extends State<GenericHoriSong> {
           color: s.favorite ? Colors.yellow : Colors.white,
         ),
       ),
-      PopUpSong(s: s, playlist: _playlist,),
+      PopUpSong(
+        s: s,
+        playlist: _playlist,
+      ),
     ];
   }
 
   _elementoEvento(context) {
-
     return Row(
       children: <Widget>[
         Container(
@@ -104,28 +107,28 @@ class _GenericHoriSongState extends State<GenericHoriSong> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Expanded(
-                        flex: 1,
-                        child: _text(context, widget.args[0]),
-                      ),
-                      Expanded(
-                        flex: 2,
-                        child: Divider(
-                          color: Colors.white,
-                          thickness: 2.0,
-                          endIndent: 80,
-                          indent: 80,
-                        ),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child:_text(context, widget.args[1]),
-                      ),
-                    ],
+                  Container(
+                    width: MediaQuery.of(context).size.width*0.42,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Expanded(
+                            flex: 1,
+
+                            child: Center(
+                                  child: _text(context, widget.args[0]),
+//                              child: UsefulMethods.text(widget.args[0], 20.0, 0.0, 255, 255, 255, 1.0)
+                                )),
+                        Expanded(
+                            flex: 1,
+
+                            child: Center(
+                              child:_text(context, widget.args[1]),
+//                              child: UsefulMethods.text(widget.args[1], 15.0, 0.0, 255, 255, 255, 1.0)
+                                )),
+                      ],
+                    ),
                   ),
                   IconButton(
                     onPressed: () {
@@ -138,14 +141,15 @@ class _GenericHoriSongState extends State<GenericHoriSong> {
                       color: s.favorite ? Colors.yellow : Colors.white,
                     ),
                   ),
-                  PopUpSong(s: s, playlist: _playlist,),
-
+                  PopUpSong(
+                    s: s,
+                    playlist: _playlist,
+                  ),
                 ],
               ),
             ),
           ),
         ),
-
       ],
     );
   }

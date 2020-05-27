@@ -19,11 +19,17 @@ class UsefulMethods {
           Color.fromRGBO(0, 0, 0, 0)]
     );
   }
-  static Widget text(id, size, letterspace, r,g,b,op) {
+  static Widget text(String id, size, letterspace, r,g,b,op) {
+    if (id.length > 25){
+      id = id.substring(0,25)+'...';
+    }
     return FittedBox(
-      fit: BoxFit.fitWidth,
+      fit: BoxFit.scaleDown,
       child: Text(
         id.toUpperCase(),
+        overflow: TextOverflow.clip,
+        maxLines: 2,
+        softWrap: false,
         textAlign: TextAlign.end,
         style: GoogleFonts.roboto(
           fontWeight: FontWeight.w400,

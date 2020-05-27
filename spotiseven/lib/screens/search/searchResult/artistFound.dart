@@ -77,7 +77,7 @@ class _ArtistFoundState extends State<ArtistFound> {
         ],
       ));
     }
-    else if(foundArtist == null){
+    else if(foundArtist.isEmpty){
       return UsefulMethods.noItems(context);
     }
     else {

@@ -4,23 +4,32 @@ import 'package:spotiseven/audio/utils/podcast.dart';
 import 'package:spotiseven/generic_components/GenericPodcast.dart';
 import 'package:spotiseven/usefullMethods.dart';
 
-class GenericSmallPodcast extends StatelessWidget {
+class GenericSmallPodcast extends StatefulWidget {
   Podcast podcast;
+
+  GenericSmallPodcast({@required this.podcast});
+
+  @override
+  _GenericSmallPodcastState createState() => _GenericSmallPodcastState();
+}
+
+class _GenericSmallPodcastState extends State<GenericSmallPodcast> {
   Podcast p_detallado;
 
- 
-  GenericSmallPodcast({@required this.podcast}){
+  @override
+  void initState(){
     coger();
+    super.initState();
   }
 
   Future<Podcast> coger() async{
-    print(podcast.title + '  ' + podcast.id.toString());
-    if (podcast.id != null) {
+    print(widget.podcast.title + '  ' + widget.podcast.id.toString());
+    if (widget.podcast.url == null) {
       print('es un trending');
-      p_detallado = await PodcastDAO.getTrending(podcast.id);
+      p_detallado = await PodcastDAO.getTrending(widget.podcast.id);
     }
     else {
-      p_detallado= await PodcastDAO.getFromUrl(podcast.url);
+      p_detallado= await PodcastDAO.getFromUrl(widget.podcast.url);
       print('no es trending');
     }
       return p_detallado;
@@ -40,9 +49,9 @@ class GenericSmallPodcast extends StatelessWidget {
       child: Container(
         child: Column(
           children: <Widget>[
-            UsefulMethods.imageContainer(context, podcast.photoUrl, 0.2, 0.2),
+            UsefulMethods.imageContainer(context, widget.podcast.photoUrl, 0.2, 0.2),
             SizedBox(height: 10,),
-            UsefulMethods.text(podcast.title, 10.0, 0.0, 0, 0, 0, 1.0)
+            UsefulMethods.text(widget.podcast.title, 10.0, 0.0, 0, 0, 0, 1.0)
           ],
         )
       ),

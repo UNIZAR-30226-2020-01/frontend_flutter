@@ -82,7 +82,7 @@ class _SongFoundState extends State<SongFound> {
               ],
             ),
           ));
-    } else if (foundsong == null) {
+    } else if (foundsong.isEmpty) {
       return UsefulMethods.noItems(context);
     } else {
       return Center(

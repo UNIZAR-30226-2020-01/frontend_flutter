@@ -63,7 +63,7 @@ class PodcastDAO{
   }
 
   static Future<Podcast> getTrending(String id) async {
-    print('getting trending podcast info');
+/*    print('getting trending podcast info');
     dynamic response =
     await _client.get('$_url/podcast/$id', headers: TokenSingleton().authHeader).then((Response
     resp) {
@@ -72,21 +72,61 @@ class PodcastDAO{
       } else {
         throw Exception('No tienes permisos para acceder a este recurso ${resp.statusCode}');
       }
-    });
-    return Podcast.fromTrending(response);
+    });*/
+    Response response = await _client.get('$_url/podcast/$id',
+        headers: TokenSingleton().authHeader);
+    print(response.body);
+    if (response.statusCode != 200) {
+      throw Exception(
+          'Error al buscar trending. Codigo de error: ${response.statusCode}');
+    }
+    else {
+      dynamic dyna = jsonDecode(utf8.decode(response.bodyBytes));
+      print('dynaL: $dyna');
+      return Podcast.fromTrending(dyna);
+    }
   }
 
- /* static Future<List<Podcast>> searchPod(String query) async {
-    Response resp = await _client.get('$_url/podcasts/?search=$query');
-    if(resp.statusCode == 200) {
-      // Ha ido bien, devolvemos las listas
-      List<dynamic> lista = jsonDecode(utf8.decode(resp.bodyBytes));
-      List<Podcast> songs = lista.map((dynamic d) => (Podcast.fromJSON(d) as Podcast )).toList();
-      return songs;
-    }else{
-      throw Exception('La busqueda de Podcast ha ido mal. Codigo de error ${resp.statusCode}');
+  static Future<bool> amISusbscribed(Podcast p) async {
+    Response response = await _client.post('$_url/user/podcasts/',
+        headers: TokenSingleton().authHeader);
+    if (response.statusCode != 200) {
+      throw Exception(
+          'Error al buscar suscripcion. Codigo de error: ${response.statusCode}');
     }
-  }*/
+    else {
+      List<dynamic> dyna = jsonDecode(utf8.decode(response.bodyBytes));
+      List<Podcast> lista = dyna.map((d) => Podcast.fromJSONListed(d)).toList();
+      if (lista.contains(p)){
+        print('Está suscrito');
+        return true;
+      }
+      else{
+        print('No está suscrito');
+        return false;
+      }
+    }
+  }
+
+  static Future<bool> subscribePod(Podcast p, bool sigue) async {
+    String followOrNo = 'followPodcast';
+    if (sigue){
+      followOrNo = 'unfollowPodcast';
+    }
+    print('url: $_url/user/podcasts/$followOrNo/?id=${p.id}');
+    Response response = await _client.post('$_url/user/podcasts/$followOrNo/?id=${p.id}',
+        headers: TokenSingleton().authHeader);
+    if (response.statusCode != 200) {
+      throw Exception(
+          'Error al suscribirse al pod. Codigo de error: ${response.statusCode}');
+    }
+    else {
+      print('Exito suscribiendote');
+      return true;
+    }
+  }
+
+
 
   static Future<List<Podcast>> searchPod(int limit, int offset, String query) async {
     print('searching podChaps $query');
@@ -109,5 +149,7 @@ class PodcastDAO{
       throw Exception('La busqueda de Artist ha ido mal. Codigo de error ${resp.statusCode}');
     }
   }
+
+
 
 }

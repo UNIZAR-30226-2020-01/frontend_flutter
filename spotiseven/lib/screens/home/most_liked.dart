@@ -1,32 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:spotiseven/audio/utils/DAO/playlistDAO.dart';
-import 'package:spotiseven/audio/utils/playlist.dart';
-import 'package:spotiseven/screens/home/details/playlist_detail.dart';
+import 'package:spotiseven/audio/utils/DAO/songDAO.dart';
+import 'package:spotiseven/audio/utils/song.dart';
+import 'package:spotiseven/screens/home/details/song_detail.dart';
 import 'package:spotiseven/usefullMethods.dart';
 
-class PlaylistFound extends StatefulWidget {
-  final List<Playlist> foundpl;
-  String word;
-
-  PlaylistFound({@required this.foundpl, @required this.word});
-
+class MostLiked extends StatefulWidget {
   @override
-  _PlaylistFoundState createState() => _PlaylistFoundState();
+  _MostLikedState createState() => _MostLikedState();
 }
 
-class _PlaylistFoundState extends State<PlaylistFound> {
-  List<Playlist> get foundlp => widget.foundpl;
-  String get word => widget.word;
+class _MostLikedState extends State<MostLiked> {
+  List<Song> foundsong;
   ScrollController _scrollController;
 
   int items = 4;
-  int offset = 8;
+  int offset = 0;
 
   bool fetching = false;
 
   @override
   void initState() {
+    foundsong = List();
+    SongDAO.mostLiked(8, 0).then((List<Song> list) => setState(() {
+      foundsong = list;
+      offset = offset + 8;
+    }));
     _scrollController = ScrollController();
     super.initState();
   }
@@ -39,7 +38,7 @@ class _PlaylistFoundState extends State<PlaylistFound> {
 
   @override
   Widget build(BuildContext context) {
-    if (foundlp.isNotEmpty) {
+    if (foundsong.isNotEmpty) {
       return NotificationListener<ScrollNotification>(
           onNotification: (ScrollNotification sn) {
             if (sn is ScrollEndNotification &&
@@ -47,11 +46,11 @@ class _PlaylistFoundState extends State<PlaylistFound> {
                 !fetching) {
               fetching = true;
               UsefulMethods.snack(context);
-              PlaylistDAO.searchPlaylist(items, offset, word).then((List<Playlist> list) {
+              SongDAO.mostPlayed(items, offset).then((List<Song> list) {
                 if (list.length > 0) {
                   setState(() {
                     print('fetching more items');
-                    foundlp.addAll(list);
+                    foundsong.addAll(list);
                     offset = offset + items;
                     fetching = false;
                   });
@@ -63,19 +62,22 @@ class _PlaylistFoundState extends State<PlaylistFound> {
           child: CustomScrollView(
             controller: _scrollController,
             slivers: <Widget>[
-              SliverGrid.count(
-                crossAxisCount: 2,
-                children: widget.foundpl
-                    .map((el) => PlaylistCardWidget(
-                          playlist: el,
-                        ))
-                    .toList(),
+              SliverList(
+                delegate: SliverChildListDelegate(
+                  foundsong
+                      .map((el) => SongCardWidget(
+                    song: el,
+                  ))
+                      .toList(),
+                ),
               ),
             ],
           ));
-    } else if (foundlp.isEmpty) {
+    }
+    else if (foundsong == null) {
       return UsefulMethods.noItems(context);
-    } else if (!fetching && foundlp == null){
+    }
+    else {
       return Center(
         child: CircularProgressIndicator(),
       );

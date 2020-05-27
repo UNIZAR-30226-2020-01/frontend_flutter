@@ -77,7 +77,7 @@ class _AlbumsFoundState extends State<AlbumsFound> {
         ],
       ));
     }
-    else if(foundAlbum == null){
+    else if(foundAlbum.isEmpty){
       return UsefulMethods.noItems(context);
     }
     else {

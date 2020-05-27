@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:spotiseven/screens/home/albums.dart';
 import 'package:spotiseven/screens/home/artist_home.dart';
 import 'package:spotiseven/screens/home/following.dart';
+import 'package:spotiseven/screens/home/most_liked.dart';
 import 'package:spotiseven/screens/home/most_played.dart';
 import 'package:spotiseven/screens/home/your_playlists.dart';
 
@@ -23,6 +24,7 @@ class _HomeScreenWrapperState extends State<HomeScreenWrapper>
     ArtistScreen(),
     FollowingScreen(),
     MostPlayed(),
+    MostLiked(),
   ];
 
   @override
@@ -78,7 +80,8 @@ class _HomeScreenWrapperState extends State<HomeScreenWrapper>
                         buildTextTab('Albums'),
                         buildTextTab('Artists'),
                         buildTextTab('Following'),
-                        buildTextTab('Most Played')
+                        buildTextTab('Most Played'),
+                        buildTextTab('Most Liked')
                       ],
                     ),
                   ),
