@@ -219,4 +219,22 @@ class UserDAO {
     }
   }
 
+  static Future<User> putName(String newName) async {
+    Response response = await _client.get('$_url/update-user/?name=$newName',
+        headers: TokenSingleton().authHeader);
+
+    if (response.statusCode == 200) {
+      // Ha ido bien
+      print('El update de foto ha ido bien');
+      print('Respuesta ==> ${response.body}');
+      print('${response.body.runtimeType}');
+      dynamic d = jsonDecode(utf8.decode(response.bodyBytes));
+      return User.imageJSON(d);
+    } else {
+      print('${response.body}');
+      throw Exception(
+          'Error al subir un username. Codigo de error: ${response.statusCode}');
+    }
+  }
+
 }

@@ -24,6 +24,23 @@ class PodcastDAO{
     return response.map((d) => Podcast.fromJSONListed(d)).toList();
   }
 
+
+  static Future<List<Podcast>> getForU() async {
+    Response response = await _client.get('$_url/user/recomendedPodcast',
+        headers: TokenSingleton().authHeader);
+    List<dynamic> d = jsonDecode(utf8.decode(response.bodyBytes));
+    print('getFor u $response.b');
+    if (response.statusCode != 200) {
+      throw Exception(
+          'Error al buscar for u. Codigo de error: ${response.statusCode}');
+    }
+    else {
+      List<dynamic> dyna = jsonDecode(utf8.decode(response.bodyBytes));
+      print('dynaL: $dyna');
+      return dyna.map((d) => Podcast.fromTrending(d)).toList();
+    }
+  }
+
   static Future<List<Podcast>> getAllPodcasts() async {
     List<dynamic> response =
     await _client.get('$_url/podcasts/', headers: TokenSingleton().authHeader).then((Response resp) {

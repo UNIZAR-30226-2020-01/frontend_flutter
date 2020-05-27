@@ -34,6 +34,7 @@ class _SearchBarScreenState extends State<SearchBarScreen> {
     return [''];
   }
 
+
   _loader(){
     return Center(
       child: Container(

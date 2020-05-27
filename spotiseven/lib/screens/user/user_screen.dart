@@ -52,6 +52,7 @@ class _UserScreenState extends State<UserScreen> {
       return Scaffold(
         appBar: _buildAppBar(),
         body: Container(
+          color: Colors.white,
           width: MediaQuery.of(context).size.width,
           child: SafeArea(
             child: Container(
@@ -155,7 +156,11 @@ class _UserScreenState extends State<UserScreen> {
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => SplashScreen()));
       },
-      child: Text('Log out'),
+      child: Text('Log out',
+      style:  GoogleFonts.roboto(
+        fontWeight: FontWeight.w900,
+        fontSize: 10
+      ),),
     );
   }
 
@@ -201,6 +206,7 @@ class _UserScreenState extends State<UserScreen> {
           print('Editar usuario');
           User us = await Navigator.push(context, MaterialPageRoute(builder: (context) => UserEditScreen(user: _user,)));
           if(us != null){
+            us = await UserDAO.getUserData();
             print('Ha habido cambios. Recargando');
             setState(() {
               _user = us;
@@ -211,13 +217,29 @@ class _UserScreenState extends State<UserScreen> {
         color: Colors.white,
       ),
       actions: <Widget>[
-        FlatButton(
-          onPressed: () async {
-            await TokenSingleton().deleteFromSecure();
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => SplashScreen()));
-          },
-          child: Text('LOG OUT', style: TextStyle(color: Colors.red[800]),),
+        Container(
+          width: MediaQuery.of(context).size.width*0.25,
+          child: FittedBox(
+            fit: BoxFit.contain,
+            child: FlatButton(
+              onPressed: () async {
+                await TokenSingleton().deleteFromSecure();
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => SplashScreen()));
+              },
+              child: Text(
+                'LOG OUT',
+                maxLines: 1,
+                softWrap: false,
+                overflow: TextOverflow.fade,
+                style: GoogleFonts.roboto(
+                  fontWeight: FontWeight.w900,
+                  color: Colors.red,
+                  fontSize: 70
+                ),
+              ),
+            ),
+          ),
         )
       ],
     );

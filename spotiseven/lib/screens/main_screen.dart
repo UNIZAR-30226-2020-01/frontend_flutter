@@ -50,7 +50,10 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
     // Ante el cambio del estado del reproductor central
     _subscriptionState = subscribeStateEvents();
     _subscriptionSong =
-        _player.getStreamedSong().listen((s) => setState(() {}));
+        _player.getStreamedSong().listen((s) {
+          if (_firstTime) _firstTime=false;
+          setState(() {});
+        });
     // Buscamos en el remoto lo que se estuviera reproduciendo
     _firstTime = false;
     UserDAO.retrieveSongWithTimestamp().then((Map<String, Object> map) {

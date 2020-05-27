@@ -169,7 +169,7 @@ class _GenericPodcastState extends State<GenericPodcast> {
         margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
         padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
         decoration: _borderBlack(),
-        child: _text(context, 'sub', 40.0,  255, 255, 255, 1.0),
+        child: _text(context, estadoPod, 40.0,  255, 255, 255, 1.0),
       ),
       onPressed: () async {
         if (await PodcastDAO.subscribePod(podcast, sigue)){

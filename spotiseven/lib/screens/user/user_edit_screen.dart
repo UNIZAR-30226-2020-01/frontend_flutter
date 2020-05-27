@@ -39,6 +39,7 @@ class _UserEditScreenState extends State<UserEditScreen> {
         elevation: 0,
       ),
       body: Container(
+        color: Colors.white,
         width: MediaQuery.of(context).size.width,
         child: SafeArea(
           child: Container(
@@ -48,7 +49,7 @@ class _UserEditScreenState extends State<UserEditScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 _buildImage(),
-                //_buildUserDetails(),
+                _buildUserDetails(),
                 _buildSubmitButton()
                 //_buildLogoutButton(context),
 //                _imagePicker(),
@@ -123,15 +124,16 @@ class _UserEditScreenState extends State<UserEditScreen> {
           // Si onPressed == null -> Botón deshabilitado
           onPressed: _image != null ? () async {
             print('Submit');
+            User us;
             if(_image != null){
               // Ha cambiado la imagen
-              User us = await UserDAO.putImage(_image);
+              us = await UserDAO.putImage(_image);
               us.username = widget.user.username;
-              Navigator.pop(context, us);
             }
-//            if(_name.trim() != ""){
-//              // Ha cambiado el nombre
-//            }
+            if(_name.trim() != ""){
+
+            }
+            if (_image != null || _name.trim() != "")  Navigator.pop(context, us);
           } : null  ,
           child: UsefulMethods.text("save", 20.0, 1.0, 0, 0, 0, 1.0),
         ),

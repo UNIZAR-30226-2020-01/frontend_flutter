@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:spotiseven/generic_components/GenericHorizontalWidget.dart';
 import 'package:spotiseven/screens/user/user_screen.dart';
 import 'package:spotiseven/user/user.dart';
-import 'package:spotiseven/user/userScreenFounded.dart';
+import 'package:spotiseven/screens/user/userScreenFounded.dart';
 
 class UserCardWidget extends StatelessWidget {
 
