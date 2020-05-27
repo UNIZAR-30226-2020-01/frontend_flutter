@@ -88,7 +88,7 @@ class PodcastDAO{
   }
 
   static Future<bool> amISusbscribed(Podcast p) async {
-    Response response = await _client.post('$_url/user/podcasts/',
+    Response response = await _client.get('$_url/user/podcasts/',
         headers: TokenSingleton().authHeader);
     if (response.statusCode != 200) {
       throw Exception(

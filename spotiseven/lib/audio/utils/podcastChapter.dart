@@ -18,6 +18,7 @@ class PodcastChapter {
   String photoUrl;
   //url de listennotes
   String uri;
+  String id;
 
   PodcastChapter({
     @required this.title,
@@ -26,7 +27,8 @@ class PodcastChapter {
     @required this.duration,
     @required this.url,
     @required this.photoUrl,
-    @required this.uri
+    @required this.uri,
+    this.id
 });
 
   static fromJSON(Map<String, Object> json){
@@ -37,7 +39,8 @@ class PodcastChapter {
         photoUrl: json['image'],
         url: json['url'],
         podcast: Podcast.fromJSONListed(json['podcast']),
-        uri: json['URI']
+        uri: json['URI'],
+        id: json['id_listenotes']
     );
     return chap;
   }
@@ -62,6 +65,8 @@ class PodcastChapter {
         description: json['description'],
         duration: json['audio_length_sec'],
         photoUrl: json['image'],
+        id: json['id'],
+        uri: json['audio'],
         podcast: p
     );
 

@@ -70,7 +70,7 @@ class Podcast {
   static Podcast fromJSONDetailed(Map<String, Object> json) {
     Podcast p = Podcast(
         title: json['title'],
-      id: json['id_listenotes'],
+        id: json['id_listenotes'],
         canal: CanalPodcast.fromJSON(json['channel']),
         photoUrl: json['image'],
         numChapters: json['number_episodes'],
@@ -81,13 +81,14 @@ class Podcast {
   }
 
   static Podcast fromTrending(Map<String, Object> json) {
-    CanalPodcast canal = CanalPodcast(title: '');
+    CanalPodcast canal = CanalPodcast(title: json['publisher']);
     Podcast p = Podcast(
       title: json['title'],
       canal: canal,
       photoUrl: json['image'],
       numChapters: json['total_episodes'],
       id: json['id'],
+      url: "https://s7-rest.francecentral.cloudapp.azure.com/podcast/${json['id']}"
     );
     p.chapters = (json['episodes'] as List).map((j) => (PodcastChapter.trendingWithPodcast(j, p) as PodcastChapter)
     ).toList();
