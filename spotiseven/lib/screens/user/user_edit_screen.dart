@@ -49,7 +49,7 @@ class _UserEditScreenState extends State<UserEditScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 _buildImage(),
-                _buildUserDetails(),
+//                _buildUserDetails(),
                 _buildSubmitButton()
                 //_buildLogoutButton(context),
 //                _imagePicker(),
