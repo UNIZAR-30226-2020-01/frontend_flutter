@@ -29,6 +29,12 @@ class _UserScreenFoundState extends State<UserScreenFound> {
   bool hayFollowing = false;
 
 
+  static const String fo = 'FOLLOW';
+  static const String unfo = 'UNFOLLOW';
+  String estado = "LOADING...";
+  User get podcast => widget.user;
+  bool sigue = false;
+
 
   void checkFollowing(){
     if (following.length > 0){
@@ -67,6 +73,15 @@ class _UserScreenFoundState extends State<UserScreenFound> {
 
   @override
   void initState(){
+    UserDAO.amIFollowing(user).then((bool x) {
+      setState(() {
+        sigue = x;
+        if (sigue)
+          estado = unfo;
+        else
+          estado = fo;
+      });
+    });
     super.initState();
     _fetchData();
   }
@@ -128,14 +143,16 @@ class _UserScreenFoundState extends State<UserScreenFound> {
                       color: Colors.black,
                       borderRadius: BorderRadius.circular(10)
                     ),
-                    child: Center(
-                      child: FittedBox(
-                        child: Container(
-                          padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                    child: FittedBox(
+                      fit: BoxFit.contain,
+                      child: Container(
+                        width: MediaQuery.of(context).size.width*0.7,
+                        child: Center(
                           child: Text(
-                            'Username: '+ user.username,
+                            user.username,
+                            overflow: TextOverflow.clip,
                             style: GoogleFonts.roboto(
-                              fontSize: 35,
+                              fontSize: 30,
                               fontWeight: FontWeight.w400,
                               color: Colors.white
                             ),
@@ -150,11 +167,27 @@ class _UserScreenFoundState extends State<UserScreenFound> {
                     children: <Widget>[
                       FlatButton(
                         onPressed: (){
-                          UserDAO.followUser(user);
-                          print('User has been followed');
                           setState(() {
-
+                            if (sigue){
+                              UserDAO.unfollowUser(user);
+                              sigue = !sigue;
+                              if (sigue)
+                                estado = unfo;
+                              else
+                                estado = fo;
+                              _fetchData();
+                            }
+                            else {
+                              UserDAO.followUser(user);
+                              sigue = !sigue;
+                              if (sigue)
+                                estado = unfo;
+                              else
+                                estado = fo;
+                              _fetchData();
+                            }
                           });
+                          print ('boton pulsado');
                         },
                         child: Container(
                           width: MediaQuery.of(context).size.width*0.3,
@@ -165,7 +198,7 @@ class _UserScreenFoundState extends State<UserScreenFound> {
                           ),
                           child: Center(
                             child: Text(
-                              'FOLLOW',
+                              estado,
                               style: GoogleFonts.roboto(
                                 color: Colors.white,
                                 fontSize: 25,
@@ -175,12 +208,12 @@ class _UserScreenFoundState extends State<UserScreenFound> {
                           ),
                         ),
                       ),
-                      FlatButton(
+                      /*FlatButton(
                         onPressed: (){
                           UserDAO.unfollowUser(user);
                           print('User has been unfollowed');
                           setState(() {
-                            
+
                           });
                         },
                         child: Container(
@@ -201,7 +234,7 @@ class _UserScreenFoundState extends State<UserScreenFound> {
                             ),
                           ),
                         ),
-                      )
+                      )*/
                     ],
                   ),
                 ],

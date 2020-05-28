@@ -11,9 +11,7 @@ class GenericSmallUser extends StatelessWidget {
       ".png";
   GenericSmallUser({
     @required this.user
-  }){
-    print('Entro generic small user');
-  }
+  });
 
   @override
   Widget build(BuildContext context) {

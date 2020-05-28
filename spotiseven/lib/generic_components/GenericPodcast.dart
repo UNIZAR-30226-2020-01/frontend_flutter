@@ -15,7 +15,6 @@ import 'package:spotiseven/screens/podcast/podcast_chapter_info.dart';
 class GenericPodcast extends StatefulWidget {
   final Podcast podcast;
 
-
   GenericPodcast({this.podcast});
 
   @override
@@ -25,7 +24,7 @@ class GenericPodcast extends StatefulWidget {
 class _GenericPodcastState extends State<GenericPodcast> {
   static const String sub = 'SUBSCRIBE';
   static const String unsub = 'UNSUBSCRIBE';
-  String estadoPod = '';
+  String estadoPod = "LOADING...";
   Podcast get podcast => widget.podcast;
   bool sigue = false;
 
@@ -34,16 +33,23 @@ class _GenericPodcastState extends State<GenericPodcast> {
   @override
   void initState() {
     estado();
-    print("Podcast: "+widget.podcast.title);
+    print("Podcast: " + widget.podcast.title);
     _scrollController = ScrollController()..addListener(() => setState(() {}));
     super.initState();
   }
+
   Future<void> estado() async {
-    sigue = await PodcastDAO.amISusbscribed(podcast);
-    setState(() {
-      if (sigue) estadoPod = unsub;
-      else estadoPod = sub;
-    });
+    PodcastDAO.amISusbscribed(podcast).then(
+          (bool x) {
+        setState(() {
+          sigue = x;
+          if (sigue)
+            estadoPod = unsub;
+          else
+            estadoPod = sub;
+        });
+      },
+    );
   }
 
   @override
@@ -51,6 +57,7 @@ class _GenericPodcastState extends State<GenericPodcast> {
     _scrollController.dispose();
     super.dispose();
   }
+
   _text(context, id, size, r, g, b, op) {
     return FittedBox(
       fit: BoxFit.fitWidth,
@@ -68,7 +75,6 @@ class _GenericPodcastState extends State<GenericPodcast> {
     );
   }
 
-
   _image(context, url) {
     return Image(
       fit: BoxFit.cover,
@@ -77,22 +83,21 @@ class _GenericPodcastState extends State<GenericPodcast> {
     );
   }
 
-
-  _border(){
+  _border() {
     return const BoxDecoration(
       borderRadius: BorderRadius.all(Radius.circular(30)),
       color: Colors.white,
     );
   }
 
-  _borderBlack(){
+  _borderBlack() {
     return const BoxDecoration(
       borderRadius: BorderRadius.all(Radius.circular(30)),
       color: Colors.black,
     );
   }
 
-  _imageContainer(){
+  _imageContainer() {
     return Container(
       margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
       width: MediaQuery.of(context).size.width * 0.35,
@@ -103,9 +108,10 @@ class _GenericPodcastState extends State<GenericPodcast> {
       ),
     );
   }
-  _textContainer(){
+
+  _textContainer() {
     return Container(
-      margin:EdgeInsets.fromLTRB(10, 0, 0, 0),
+      margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
       width: MediaQuery.of(context).size.width * 0.6,
       height: MediaQuery.of(context).size.height * 0.2,
       decoration: _border(),
@@ -117,7 +123,7 @@ class _GenericPodcastState extends State<GenericPodcast> {
           Row(
             children: <Widget>[
               Container(
-                width: MediaQuery.of(context).size.width*0.50,
+                width: MediaQuery.of(context).size.width * 0.50,
                 child: AutoSizeText(
                   widget.podcast.title,
                   maxLines: 2,
@@ -135,54 +141,68 @@ class _GenericPodcastState extends State<GenericPodcast> {
               Container(
                 width: MediaQuery.of(context).size.width * 0.1,
                 child: IconButton(
-                  onPressed: (){
+                  onPressed: () {
                     print('presionado boton info de podcast');
                     //Navigator.push(context, MaterialPageRoute(builder: (context) => ArtistInfo(podcast: widget.podcast)));
                   },
-                  icon: Icon(Icons.info, color: Colors.black,),
+                  icon: Icon(
+                    Icons.info,
+                    color: Colors.black,
+                  ),
                   color: Colors.black,
                 ),
               ),
             ],
           ),
-          SizedBox(height: 10,),
+          SizedBox(
+            height: 10,
+          ),
           Container(
 //            width: MediaQuery.of(context).size.width*0.25,
             margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
             child: _text(context, '${widget.podcast.canal.title}', 40.0, 0, 0, 0, 1.0),
           ),
-
-          SizedBox(height: 10,),
+          SizedBox(
+            height: 10,
+          ),
           Container(
 //            width: MediaQuery.of(context).size.width*0.25,
-            child: _text(context, '${widget.podcast.numChapters} chapters', 10.0,  0, 0, 0, 1.0),
+            child: _text(context, '${widget.podcast.numChapters} chapters', 10.0, 0, 0, 0, 1.0),
           ),
         ],
       ),
     );
   }
 
-  _botonFollow(){
-    return FlatButton(
-      child: Container(
-        height: 30,
-        margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
-        padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
-        decoration: _borderBlack(),
-        child: _text(context, estadoPod, 40.0,  255, 255, 255, 1.0),
-      ),
-      onPressed: () async {
-        if (await PodcastDAO.subscribePod(podcast, sigue)){
-          sigue = !sigue;
-          setState(() {
-            if (sigue) estadoPod = unsub;
-            else estadoPod = sub;
-          });
-        }
-      },
-    );
+  _botonFollow() {
+    return Container(
+        width: MediaQuery.of(context).size.width * 0.45,
+        height: MediaQuery.of(context).size.width * 0.2,
+        child: FlatButton(
+            child: Container(
+              height: 30,
+              margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+              padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
+              decoration: _borderBlack(),
+              child: _text(context, estadoPod, 40.0, 255, 255, 255, 1.0),
+            ),
+            onPressed: () async {
+              print('Sigue: $sigue');
+              PodcastDAO.subscribePod(podcast, sigue).then(
+                (bool x) {
+                  setState(() {
+                    sigue = x;
+                    if (sigue)
+                      estadoPod = unsub;
+                    else
+                      estadoPod = sub;
+                  });
+                },
+              );
+            }));
   }
-  _appBar(context){
+
+  _appBar(context) {
     return SliverAppBar(
         backgroundColor: Colors.white,
         elevation: 0,
@@ -193,8 +213,20 @@ class _GenericPodcastState extends State<GenericPodcast> {
         // Efectos
         leading: SizedBox(),
         stretch: true,
-        onStretchTrigger: () => Future.delayed(
-            Duration(microseconds: 1), () => print('stretch')),
+        onStretchTrigger: () => Future.delayed(Duration(microseconds: 1), () async {
+              PodcastDAO.amISusbscribed(podcast).then(
+                    (bool x) {
+                  setState(() {
+                    sigue = x;
+                    if (sigue)
+                      estadoPod = unsub;
+                    else
+                      estadoPod = sub;
+                  });
+                },
+              );
+              print('stretch');
+            }),
         expandedHeight: 300,
         flexibleSpace: FlexibleSpaceBar(
           stretchModes: [
@@ -203,7 +235,7 @@ class _GenericPodcastState extends State<GenericPodcast> {
             StretchMode.fadeTitle,
           ],
           background: Container(
-            width: MediaQuery.of(context).size.width*0.2,
+            width: MediaQuery.of(context).size.width * 0.2,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -222,7 +254,7 @@ class _GenericPodcastState extends State<GenericPodcast> {
                     children: <Widget>[
                       Container(
                         padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                        child: _text(context, 'CHAPTERS', 15.0,  0, 0, 0, 1.0),
+                        child: _text(context, 'CHAPTERS', 15.0, 0, 0, 0, 1.0),
                       ),
                       _botonFollow(),
                     ],
@@ -237,34 +269,30 @@ class _GenericPodcastState extends State<GenericPodcast> {
               ],
             ),
           ),
-        )
-    );
+        ));
   }
 
-
-  _alert(context){
-    return  showDialog(
+  _alert(context) {
+    return showDialog(
         context: context,
         builder: (context) {
           Future.delayed(Duration(milliseconds: 1500), () {
             Navigator.of(context).pop(true);
           });
           return Container(
-            height: MediaQuery.of(context).size.height*0.1,
-            width: MediaQuery.of(context).size.width*0.1,
+            height: MediaQuery.of(context).size.height * 0.1,
+            width: MediaQuery.of(context).size.width * 0.1,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(50),
             ),
             child: AlertDialog(
-
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
               backgroundColor: Colors.white,
               title: Center(
-                child: Text('Playing...',
-                  style: GoogleFonts.roboto(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w800
-                  ),),
+                child: Text(
+                  'Playing...',
+                  style: GoogleFonts.roboto(color: Colors.black, fontWeight: FontWeight.w800),
+                ),
               ),
             ),
           );
@@ -281,30 +309,26 @@ class _GenericPodcastState extends State<GenericPodcast> {
           Container(
             color: Colors.white,
             child: RefreshIndicator(
-              onRefresh: () => Future.delayed(
-                  Duration(microseconds: 1), () => print('recargando')),
+              onRefresh: () => Future.delayed(Duration(microseconds: 1), () => print('recargando')),
               child: CustomScrollView(
                 controller: _scrollController,
                 physics: const BouncingScrollPhysics(),
                 slivers: <Widget>[
                   _appBar(context),
-
                   SliverList(
-                    delegate: SliverChildListDelegate(
-                      widget.podcast.chapters
-                        .map( (el) => GenericHorizontalWidget(
-                            args: [el.title, pod.canal.title, ''],
-                            imageUrl: pod.photoUrl ,
-                            onPressedFunction: (){
-                              _alert(context);
-                              var playingSingleton = PlayingSingleton();
-                              playingSingleton.setPlayList(PodcastChapterWrapper(el));
-                              print('Reproduciendo ${playingSingleton.song.title}');
-                              print('Pulsado en un new chapter');
-                        },
-                      )
-                      ).toList()
-                    ),
+                    delegate: SliverChildListDelegate(widget.podcast.chapters
+                        .map((el) => GenericHorizontalWidget(
+                              args: [el.title, pod.canal.title, ''],
+                              imageUrl: pod.photoUrl,
+                              onPressedFunction: () {
+                                _alert(context);
+                                var playingSingleton = PlayingSingleton();
+                                playingSingleton.setPlayList(PodcastChapterWrapper(el));
+                                print('Reproduciendo ${playingSingleton.song.title}');
+                                print('Pulsado en un new chapter');
+                              },
+                            ))
+                        .toList()),
                   )
                 ],
               ),

@@ -42,7 +42,12 @@ class _ArtistFoundState extends State<ArtistFound> {
 
   @override
   Widget build(BuildContext context) {
-    if (foundArtist.isNotEmpty) {
+    if (fetching && foundArtist.isEmpty){
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+    else if (foundArtist.isNotEmpty || !fetching) {
       return NotificationListener<ScrollNotification>(
           onNotification: (ScrollNotification sn) {
         if (sn is ScrollEndNotification &&

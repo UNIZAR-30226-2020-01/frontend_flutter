@@ -27,7 +27,7 @@ class UsefulMethods {
       fit: BoxFit.scaleDown,
       child: Text(
         id.toUpperCase(),
-        overflow: TextOverflow.clip,
+        overflow: TextOverflow.fade,
         maxLines: 2,
         softWrap: false,
         textAlign: TextAlign.end,

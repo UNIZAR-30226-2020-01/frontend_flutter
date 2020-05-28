@@ -1,9 +1,13 @@
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:spotiseven/audio/utils/DAO/genresDAO.dart';
 import 'package:spotiseven/audio/utils/DAO/podcastDAO.dart';
+import 'package:spotiseven/audio/utils/genres.dart';
 import 'package:spotiseven/audio/utils/podcastChapter.dart';
 import 'package:spotiseven/audio/utils/podcast.dart';
 import 'package:spotiseven/generic_components/GenericHorizontalListView.dart';
+import 'package:spotiseven/screens/genres/GenresWidget.dart';
 import 'package:spotiseven/usefullMethods.dart';
 
 class DiscoverPodcast extends StatefulWidget {
@@ -18,6 +22,13 @@ class _DiscoverPodcastState extends State<DiscoverPodcast> {
   List<Podcast> _listPodcasts;
 
   bool hayForYou;
+
+  List<Genres> genres;
+  bool hayGenres;
+
+  int offset = 0;
+  int items =4;
+
   @override
   void initState() {
     _listPodcasts = List();
@@ -25,6 +36,9 @@ class _DiscoverPodcastState extends State<DiscoverPodcast> {
       _listPodcasts = list;
       hayForYou = true;
     }));
+    GenresDAO.searchGenres(15, 0).then((List<Genres> list) => setState(() {
+        genres = list;
+      }));
     super.initState();
   }
 
@@ -80,52 +94,47 @@ class _DiscoverPodcastState extends State<DiscoverPodcast> {
         );
     }
 
-    _suggestionsBar() {
-      return Container(
-        color: Colors.black,
-        padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-        height: MediaQuery.of(context).size.width * 0.08,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            UsefulMethods.text('SUGGESTIONS', 14.0, 0.0, 255,255,255,1.0),
-          ],
+
+  _suggestionsGrid() {
+    if (genres.isEmpty) {
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    } else if (_listPodcasts.length == 0) {
+      return Center(
+        child: Container(
+          height: MediaQuery.of(context).size.height * 0.05,
+          width: MediaQuery.of(context).size.width * 0.6,
+          decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(10)),
+          child: Center(
+            child: Text(
+              'You don`t have any subscription',
+              style: GoogleFonts.roboto(
+                  fontWeight: FontWeight.w500, fontSize: 20, color: Colors.white),
+            ),
+          ),
         ),
       );
-    }
-
-
-    suggestion(title){
-      return Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            UsefulMethods.suggestionImage(context, 'https://cdn.pixabay.com/photo/2019/06/26/18/00/suggestion-4300902_1280.jpg',
-                0.4, 0.2),
-            UsefulMethods.text(title, 15.0, 0.0, 0, 0, 0, 1.0)
-          ],
-        ),
+    } else
+      return GenresWidget(
+        lista: genres,
       );
-    }
+  }
 
 
-
-    _suggestionsGrid() {
-//    List<Podcast> list = Items.devoListsPodcasts();
-      return Container(
-          child: GridView.builder(
-              itemCount: _listPodcasts.length,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-              itemBuilder: (context, index){
-                return Container(
-                  margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
-                  child: suggestion(_listPodcasts[index].title),
-                );
-              }
-
-          )
-      );
-    }
+  _suggestionsBar() {
+    return Container(
+      color: Colors.black,
+      padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+      height: MediaQuery.of(context).size.width * 0.08,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          UsefulMethods.text('GENRES', 14.0, 0.0, 255, 255, 255, 1.0),
+        ],
+      ),
+    );
+  }
 
 
 
@@ -151,7 +160,7 @@ class _DiscoverPodcastState extends State<DiscoverPodcast> {
               child: _suggestionsBar(),
             ),
             Expanded(
-              flex: 10,
+              flex: 6,
               child: _suggestionsGrid(),
             )
           ],

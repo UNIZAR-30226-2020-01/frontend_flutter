@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:spotiseven/usefullMethods.dart';
 
 class GenericCardWidget extends StatelessWidget {
-  final String imageUrl;
+   String imageUrl;
 
   final List<Widget> args;
 
@@ -12,8 +12,11 @@ class GenericCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (imageUrl == null){
+      imageUrl = "https://imgur.com/a/7c3Y8pR";
+    }
     return Card(
-      elevation: 0,
+      elevation: 3,
       margin: EdgeInsets.only(left: 35, right: 35, top: 20),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
@@ -29,15 +32,14 @@ class GenericCardWidget extends StatelessWidget {
               child: Container(
                 margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
                 decoration: BoxDecoration(
-                  border: Border.all(color: Colors.white, width: 3),
-                  borderRadius: BorderRadius.circular(13),
+                  border: Border.all(color: Colors.white, width: 1),
+                  borderRadius: BorderRadius.circular(7),
                 ),
                 child: Center(
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
                     child: Image.network(
                       imageUrl,
-//                    width: MediaQuery.of(context).size.width / 2.5,
                       fit: BoxFit.cover,
                     ),
                   ),

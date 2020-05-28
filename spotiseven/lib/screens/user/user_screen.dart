@@ -185,7 +185,7 @@ class _UserScreenState extends State<UserScreen> {
       decoration: _boxDeco(),
       margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
       child: Center(
-        child: UsefulMethods.text(s, 25.0, 2.0, 255, 255, 255, 1.0),
+        child: UsefulMethods.text(s, 20.0, 2.0, 255, 255, 255, 1.0),
       ),
     );
   }
@@ -223,6 +223,7 @@ class _UserScreenState extends State<UserScreen> {
             fit: BoxFit.contain,
             child: FlatButton(
               onPressed: () async {
+                await TokenSingleton().deleteFromSecure();
                 await TokenSingleton().deleteFromSecure();
                 Navigator.pushReplacement(context,
                     MaterialPageRoute(builder: (context) => SplashScreen()));

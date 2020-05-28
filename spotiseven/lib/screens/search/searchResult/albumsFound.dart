@@ -43,7 +43,12 @@ class _AlbumsFoundState extends State<AlbumsFound> {
 
   @override
   Widget build(BuildContext context) {
-    if (foundAlbum.isNotEmpty) {
+    if (fetching && foundAlbum.isEmpty){
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+    else if (foundAlbum.isNotEmpty || !fetching) {
       return NotificationListener<ScrollNotification>(
           onNotification: (ScrollNotification sn) {
         if (sn is ScrollEndNotification &&

@@ -46,7 +46,12 @@ class _ChaptersFoundState extends State<ChaptersFound> {
 
   @override
   Widget build(BuildContext context) {
-    if (chapsFound.isNotEmpty) {
+    if (fetching && chapsFound.isEmpty){
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+    else if (chapsFound.isNotEmpty || !fetching) {
       return NotificationListener<ScrollNotification>(
           onNotification: (ScrollNotification sn) {
         if (sn is ScrollEndNotification &&
@@ -80,7 +85,7 @@ class _ChaptersFoundState extends State<ChaptersFound> {
         ],
       ));
     }
-    else if(chapsFound == null){
+    else if(chapsFound.isEmpty){
       return UsefulMethods.noItems(context);
     }
     else {

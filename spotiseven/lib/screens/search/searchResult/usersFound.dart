@@ -26,6 +26,7 @@ class _UserFoundState extends State<UserFound> {
       founduser = list;
       loading = false;
     }));
+//    addImage();
     _scrollController = ScrollController();
     super.initState();
   }
@@ -61,8 +62,13 @@ class _UserFoundState extends State<UserFound> {
         ),
       );
     }
-    else {
+    else if(founduser.isEmpty){
       return UsefulMethods.noItems(context);
+    }
+    else {
+      return Center(
+        child: CircularProgressIndicator(),
+      );
     }
   }
 }

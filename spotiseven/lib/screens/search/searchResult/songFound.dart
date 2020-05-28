@@ -45,8 +45,13 @@ class _SongFoundState extends State<SongFound> {
 
   @override
   Widget build(BuildContext context) {
-    if (foundsong.isNotEmpty) {
-      return NotificationListener<ScrollNotification>(
+    if (fetching && foundsong.isEmpty){
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+    else if (foundsong.isNotEmpty || !fetching) {
+    return NotificationListener<ScrollNotification>(
           onNotification: (ScrollNotification sn) {
             if (sn is ScrollEndNotification &&
                 sn.metrics.pixels >= 0.7 * sn.metrics.maxScrollExtent &&
@@ -82,9 +87,11 @@ class _SongFoundState extends State<SongFound> {
               ],
             ),
           ));
-    } else if (foundsong.isEmpty) {
+    }
+    else if(foundsong.isEmpty){
       return UsefulMethods.noItems(context);
-    } else {
+    }
+    else {
       return Center(
         child: CircularProgressIndicator(),
       );

@@ -119,7 +119,6 @@ class UserDAO {
       Map<String, dynamic> map = (jsonDecode(utf8.decode(resp.bodyBytes)) as List)[0];
       List<dynamic> lista = map['followers'];
       return lista.map((dynamic d) => User.fromJSON(d)).toList();
-//      return lista['followers'].map((dynamic d) => User.fromJSON(d) ).toList();
     }
     else{
       throw Exception('Error al coger los followers de ${user.username}. Codigo de error ${resp
@@ -127,11 +126,33 @@ class UserDAO {
     }
   }
 
+  static Future<bool> amIFollowing(User user) async {
+    Response resp = await _client.get('$_url/current-user/', headers: TokenSingleton()
+        .authHeader);
+    if(resp.statusCode == 200){
+      print('RESPONE: ${resp.body}');
+      Map<String, dynamic> map = (jsonDecode(utf8.decode(resp.bodyBytes)) as List)[0];
+      List<dynamic> lista = map['following'];
+      if (lista.contains(user))
+        return true;
+      else
+        return false;
+    }
+    else{
+      throw Exception('Error al coger los followers de ${user.username}. Codigo de error ${resp
+          .statusCode}');
+    }
+  }
+
+
+
   // Follow User
   static Future<void> followUser(User user) async {
+    print('following ${user.url}follow/');
     Response resp = await _client.get('${user.url}follow/', headers: TokenSingleton().authHeader);
     if(resp.statusCode == 200){
       // Ha ido bien -> Le estamos siguiendo
+      print('user ${user.username} followd');
     }else{
       throw Exception('Error al seguir al usuario ${user.username}. Codigo de error ${resp.statusCode}');
     }
@@ -139,9 +160,12 @@ class UserDAO {
 
   // Unfollow User
   static Future<void> unfollowUser(User user) async {
-    Response resp = await _client.get('${user.url}unfollow/', headers: TokenSingleton().authHeader);
+    print('unfollowing ${user.url}unfollow');
+    Response resp = await _client.get('${user.url}unfollow/', headers: TokenSingleton()
+        .authHeader);
     if(resp.statusCode == 200){
       // Ha ido bien -> Le hemos dejado de seguir
+      print('user ${user.username} unfollowd');
     }else{
       throw Exception('Error al dejar de seguir al usuario ${user.username}. Codigo de error ${resp.statusCode}');
     }
@@ -188,6 +212,19 @@ class UserDAO {
     }
   }
 
+  static Future<String> userImg(String url) async {
+    Response resp = await _client.get(url);
+    if (resp.statusCode == 200) {
+      // Ha ido bien, devolvemos las listas
+      dynamic d = jsonDecode(utf8.decode(resp.bodyBytes));
+      return User.img(d);
+    } else {
+      throw Exception(
+          'La busqueda de user con img ha ido mal. Codigo de error ${resp.statusCode}');
+    }
+  }
+
+
   static Future<User> putImage(File image) async {
 
     print('${image.path}');
@@ -211,7 +248,7 @@ class UserDAO {
       print('El update de foto ha ido bien');
       print('Respuesta ==> ${response.data}');
       print('${response.data.runtimeType}');
-      return User.imageJSON(response.data);
+      return User.userJSON(response.data);
     } else {
       print('${response.data}');
       throw Exception(
@@ -229,7 +266,7 @@ class UserDAO {
       print('Respuesta ==> ${response.body}');
       print('${response.body.runtimeType}');
       dynamic d = jsonDecode(utf8.decode(response.bodyBytes));
-      return User.imageJSON(d);
+      return User.userJSON(d);
     } else {
       print('${response.body}');
       throw Exception(

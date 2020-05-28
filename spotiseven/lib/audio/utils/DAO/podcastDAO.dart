@@ -37,7 +37,7 @@ class PodcastDAO{
     else {
       List<dynamic> dyna = jsonDecode(utf8.decode(response.bodyBytes));
       print('dynaL: $dyna');
-      return dyna.map((d) => Podcast.fromTrending(d)).toList();
+      return dyna.map((d) => Podcast.popularJSON(d)).toList();
     }
   }
 
@@ -80,16 +80,6 @@ class PodcastDAO{
   }
 
   static Future<Podcast> getTrending(String id) async {
-/*    print('getting trending podcast info');
-    dynamic response =
-    await _client.get('$_url/podcast/$id', headers: TokenSingleton().authHeader).then((Response
-    resp) {
-      if (resp.statusCode == 200) {
-        return jsonDecode(utf8.decode(resp.bodyBytes));
-      } else {
-        throw Exception('No tienes permisos para acceder a este recurso ${resp.statusCode}');
-      }
-    });*/
     Response response = await _client.get('$_url/podcast/$id',
         headers: TokenSingleton().authHeader);
     print(response.body);

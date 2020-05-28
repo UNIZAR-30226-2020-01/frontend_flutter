@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:spotiseven/usefullMethods.dart';
 
 class GenericHorizontalWidget extends StatelessWidget {
   final String imageUrl;
@@ -23,12 +24,15 @@ class GenericHorizontalWidget extends StatelessWidget {
 
   _text(context, id) {
     return FittedBox(
-      fit: BoxFit.fitWidth,
+      fit: BoxFit.fill,
       child: Text(
         id.toUpperCase(),
-        textAlign: TextAlign.end,
+        overflow: TextOverflow.ellipsis,
+        maxLines: 3,
+//        textAlign: TextAlign.end,
         style: GoogleFonts.roboto(
           fontWeight: FontWeight.w500,
+          fontSize: 100,
           letterSpacing: 8,
           wordSpacing: 2,
           color: Colors.white,
@@ -36,6 +40,8 @@ class GenericHorizontalWidget extends StatelessWidget {
       ),
     );
   }
+
+
 
   _elementoEvento(context) {
 
@@ -67,7 +73,9 @@ class GenericHorizontalWidget extends StatelessWidget {
                 children: <Widget>[
                   Expanded(
                     flex: 1,
-                    child: _text(context, args[0]),
+                    child: Center(
+                      child: _text(context, args[0]),
+                    )
                   ),
                   Expanded(
                     flex: 1,
@@ -80,7 +88,9 @@ class GenericHorizontalWidget extends StatelessWidget {
                   ),
                   Expanded(
                     flex: 1,
-                    child:_text(context, args[1]),
+                      child: Center(
+                        child: _text(context, args[1]),
+                      )
                   ),
                 ],
               ),

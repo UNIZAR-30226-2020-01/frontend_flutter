@@ -39,7 +39,12 @@ class _PlaylistFoundState extends State<PlaylistFound> {
 
   @override
   Widget build(BuildContext context) {
-    if (foundlp.isNotEmpty) {
+    if (fetching && foundlp.isEmpty){
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+    else if (foundlp.isNotEmpty || !fetching) {
       return NotificationListener<ScrollNotification>(
           onNotification: (ScrollNotification sn) {
             if (sn is ScrollEndNotification &&
@@ -73,9 +78,11 @@ class _PlaylistFoundState extends State<PlaylistFound> {
               ),
             ],
           ));
-    } else if (foundlp.isEmpty) {
+    }
+    else if(foundlp.isEmpty){
       return UsefulMethods.noItems(context);
-    } else if (!fetching && foundlp == null){
+    }
+    else {
       return Center(
         child: CircularProgressIndicator(),
       );

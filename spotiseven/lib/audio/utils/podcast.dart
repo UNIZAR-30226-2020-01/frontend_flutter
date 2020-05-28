@@ -43,6 +43,17 @@ class Podcast {
     );
   }
 
+  static Podcast fromGenre(Map<String, Object> json) {
+    return Podcast(
+        title: json['title'],
+        photoUrl: json['image'],
+        canal: CanalPodcast(title: (json['channel'] as Map )['name']),
+        numChapters: json['number_episodes'],
+        url: json['url'],
+        id: json['id_listenotes']
+    );
+  }
+
 
   static Podcast popularJSON(Map<String, Object> json) {
     Podcast p = Podcast(
@@ -81,10 +92,9 @@ class Podcast {
   }
 
   static Podcast fromTrending(Map<String, Object> json) {
-    CanalPodcast canal = CanalPodcast(title: json['publisher']);
     Podcast p = Podcast(
       title: json['title'],
-      canal: canal,
+      canal: CanalPodcast(title: json['publisher']),
       photoUrl: json['image'],
       numChapters: json['total_episodes'],
       id: json['id'],

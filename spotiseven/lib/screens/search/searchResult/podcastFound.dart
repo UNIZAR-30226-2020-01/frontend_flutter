@@ -14,7 +14,7 @@ class PodcastFound extends StatefulWidget {
 
 class _PodcastFoundState extends State<PodcastFound> {
   String get word => widget.word;
-  List<Podcast> pods;
+  List<Podcast> pods = List();
 
   int items = 4;
   int offset = 0;
@@ -23,7 +23,6 @@ class _PodcastFoundState extends State<PodcastFound> {
 
   ScrollController _scrollController;
 
-  bool loading = true;
   @override
   void initState() {
     PodcastDAO.searchPod(18,0,word).then((List<Podcast> list) => setState(() {
@@ -42,7 +41,12 @@ class _PodcastFoundState extends State<PodcastFound> {
 
   @override
   Widget build(BuildContext context) {
-    if (pods.isNotEmpty) {
+    if (fetching && pods.isEmpty){
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+    else if (pods.isNotEmpty || !fetching) {
       return NotificationListener<ScrollNotification>(
           onNotification: (ScrollNotification sn) {
             if (sn is ScrollEndNotification &&
@@ -76,13 +80,12 @@ class _PodcastFoundState extends State<PodcastFound> {
             ],
           ));
     }
-    else if(pods.isEmpty){
+    else if (pods.isEmpty)
       return UsefulMethods.noItems(context);
-    }
-    else if (fetching){
+    /*else {
       return Center(
         child: CircularProgressIndicator(),
       );
-    }
+    }*/
   }
 }
