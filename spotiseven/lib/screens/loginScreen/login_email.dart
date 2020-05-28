@@ -99,7 +99,7 @@ class _LoginMailState extends State<LoginEmail> {
                           _error = true;
                         });
                       } else {
-                        // No ha habido error. Entramos
+                        CircularProgressIndicator();
 //                        Navigator.popAndPushNamed(context, '/home');
                         Navigator.pushReplacementNamed(context, '/home');
                       }

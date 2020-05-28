@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:spotiseven/audio/utils/DAO/playlistDAO.dart';
 import 'package:spotiseven/audio/utils/playlist.dart';
 import 'package:spotiseven/screens/home/details/playlist_detail.dart';
+import 'package:spotiseven/usefullMethods.dart';
 import 'package:spotiseven/user/userDAO.dart';
 
 class FollowingScreen extends StatefulWidget {
@@ -10,25 +12,27 @@ class FollowingScreen extends StatefulWidget {
 }
 
 class _FollowingScreenState extends State<FollowingScreen> {
-
   bool _initialized;
 
   List<Playlist> _followingUserPlaylist;
 
   ScrollController _scrollController;
 
+  int items = 4;
+  int offset = 0;
+
+  bool fetching = false;
 
   @override
   void initState() {
     _initialized = false;
     _followingUserPlaylist = List();
     _scrollController = ScrollController();
-    UserDAO.followingPlaylists().then((List<Playlist> lp) => setState(() {
-      setState(() {
-        _initialized = true;
-        _followingUserPlaylist = lp;
-      });
-    }));
+    UserDAO.followingPlaylists(8, 0).then((List<Playlist> lp) => setState(() {
+          _initialized = true;
+          _followingUserPlaylist = lp;
+          offset = offset + 8;
+        }));
     super.initState();
   }
 
@@ -40,48 +44,45 @@ class _FollowingScreenState extends State<FollowingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if(_followingUserPlaylist.isNotEmpty){
-      return CustomScrollView(
-        controller: _scrollController,
-        slivers: <Widget>[
-          SliverGrid.count(
-            crossAxisCount: 2,
-            children: _followingUserPlaylist
-                .map((el) => PlaylistCardWidget(
-              playlist: el,
-            ))
-                .toList(),
-          ),
-        ],
-      );
-    }else if(_initialized) {
-      // La lista esta inicializada pero está vacía
-      return Center(child: Text('No tienes playlist de los usuarios a los que sigues'),);
-    } else{
+    if (_followingUserPlaylist.isNotEmpty) {
+      return NotificationListener<ScrollNotification>(
+          onNotification: (ScrollNotification sn) {
+            if (sn is ScrollEndNotification &&
+                sn.metrics.pixels >= 0.7 * sn.metrics.maxScrollExtent &&
+                !fetching) {
+              fetching = true;
+              UsefulMethods.snack(context);
+              UserDAO.followingPlaylists(items, offset).then((List<Playlist> list) {
+                if (list.length > 0) {
+                  setState(() {
+                    print('fetching more items');
+                    _followingUserPlaylist.addAll(list);
+                    offset = offset + items;
+                    fetching = false;
+                  });
+                }
+              });
+            }
+            return true;
+          },
+          child: CustomScrollView(
+            controller: _scrollController,
+            slivers: <Widget>[
+              SliverGrid.count(
+                crossAxisCount: 2,
+                children: _followingUserPlaylist
+                    .map((el) => PlaylistCardWidget(
+                          playlist: el,
+                        ))
+                    .toList(),
+              ),
+            ],
+          ));
+    } else if (_followingUserPlaylist == null) {
+      return UsefulMethods.noItems(context);
+    } else {
       return Center(
-        child: Center(
-            child: Container(
-              height: MediaQuery.of(context).size.height*.05,
-              width: MediaQuery.of(context).size.width*0.5,
-              decoration: BoxDecoration(
-                  color: Colors.black,
-                  borderRadius: BorderRadius.circular(10)
-              ),
-              child: Center(
-                child: FittedBox(
-                  fit: BoxFit.fitHeight,
-                  child: Text(
-                    'You don`t follow users',
-                    style: GoogleFonts.roboto(
-                      fontSize: 25,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ),
-            )
-        ),
+        child: CircularProgressIndicator(),
       );
     }
   }

@@ -50,7 +50,10 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
     // Ante el cambio del estado del reproductor central
     _subscriptionState = subscribeStateEvents();
     _subscriptionSong =
-        _player.getStreamedSong().listen((s) => setState(() {}));
+        _player.getStreamedSong().listen((s) {
+          if (_firstTime) _firstTime=false;
+          setState(() {});
+        });
     // Buscamos en el remoto lo que se estuviera reproduciendo
     _firstTime = false;
     UserDAO.retrieveSongWithTimestamp().then((Map<String, Object> map) {
@@ -114,12 +117,6 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
           BottomNavigationBarItem(icon: Icon(Icons.home), title: Text('')),
           // TODO: Change 'hearing' icon to podcast
           BottomNavigationBarItem(icon: Icon(Icons.cast), title: Text('')),
-          /*BottomNavigationBarItem(
-              icon: Transform.scale(
-                  scale: 0.2,
-                  child: Image.asset("assets/images/pod.png")),
-            title: Text(''),
-          ),*/
           BottomNavigationBarItem(icon: Icon(Icons.search), title: Text('')),
           BottomNavigationBarItem(icon: Icon(Icons.person), title: Text('')),
         ],
@@ -144,6 +141,7 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
                 setState(() {
                   _showReprBar = true;
                 });
+//                Navigator.pushNamed(context, '/playing');
               },
               // TODO: Change this color
 //              backgroundColor: Colors.black,
@@ -192,8 +190,8 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
         color: Colors.black,
         border: Border(
           bottom: BorderSide(
-            color: Colors.white,
-            width: 3.0,
+            color: Colors.yellow,
+            width: 1.0,
           ),
         )
       ),
@@ -210,7 +208,8 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
           _subscriptionState.cancel();
           _subscriptionState = subscribeStateEvents();
           // TODO: Recargar el estado a la vuelta para cambios.
-          setState(() {});
+          setState(() {
+          });
         },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -223,23 +222,30 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
                 backgroundImage: NetworkImage(_player.song.photoUrl),
               ),
             ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  '${_player.song.title}',
-                  style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.bold),
-                ),
-//              SizedBox(height: 10),
-                Text(
-                  '${_player.song.album.artista.name}',
-                  style: TextStyle(
-                    color: Colors.white,
+            Container(
+              margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                    width: MediaQuery.of(context).size.width*0.5,
+                    child: Text(
+                      '${_player.song.title}',
+                      overflow: TextOverflow.fade,
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
                   ),
-                ),
-              ],
+//              SizedBox(height: 10),
+                  Text(
+                    '${_player.song.album.artista.name}',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
             ),
             Align(
               alignment: Alignment.center,

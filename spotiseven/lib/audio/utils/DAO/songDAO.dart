@@ -46,28 +46,80 @@ class SongDAO {
   }
 
   /// Busca el parámetro en: título o nombre del artista
-  static Future<List<Song>> searchSong(String query) async {
-    Response resp = await _client.get('$_url/songs/?search=$query');
-    if(resp.statusCode == 200) {
-      // Ha ido bien, devolvemos las listas
-      List<dynamic> lista = jsonDecode(utf8.decode(resp.bodyBytes));
-      List<Song> songs = lista.map((dynamic d) => (Song.fromJSON(d) as Song )).toList();
-      return songs;
-    }else{
-      throw Exception('La busqueda de Song ha ido mal. Codigo de error ${resp.statusCode}');
+
+  static Future<List<Song>> searchSong(int limit, int offset, String query) async {
+      print('searching podChaps $query');
+      Response resp = await _client.get('$_url/songs/?search=$query&limit=$limit&offset=$offset'
+          '=$offset', headers: TokenSingleton().authHeader);
+
+      if(resp.statusCode == 200) {
+        Map<String, dynamic> map = (jsonDecode(utf8.decode(resp.bodyBytes)) as Map);
+        List<dynamic> lista = map['results'];
+        if (map['next'] == null && lista.isEmpty){
+          //=======================================
+          // DEVOLVEMOS NULL PQ SE HAN ACABADO LOS RECURSOS DE LA PAGINACIÓN
+          // SOMOS UNOS GUARRROS
+          //=======================================
+          return [];
+        }
+        else return lista.map((dynamic d) => Song.fromJSON(d)).toList();
+      }
+      else {
+        throw Exception('La busqueda de Artist ha ido mal. Codigo de error ${resp.statusCode}');
+      }
+    }
+
+
+
+  static Future<List<Song>> mostPlayed(int limit, int offset) async {
+    print('ilimit: $limit & offset: $offset');
+    Response response = await _client.get
+      ('$_url/songs/?ordering=-times_played&limit=$limit&offset=$offset',
+        headers: TokenSingleton().authHeader);
+    if (response.statusCode == 200) {
+      print('RESPONSE: ${response.body}');
+      Map<String, dynamic> map = (jsonDecode(utf8.decode(response.bodyBytes)) as Map);
+      List<dynamic> lista = map['results'];
+      print(lista);
+      if (map['next'] == null && lista.isEmpty){
+        //=======================================
+        // DEVOLVEMOS NULL PQ SE HAN ACABADO LOS RECURSOS DE LA PAGINACIÓN
+        // SOMOS UNOS GUARRROS
+        //=======================================
+        return [];
+      }
+      else return lista.map((dynamic d) => Song.fromJSON(d)).toList();
+    }
+    else {
+      throw Exception(
+          'Error al buscar most played songs Código: ${response.statusCode}'
+      );
     }
   }
 
-  static Future<List<Song>> mostPlayed() async {
-    Response resp = await _client.get('$_url/songs/?ordering=-times_played', headers: TokenSingleton().authHeader);
-    if(resp.statusCode == 200) {
-      // Ha ido bien, devolvemos las listas
-      print('Most played: '+ resp.body);
-      List<dynamic> lista = jsonDecode(utf8.decode(resp.bodyBytes));
-      List<Song> songs = lista.map((dynamic d) => (Song.fromJSON(d) as Song )).toList();
-      return songs;
-    }else{
-      throw Exception('La busqueda de Song ha ido mal. Codigo de error ${resp.statusCode}');
+  static Future<List<Song>> mostLiked(int limit, int offset) async {
+    print('ilimit: $limit & offset: $offset');
+    Response response = await _client.get
+      ('$_url/songs/?ordering=-times_faved&limit=$limit&offset=$offset',
+        headers: TokenSingleton().authHeader);
+    if (response.statusCode == 200) {
+      print('RESPONSE: ${response.body}');
+      Map<String, dynamic> map = (jsonDecode(utf8.decode(response.bodyBytes)) as Map);
+      List<dynamic> lista = map['results'];
+      print(lista);
+      if (map['next'] == null && lista.isEmpty){
+        //=======================================
+        // DEVOLVEMOS NULL PQ SE HAN ACABADO LOS RECURSOS DE LA PAGINACIÓN
+        // SOMOS UNOS GUARRROS
+        //=======================================
+        return [];
+      }
+      else return lista.map((dynamic d) => Song.fromJSON(d)).toList();
+    }
+    else {
+      throw Exception(
+          'Error al buscar fav songs Código: ${response.statusCode}'
+      );
     }
   }
 }

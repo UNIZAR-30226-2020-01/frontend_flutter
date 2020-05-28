@@ -29,6 +29,12 @@ class _UserScreenFoundState extends State<UserScreenFound> {
   bool hayFollowing = false;
 
 
+  static const String fo = 'FOLLOW';
+  static const String unfo = 'UNFOLLOW';
+  String estado = "LOADING...";
+  User get podcast => widget.user;
+  bool sigue = false;
+
 
   void checkFollowing(){
     if (following.length > 0){
@@ -50,7 +56,16 @@ class _UserScreenFoundState extends State<UserScreenFound> {
     if (hayFollowers){
         return GenericElementList(lista: followers);
     }
-    else return Text('no hay followers');
+    else return
+    Text(
+      'You don`t have followers',
+      overflow: TextOverflow.clip,
+      style: GoogleFonts.roboto(
+          fontSize: 30,
+          fontWeight: FontWeight.w400,
+          color: Colors.white
+      ),
+    );
 
   }
 
@@ -62,11 +77,28 @@ class _UserScreenFoundState extends State<UserScreenFound> {
         print('get Following: hay followeers');
         return GenericElementList(lista: following);
     }
-    else return Text('no hay following');
+    else return  Text(
+      'You don`t follow users',
+      overflow: TextOverflow.clip,
+      style: GoogleFonts.roboto(
+          fontSize: 30,
+          fontWeight: FontWeight.w400,
+          color: Colors.white
+      ),
+    );;
   }
 
   @override
   void initState(){
+    UserDAO.amIFollowing(user).then((bool x) {
+      setState(() {
+        sigue = x;
+        if (sigue)
+          estado = unfo;
+        else
+          estado = fo;
+      });
+    });
     super.initState();
     _fetchData();
   }
@@ -82,7 +114,6 @@ class _UserScreenFoundState extends State<UserScreenFound> {
   }
 
   _bar(String s) {
-
     return Container(
       color: Colors.black,
       margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -129,14 +160,17 @@ class _UserScreenFoundState extends State<UserScreenFound> {
                       color: Colors.black,
                       borderRadius: BorderRadius.circular(10)
                     ),
-                    child: Center(
-                      child: FittedBox(
-                        child: Container(
-                          padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                    child: FittedBox(
+                      fit: BoxFit.contain,
+                      child: Container(
+                        width: MediaQuery.of(context).size.width*0.7,
+                        padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
+                        child: Center(
                           child: Text(
-                            'Username: '+ user.username,
+                            user.username,
+                            overflow: TextOverflow.clip,
                             style: GoogleFonts.roboto(
-                              fontSize: 35,
+                              fontSize: 30,
                               fontWeight: FontWeight.w400,
                               color: Colors.white
                             ),
@@ -151,22 +185,39 @@ class _UserScreenFoundState extends State<UserScreenFound> {
                     children: <Widget>[
                       FlatButton(
                         onPressed: (){
-                          UserDAO.followUser(user);
-                          print('User has been followed');
                           setState(() {
-
+                            if (sigue){
+                              UserDAO.unfollowUser(user);
+                              sigue = !sigue;
+                              if (sigue)
+                                estado = unfo;
+                              else
+                                estado = fo;
+                              _fetchData();
+                            }
+                            else {
+                              UserDAO.followUser(user);
+                              sigue = !sigue;
+                              if (sigue)
+                                estado = unfo;
+                              else
+                                estado = fo;
+                              _fetchData();
+                            }
                           });
+                          print ('boton pulsado');
                         },
                         child: Container(
                           width: MediaQuery.of(context).size.width*0.3,
-                          height: MediaQuery.of(context).size.height*0.04,
+                          height: MediaQuery.of(context).size.height*0.06,
+                          padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                           decoration: BoxDecoration(
                             color: Colors.black,
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Center(
                             child: Text(
-                              'FOLLOW',
+                              estado,
                               style: GoogleFonts.roboto(
                                 color: Colors.white,
                                 fontSize: 25,
@@ -176,33 +227,6 @@ class _UserScreenFoundState extends State<UserScreenFound> {
                           ),
                         ),
                       ),
-                      FlatButton(
-                        onPressed: (){
-                          UserDAO.unfollowUser(user);
-                          print('User has been unfollowed');
-                          setState(() {
-                            
-                          });
-                        },
-                        child: Container(
-                          width: MediaQuery.of(context).size.width*0.3,
-                          height: MediaQuery.of(context).size.height*0.04,
-                          decoration: BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Center(
-                            child: Text(
-                              'UNFOLLOW',
-                              style: GoogleFonts.roboto(
-                                color: Colors.white,
-                                fontSize: 25,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          ),
-                        ),
-                      )
                     ],
                   ),
                 ],

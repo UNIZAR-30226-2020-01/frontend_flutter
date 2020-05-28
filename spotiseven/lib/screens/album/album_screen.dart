@@ -51,6 +51,26 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.black,
+        onPressed: (){
+          PlayingSingleton()
+            ..setPlayList(Playlist(
+                title: widget.album.titulo,
+                photoUrl: widget.album.photoUrl,
+                playlist: widget.album.list))
+            ..randomize()
+            ..play(PlayingSingleton().song);
+        },
+        child: Container(
+          color: Colors.black,
+            child: UsefulMethods.text('PLAY', 25.0, 0.0, 255, 255, 255, 1.0)
+        ),
+      ),
+      appBar: AppBar(
+
+        title: UsefulMethods.text(widget.album.titulo, 20.0, 0.0, 0, 0, 0, 1.0),
+      ),
       body: SafeArea(
         child: RefreshIndicator(
           onRefresh: () => widget.album.fetchRemote(),
@@ -108,25 +128,18 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
                           : [
                               Padding(
                                 padding: const EdgeInsets.symmetric(
-                                    horizontal: 150, vertical: 50),
+                                    horizontal: 200, vertical: 50),
                                 child: AspectRatio(
                                     aspectRatio: 1,
                                     child: CircularProgressIndicator()),
                               )
                             ]),
-//                      delegate: SliverChildBuilderDelegate(
-//                        (BuildContext context, int index) {
-//                          return buildSongPreview_v2(
-//                              widget.album.list[index], widget.album, context);
-//                        },
-//                        childCount: widget.album.list.length,
-//                      ),
                     ),
                   ],
                 ),
               ),
               _fabReproduction(),
-              _name(),
+//              _name(),
             ],
           ),
         ),
@@ -135,7 +148,7 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
   }
 
   _name() {
-    final double defaultTopMargin = 271 - 0.0;
+    final double defaultTopMargin = 271 - 14.0;
     double top = defaultTopMargin;
     return Positioned(
       top: top,
@@ -153,7 +166,7 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
 
   Widget _fabReproduction() {
     //starting fab position
-    final double defaultTopMargin = 270 - 4.0;
+    final double defaultTopMargin = 271 - 20.0;
     //pixels from top where scaling should start
     final double scaleStart = 96.0;
     //pixels from top where scaling should end
@@ -185,19 +198,8 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
-            /*Container(
-              margin: EdgeInsets.fromLTRB(0, 0, 90, 0),
-              padding: EdgeInsets.fromLTRB(2, 2, 2, 2),
-              height: MediaQuery.of(context).size.width*0.08,
-              decoration: BoxDecoration(
-                color:  Colors.white,
-                borderRadius: BorderRadius.circular(10)
-              ),
-              child: UsefulMethods.text(widget.album.titulo, 20.0, 0.0, 0, 0, 0, 1.0)
-            ),*/
-            RaisedButton(
+            /*RaisedButton(
               onPressed: () => PlayingSingleton()
-                // TODO: Integrar la reproduccion de un album como playlist (poner como lista de canciones las del album)
                 ..setPlayList(Playlist(
                     title: widget.album.titulo,
                     photoUrl: widget.album.photoUrl,
@@ -209,7 +211,7 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
               color: Colors.white,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10))),
-            ),
+            ),*/
           ],
         ),
       ),
@@ -338,6 +340,7 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
                                       return AlertDialog(
                                         title: Text('Select Playlist to add'),
                                         elevation: 0,
+                                        scrollable: true,
                                         actions: [
                                               FlatButton(
                                                 onPressed: () {
@@ -366,8 +369,13 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
                                           builder: (context) =>
                                               CreatePlaylistScreen()));
                                   if (nueva != null) {
-                                    // TODO: Cambiar esto para que nueva tenga url
                                     PlaylistDAO.addSongToPlaylist(nueva, s);
+                                    PlaylistDAO.getAllPlaylists().then((List<Playlist> playlist) {
+                                      print('listas: ${playlist.length}');
+                                      setState(() {
+                                        _playlists = playlist;
+                                      });
+                                    });
                                   }
                                 }
                                 break;

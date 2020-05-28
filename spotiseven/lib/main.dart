@@ -13,7 +13,7 @@ import 'package:spotiseven/screens/splashScreen/splash_screen.dart';
 import 'package:spotiseven/screens/search/searchBar.dart';
 import 'package:spotiseven/screens/search/searchResult/albumsFound.dart';
 import 'package:spotiseven/screens/search/searchResult/artistFound.dart';
-import 'package:spotiseven/screens/search/searchResult/podcastChapters.dart';
+import 'package:spotiseven/screens/search/searchResult/podcastChaptersFound.dart';
 import 'package:spotiseven/screens/search/searchResult/podcastFound.dart';
 import 'package:spotiseven/screens/search/searchResult/songFound.dart';
 import 'package:spotiseven/screens/search/searchResult/playlistFound.dart';

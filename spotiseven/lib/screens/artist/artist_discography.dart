@@ -139,7 +139,7 @@ class _ArtistDiscographyState extends State<ArtistDiscography> {
           ),
           Container(
             width: MediaQuery.of(context).size.width * 0.25,
-            child: _text(context, '${widget.artista.numAlbums} Albums', 15.0, 0,
+            child: _text(context, '${widget.artista.numAlbums} Albums', 40.0, 0,
                 0, 0, 1.0),
           ),
           SizedBox(
@@ -147,36 +147,12 @@ class _ArtistDiscographyState extends State<ArtistDiscography> {
           ),
           Container(
             width: MediaQuery.of(context).size.width * 0.25,
-            child: _text(context, '${widget.artista.totalTracks} Tracks', 15.0,
+            child: _text(context, '${widget.artista.totalTracks} Tracks', 40.0,
                 0, 0, 0, 1.0),
           ),
-          _text(context, '${widget.artista.name}', 25.0, 0, 0, 0, 1.0),
-          /*IconButton(
-            onPressed: () {
-              print('presionado boton info del artista');
-            },
-            icon: Icon(
-              Icons.info,
-              color: Colors.black,
-            ),
-            color: Colors.black,
-          ),*/
+//          _text(context, '${widget.artista.name}', 25.0, 0, 0, 0, 1.0),
         ],
       ),
-    );
-  }
-
-  _botonFollow() {
-    return FlatButton(
-      child: Container(
-        height: 30,
-        margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
-        padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
-//        margin: EdgeInsets.all(),
-        decoration: _borderBlack(),
-        child: _text(context, '+FOLLOW', 20.0, 255, 255, 255, 1.0),
-      ),
-      onPressed: () => Navigator.of(context).pop(),
     );
   }
 
@@ -222,7 +198,8 @@ class _ArtistDiscographyState extends State<ArtistDiscography> {
                         padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
                         child: _text(context, 'ALBUMS', 15.0, 0, 0, 0, 1.0),
                       ),
-                      _botonFollow(),
+//                      _botonFollow(),
+                      SizedBox(height: 40,)
                     ],
                   ),
                 ),

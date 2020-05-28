@@ -33,7 +33,7 @@ class _LoginState extends State<Login> {
         print('Login con google');
         if(await TokenSingleton().getTokenFromGoogle()){
           // Se ha logueado bien
-          Navigator.pushNamed(context, '/home');
+          Navigator.pushReplacementNamed(context, '/home');
         }
       },
       child: Container(
@@ -50,14 +50,6 @@ class _LoginState extends State<Login> {
                     )
                 ),
               ),
-//                        SizedBox(width: 10,),
-              /*Container(
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: AssetImage('assets/images/google.png'),
-                            ),
-                          ),
-                        ),*/
               Expanded(
                 flex: 12,
                 child: Container(
@@ -88,7 +80,7 @@ class _LoginState extends State<Login> {
       color: Color.fromRGBO(255, 255, 255, 0.6),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(70)),
       onPressed: () async {
-        Navigator.pushReplacementNamed(context, '/loginMail');
+        Navigator.pushNamed(context, '/loginMail');
       },
       child: Row(
         children: <Widget>[

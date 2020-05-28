@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:spotiseven/screens/home/albums.dart';
 import 'package:spotiseven/screens/home/artist_home.dart';
 import 'package:spotiseven/screens/home/following.dart';
-import 'package:spotiseven/screens/home/most_kwon.dart';
+import 'package:spotiseven/screens/home/most_liked.dart';
+import 'package:spotiseven/screens/home/most_played.dart';
 import 'package:spotiseven/screens/home/your_playlists.dart';
 
 class HomeScreenWrapper extends StatefulWidget {
@@ -23,6 +24,7 @@ class _HomeScreenWrapperState extends State<HomeScreenWrapper>
     ArtistScreen(),
     FollowingScreen(),
     MostPlayed(),
+    MostLiked(),
   ];
 
   @override
@@ -41,7 +43,6 @@ class _HomeScreenWrapperState extends State<HomeScreenWrapper>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // TODO: Change this color
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Stack(
@@ -64,14 +65,12 @@ class _HomeScreenWrapperState extends State<HomeScreenWrapper>
                       ),*/
                       controller: _tabController,
                       isScrollable: true,
-                      // TODO: Use <indicator> property to change indicator
                       indicatorPadding:
                           EdgeInsets.symmetric(horizontal: 30, vertical: 5),
 //                  indicatorColor: Colors.yellow[800],
                       indicatorColor: Colors.white,
                       indicatorWeight: 7,
                       indicatorSize: TabBarIndicatorSize.tab,
-                      // TODO: change labelStyle -> By the moment changed in tab's text
                       labelStyle: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
@@ -81,7 +80,8 @@ class _HomeScreenWrapperState extends State<HomeScreenWrapper>
                         buildTextTab('Albums'),
                         buildTextTab('Artists'),
                         buildTextTab('Following'),
-                        buildTextTab('Most Played')
+                        buildTextTab('Most Played'),
+                        buildTextTab('Most Liked')
                       ],
                     ),
                   ),
@@ -89,9 +89,8 @@ class _HomeScreenWrapperState extends State<HomeScreenWrapper>
               ),
             ),
             // Contenido principal de la pantalla
-            // TODO: Cambiar a ListView (Hacer en otro widget)
             Container(
-              margin: EdgeInsets.only(top: 60),
+              margin: EdgeInsets.only(top: 60, bottom: 20),
               child: Center(
                 child: TabBarView(
                   controller: _tabController,

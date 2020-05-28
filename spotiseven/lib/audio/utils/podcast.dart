@@ -14,6 +14,7 @@ class Podcast {
   //Descripción
   String photoUrl;
   String url;
+  String id ;
 
   int numChapters;
 
@@ -24,7 +25,7 @@ class Podcast {
     @required this.canal,
     @required this.photoUrl,
     @required this.numChapters,
-
+    this.id,
     @required this.chapters,
     @required this.url,
     }) {
@@ -36,22 +37,31 @@ class Podcast {
       title: json['title'],
       canal: json['canal'],
       photoUrl: json['image'],
-      numChapters: null,
-      //podcast: (json['podcast']as Map)['title']
+      numChapters: json['number_episodes'],
+      url: json['url'],
+      id: json['id_listenotes']
+    );
+  }
+
+  static Podcast fromGenre(Map<String, Object> json) {
+    return Podcast(
+        title: json['title'],
+        photoUrl: json['image'],
+        canal: CanalPodcast(title: (json['channel'] as Map )['name']),
+        numChapters: json['number_episodes'],
+        url: json['url'],
+        id: json['id_listenotes']
     );
   }
 
 
   static Podcast popularJSON(Map<String, Object> json) {
     Podcast p = Podcast(
+        id: json['id'],
         title: json['title'],
         photoUrl: json['image'],
         numChapters: json['total_episodes'],
     );
-    if (p.title.length > 25){
-      var str = p.title;
-      p.title = str.substring(0,25) + '...';
-    }
     return p;
   }
 
@@ -59,6 +69,7 @@ class Podcast {
   static Podcast fromJSONListed(Map<String, Object> json) {
     Podcast p = Podcast(
         title: json['title'],
+        id: json['id_listenotes'],
         canal: CanalPodcast.fromJSON(json['channel']),
         photoUrl: json['image'],
         numChapters: json['number_episodes'],
@@ -70,6 +81,7 @@ class Podcast {
   static Podcast fromJSONDetailed(Map<String, Object> json) {
     Podcast p = Podcast(
         title: json['title'],
+        id: json['id_listenotes'],
         canal: CanalPodcast.fromJSON(json['channel']),
         photoUrl: json['image'],
         numChapters: json['number_episodes'],
@@ -78,4 +90,41 @@ class Podcast {
     p.chapters = (json['episodes'] as List).map((j) => (PodcastChapter.fromJSONwithPodcast(j, p) as PodcastChapter)).toList();
     return p;
   }
+
+  static Podcast fromTrending(Map<String, Object> json) {
+    Podcast p = Podcast(
+      title: json['title'],
+      canal: CanalPodcast(title: json['publisher']),
+      photoUrl: json['image'],
+      numChapters: json['total_episodes'],
+      id: json['id'],
+      url: "https://s7-rest.francecentral.cloudapp.azure.com/podcast/${json['id']}"
+    );
+    p.chapters = (json['episodes'] as List).map((j) => (PodcastChapter.trendingWithPodcast(j, p) as PodcastChapter)
+    ).toList();
+    print('AJJASDJADSJADS ${p.chapters.first.title}');
+    return p;
+  }
+
+  static String getUrl(Map<String, Object> json) {
+    return json['url'];
+  }
+
+
+  static Podcast fromSearch(Map<String, Object> json) {
+    Podcast p = Podcast(
+        title: json['title_original'],
+        canal: CanalPodcast(title: json['publisher_original']),
+        photoUrl: json['image'],
+        numChapters: json['total_episodes'],
+        id: json['id'],
+        url: "https://s7-rest.francecentral.cloudapp.azure.com/podcast/${json['id']}"
+    );
+//    p.chapters = (json['episodes'] as List).map((j) => (PodcastChapter.trendingWithPodcast(j, p) as PodcastChapter)
+//    ).toList();
+    p.chapters = List();
+    print('AJJASDJADSJADS ${p.chapters.first.title}');
+    return p;
+  }
+
 }

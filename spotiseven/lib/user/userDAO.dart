@@ -1,6 +1,9 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:http/http.dart';
+import 'package:dio/dio.dart' as dio;
+
 import 'package:spotiseven/audio/utils/playlist.dart';
 import 'package:spotiseven/audio/utils/song.dart';
 import 'package:spotiseven/user/tokenSingleton.dart';
@@ -45,7 +48,7 @@ class UserDAO {
     Response response = await _client.get('$_url/current-user/', headers: tokenSingleton.authHeader);
     if(response.statusCode == 200){
 //      print('GETUSERDATA: ${response.body}');
-      // TODO: Cuidado que esto esta devolviendo una lista.
+      //  Cuidado que esto esta devolviendo una lista.
       return User.fromJSON((jsonDecode(response.body) as List)[0]);
     }else{
       print('RESPONSE EN ELSE de getUserData: ${response.body}');
@@ -75,7 +78,7 @@ class UserDAO {
     if(resp.statusCode == 200){
       // En playing   -> song en forma de detalle (DINAMICO. Puede ser un podcast chapter)
       // En timestamp -> entero en segundos
-      // TODO: Cuidado que esto devuelve una lista
+      // Cuidado que esto devuelve una lista
       dynamic map = (jsonDecode(utf8.decode(resp.bodyBytes)) as List)[0];
       if(map['playing'] != null && map['timestamp'] != null){
         // Ha ido bien
@@ -116,7 +119,6 @@ class UserDAO {
       Map<String, dynamic> map = (jsonDecode(utf8.decode(resp.bodyBytes)) as List)[0];
       List<dynamic> lista = map['followers'];
       return lista.map((dynamic d) => User.fromJSON(d)).toList();
-//      return lista['followers'].map((dynamic d) => User.fromJSON(d) ).toList();
     }
     else{
       throw Exception('Error al coger los followers de ${user.username}. Codigo de error ${resp
@@ -124,11 +126,33 @@ class UserDAO {
     }
   }
 
+  static Future<bool> amIFollowing(User user) async {
+    Response resp = await _client.get('$_url/current-user/', headers: TokenSingleton()
+        .authHeader);
+    if(resp.statusCode == 200){
+      print('RESPONE: ${resp.body}');
+      Map<String, dynamic> map = (jsonDecode(utf8.decode(resp.bodyBytes)) as List)[0];
+      List<dynamic> lista = map['following'];
+      if (lista.contains(user))
+        return true;
+      else
+        return false;
+    }
+    else{
+      throw Exception('Error al coger los followers de ${user.username}. Codigo de error ${resp
+          .statusCode}');
+    }
+  }
+
+
+
   // Follow User
   static Future<void> followUser(User user) async {
+    print('following ${user.url}follow/');
     Response resp = await _client.get('${user.url}follow/', headers: TokenSingleton().authHeader);
     if(resp.statusCode == 200){
       // Ha ido bien -> Le estamos siguiendo
+      print('user ${user.username} followd');
     }else{
       throw Exception('Error al seguir al usuario ${user.username}. Codigo de error ${resp.statusCode}');
     }
@@ -136,24 +160,43 @@ class UserDAO {
 
   // Unfollow User
   static Future<void> unfollowUser(User user) async {
-    Response resp = await _client.get('${user.url}unfollow/', headers: TokenSingleton().authHeader);
+    print('unfollowing ${user.url}unfollow');
+    Response resp = await _client.get('${user.url}unfollow/', headers: TokenSingleton()
+        .authHeader);
     if(resp.statusCode == 200){
       // Ha ido bien -> Le hemos dejado de seguir
+      print('user ${user.username} unfollowd');
     }else{
       throw Exception('Error al dejar de seguir al usuario ${user.username}. Codigo de error ${resp.statusCode}');
     }
   }
 
   // Playlist de los usuarios que sigues
-  static Future<List<Playlist>> followingPlaylists() async {
-    Response resp = await _client.get('$_url/user/followed/playlists/',headers: TokenSingleton().authHeader);
-    if(resp.statusCode == 200){
-      // Ha ido bien
-      return (jsonDecode(utf8.decode(resp.bodyBytes)) as List).map((dynamic d) => Playlist.fromJSONListed(d)).toList();
-    }else{
-      throw Exception('Error al obtener las playlist de los siguiendo. Codigo de error ${resp.statusCode}');
+  static Future<List<Playlist>> followingPlaylists(int limit, int offset) async {
+    print('ilimit: $limit & offset: $offset');
+    Response response = await _client.get('$_url/user/followed/playlists/?limit=$limit&offset=$offset',
+        headers: TokenSingleton().authHeader);
+    if (response.statusCode == 200) {
+      print('RESPONSE: ${response.body}');
+      Map<String, dynamic> map = (jsonDecode(utf8.decode(response.bodyBytes)) as Map);
+      List<dynamic> lista = map['results'];
+      print(lista);
+      if (map['next'] == null && lista.isEmpty){
+        //=======================================
+        // DEVOLVEMOS NULL PQ SE HAN ACABADO LOS RECURSOS DE LA PAGINACIÓN
+        // SOMOS UNOS GUARRROS
+        //=======================================
+        return [];
+      }
+      else return lista.map((dynamic d) => Playlist.fromJSONListed(d)).toList();
+    }
+    else {
+      throw Exception(
+          'Error al obtener las playlist de los siguiendo. Codigo de error ${response.statusCode}'
+      );
     }
   }
+
 
   /// Busca el parámetro en: nombre del usuario y en sus playlists
   static Future<List<User>> searchUser(String query) async {
@@ -168,4 +211,67 @@ class UserDAO {
           'La busqueda de Song ha ido mal. Codigo de error ${resp.statusCode}');
     }
   }
+
+  static Future<String> userImg(String url) async {
+    Response resp = await _client.get(url);
+    if (resp.statusCode == 200) {
+      // Ha ido bien, devolvemos las listas
+      dynamic d = jsonDecode(utf8.decode(resp.bodyBytes));
+      return User.img(d);
+    } else {
+      throw Exception(
+          'La busqueda de user con img ha ido mal. Codigo de error ${resp.statusCode}');
+    }
+  }
+
+
+  static Future<User> putImage(File image) async {
+
+    print('${image.path}');
+
+    var file = await dio.MultipartFile.fromFile(image.path);
+
+    print('${file.toString()}');
+
+    dio.FormData fd = dio.FormData.fromMap({
+      'icon': file,
+    });
+
+    print('$_url/update-user/');
+    print('FormData = ${fd.files}');
+
+    dio.Response response = await dio.Dio().put('$_url/update-user/',
+        data: fd, options: dio.Options(headers: TokenSingleton().authHeader));
+
+    if (response.statusCode == 200) {
+      // Ha ido bien
+      print('El update de foto ha ido bien');
+      print('Respuesta ==> ${response.data}');
+      print('${response.data.runtimeType}');
+      return User.userJSON(response.data);
+    } else {
+      print('${response.data}');
+      throw Exception(
+          'Error al subir un user. Codigo de error: ${response.statusCode}');
+    }
+  }
+
+  static Future<User> putName(String newName) async {
+    Response response = await _client.get('$_url/update-user/?name=$newName',
+        headers: TokenSingleton().authHeader);
+
+    if (response.statusCode == 200) {
+      // Ha ido bien
+      print('El update de foto ha ido bien');
+      print('Respuesta ==> ${response.body}');
+      print('${response.body.runtimeType}');
+      dynamic d = jsonDecode(utf8.decode(response.bodyBytes));
+      return User.userJSON(d);
+    } else {
+      print('${response.body}');
+      throw Exception(
+          'Error al subir un username. Codigo de error: ${response.statusCode}');
+    }
+  }
+
 }

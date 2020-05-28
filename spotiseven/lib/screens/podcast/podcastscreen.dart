@@ -22,7 +22,7 @@ class _PodcastScreenWrapper extends State<PodcastScreenWrapper>
 
   // Tabs
   List<Widget> _myTabs = [
-    NewPodcast(),
+//    NewPodcast(),
     SubscriptionPodcast(),
     DiscoverPodcast(),
   ];
@@ -51,7 +51,7 @@ class _PodcastScreenWrapper extends State<PodcastScreenWrapper>
             Align(
               alignment: Alignment.topCenter,
               child: Container(
-                padding: EdgeInsets.fromLTRB(30, 0, 0, 0),
+                padding: EdgeInsets.fromLTRB(80, 0, 30, 0),
                 width: MediaQuery.of(context).size.width,
                 color: Colors.black,
                 child: PreferredSize(
@@ -80,7 +80,7 @@ class _PodcastScreenWrapper extends State<PodcastScreenWrapper>
                         fontWeight: FontWeight.bold,
                       ),
                       tabs: <Widget>[
-                        buildTextTab('NEW PODCAST'),
+//                        buildTextTab('NEW PODCAST'),
                         buildTextTab('SUBSCRIPTION'),
                         buildTextTab('DISCOVER'),
                       ],

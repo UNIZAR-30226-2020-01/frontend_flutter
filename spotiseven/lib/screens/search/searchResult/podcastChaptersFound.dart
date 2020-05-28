@@ -1,38 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:spotiseven/audio/utils/DAO/albumDAO.dart';
-import 'package:spotiseven/audio/utils/album.dart';
-import 'package:spotiseven/screens/home/details/album_detail.dart';
+import 'package:spotiseven/audio/utils/DAO/podcastChapterDAO.dart';
+import 'package:spotiseven/audio/utils/podcastChapter.dart';
+import 'package:spotiseven/generic_components/GenericNewPodChapter.dart';
 import 'package:spotiseven/usefullMethods.dart';
 
-class AlbumsFound extends StatefulWidget {
-
+class ChaptersFound extends StatefulWidget {
   String word;
-  AlbumsFound({@required this.word});
+
+  ChaptersFound({@required this.word});
 
   @override
-  _AlbumsFoundState createState() => _AlbumsFoundState();
+  _ChaptersFoundState createState() => _ChaptersFoundState();
 }
 
-class _AlbumsFoundState extends State<AlbumsFound> {
+class _ChaptersFoundState extends State<ChaptersFound> {
   String get word => widget.word;
-  List<Album> foundAlbum = List();
+  List<PodcastChapter> chapsFound;
 
-  ScrollController _scrollController;
   int items = 4;
   int offset = 0;
 
   bool fetching = false;
   bool vacio = true;
 
+  ScrollController _scrollController;
   @override
   void initState(){
-    AlbumDAO.searchAlbum(8,0,word).then((List<Album> list) =>  setState(() {
-      foundAlbum = list;
-      offset = offset + 8;
-      vacio = false;
+    chapsFound = List();
+    PodcastChapterDAO.searchPodChap(8,0,word).then((List<PodcastChapter> list) =>
+      setState(() {
+        chapsFound = list;
+        offset = offset + 8;
+        vacio = false;
     }));
-
     _scrollController = ScrollController();
     super.initState();
   }
@@ -43,26 +44,26 @@ class _AlbumsFoundState extends State<AlbumsFound> {
     super.dispose();
   }
 
+
   @override
   Widget build(BuildContext context) {
     if (offset==0){
-      print(' song $fetching');
       return Center(
         child: CircularProgressIndicator(),
       );
     }
-    else if (foundAlbum.isNotEmpty) {
+    else if (chapsFound.isNotEmpty) {
       return NotificationListener<ScrollNotification>(
           onNotification: (ScrollNotification sn) {
         if (sn is ScrollEndNotification &&
             sn.metrics.pixels >= 0.7 * sn.metrics.maxScrollExtent && !fetching) {
           fetching = true;
           UsefulMethods.snack(context);
-          AlbumDAO.searchAlbum(items, offset, word).then((List<Album> list) {
+          PodcastChapterDAO.searchPodChap(items, offset,word).then((List<PodcastChapter> list) {
             if (list.length > 0) {
               setState(() {
                 print('fetching more items');
-                foundAlbum.addAll(list);
+                chapsFound.addAll(list);
                 offset = offset + items;
                 fetching= false;
               });
@@ -71,16 +72,16 @@ class _AlbumsFoundState extends State<AlbumsFound> {
         }
         return true;
       },
-    child: CustomScrollView(
+    child:  CustomScrollView(
         controller: _scrollController,
         slivers: <Widget>[
-          SliverGrid.count(
-            crossAxisCount: 2,
-            children: foundAlbum
-                .map((el) => AlbumCardWidget(
-              album: el,
-            ))
-                .toList(),
+          SliverList(
+            delegate: SliverChildListDelegate(
+              chapsFound.map((el) => GenericNewPodChapter(
+                podcastChapter: el,
+              ))
+                  .toList(),
+            ),
           ),
         ],
       ));

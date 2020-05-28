@@ -18,6 +18,7 @@ class PodcastChapter {
   String photoUrl;
   //url de listennotes
   String uri;
+  String id;
 
   PodcastChapter({
     @required this.title,
@@ -26,21 +27,10 @@ class PodcastChapter {
     @required this.duration,
     @required this.url,
     @required this.photoUrl,
-    @required this.uri
+    @required this.uri,
+    this.id
 });
-/*<<<<<<< HEAD
 
-  factory PodcastChapter.fromJSON(Map<String, Object> json) {
-    return PodcastChapter(
-      title: json['title'],
-      description: json['description'],
-      duration: json['duration'],
-      date: json['date'],
-      photoUrl: json['image'],
-      podcast: Podcast.fromJSON(json['podcast']),
-    );
-  }
-=======*/
   static fromJSON(Map<String, Object> json){
     PodcastChapter chap = PodcastChapter(
         title: json['title'],
@@ -49,7 +39,8 @@ class PodcastChapter {
         photoUrl: json['image'],
         url: json['url'],
         podcast: Podcast.fromJSONListed(json['podcast']),
-        uri: json['URI']
+        uri: json['URI'],
+        id: json['id_listenotes']
     );
     return chap;
   }
@@ -64,10 +55,28 @@ class PodcastChapter {
         uri: json['URI'],
         podcast: p
     );
-    if (chap.title.length > 20){
-      var str = chap.title;
-      chap.title = str.substring(1,20) + '...';
-    }
+
     return chap;
   }
+
+  static trendingWithPodcast(Map<String, Object> json, Podcast p){
+    PodcastChapter chap = PodcastChapter(
+        title: json['title'],
+        description: json['description'],
+        duration: json['audio_length_sec'],
+        photoUrl: json['image'],
+        id: json['id'],
+        uri: json['audio'],
+        podcast: p
+    );
+
+    return chap;
+  }
+
+  static String realUrl(Map<String, Object> json) {
+    print('real Url ${json['URI']}');
+    return json['URI'];
+  }
+
+
 }
