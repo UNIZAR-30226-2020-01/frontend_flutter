@@ -20,11 +20,15 @@ class _UserFoundState extends State<UserFound> {
 
   ScrollController _scrollController;
   bool loading = true;
+  bool vacio = true;
+  int offset =0;
   @override
   void initState(){
     UserDAO.searchUser(widget.word).then((List<User> list) => setState(() {
       founduser = list;
       loading = false;
+      offset= 8;
+      vacio = false;
     }));
 //    addImage();
     _scrollController = ScrollController();
@@ -39,12 +43,12 @@ class _UserFoundState extends State<UserFound> {
 
   @override
   Widget build(BuildContext context) {
-    if (loading){
+    if (offset==0){
       return Center(
         child: CircularProgressIndicator(),
       );
     }
-    else if(!loading && founduser != null){
+    else if (founduser.isNotEmpty) {
       return Scaffold(
         body: CustomScrollView(
           controller: _scrollController,
@@ -62,13 +66,10 @@ class _UserFoundState extends State<UserFound> {
         ),
       );
     }
-    else if(founduser.isEmpty){
+    else if (vacio){
       return UsefulMethods.noItems(context);
     }
-    else {
-      return Center(
-        child: CircularProgressIndicator(),
-      );
-    }
+    else
+      return UsefulMethods.noItems(context);
   }
 }

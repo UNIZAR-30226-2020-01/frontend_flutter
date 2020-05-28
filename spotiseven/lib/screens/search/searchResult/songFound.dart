@@ -17,7 +17,7 @@ class SongFound extends StatefulWidget {
 class _SongFoundState extends State<SongFound> {
   String get word => widget.word;
 
-  List<Song> foundsong;
+  List<Song> foundsong = List();
   bool loading;
 
   ScrollController _scrollController;
@@ -26,12 +26,14 @@ class _SongFoundState extends State<SongFound> {
   int offset = 0;
 
   bool fetching = false;
+  bool vacio = false;
 
   @override
   void initState() {
     SongDAO.searchSong(8, 0, word).then((List<Song> list) => setState(() {
           foundsong = list;
           offset = offset + 8;
+          vacio = true;
         }));
     _scrollController = ScrollController();
     super.initState();
@@ -45,12 +47,13 @@ class _SongFoundState extends State<SongFound> {
 
   @override
   Widget build(BuildContext context) {
-    if (fetching && foundsong.isEmpty){
+    if (offset==0){
+      print(' song $fetching');
       return Center(
         child: CircularProgressIndicator(),
       );
     }
-    else if (foundsong.isNotEmpty || !fetching) {
+    else if (foundsong.isNotEmpty) {
     return NotificationListener<ScrollNotification>(
           onNotification: (ScrollNotification sn) {
             if (sn is ScrollEndNotification &&
@@ -88,13 +91,10 @@ class _SongFoundState extends State<SongFound> {
             ),
           ));
     }
-    else if(foundsong.isEmpty){
+    else if (vacio){
       return UsefulMethods.noItems(context);
     }
-    else {
-      return Center(
-        child: CircularProgressIndicator(),
-      );
-    }
+    else
+      return UsefulMethods.noItems(context);
   }
 }

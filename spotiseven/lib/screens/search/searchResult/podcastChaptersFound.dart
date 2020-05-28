@@ -22,7 +22,7 @@ class _ChaptersFoundState extends State<ChaptersFound> {
   int offset = 0;
 
   bool fetching = false;
-
+  bool vacio = true;
 
   ScrollController _scrollController;
   @override
@@ -32,6 +32,7 @@ class _ChaptersFoundState extends State<ChaptersFound> {
       setState(() {
         chapsFound = list;
         offset = offset + 8;
+        vacio = false;
     }));
     _scrollController = ScrollController();
     super.initState();
@@ -46,12 +47,12 @@ class _ChaptersFoundState extends State<ChaptersFound> {
 
   @override
   Widget build(BuildContext context) {
-    if (fetching && chapsFound.isEmpty){
+    if (offset==0){
       return Center(
         child: CircularProgressIndicator(),
       );
     }
-    else if (chapsFound.isNotEmpty || !fetching) {
+    else if (chapsFound.isNotEmpty) {
       return NotificationListener<ScrollNotification>(
           onNotification: (ScrollNotification sn) {
         if (sn is ScrollEndNotification &&
@@ -85,13 +86,10 @@ class _ChaptersFoundState extends State<ChaptersFound> {
         ],
       ));
     }
-    else if(chapsFound.isEmpty){
+    else if (vacio){
       return UsefulMethods.noItems(context);
     }
-    else {
-      return Center(
-        child: CircularProgressIndicator(),
-      );
-    }
+    else
+      return UsefulMethods.noItems(context);
   }
 }

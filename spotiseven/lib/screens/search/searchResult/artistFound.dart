@@ -24,11 +24,13 @@ class _ArtistFoundState extends State<ArtistFound> {
   int offset = 0;
 
   bool fetching = false;
+  bool vacio = true;
   @override
   void initState() {
     ArtistDAO.searchArtist(6,0,word).then((List<Artist> list) => setState(() {
       foundArtist = list;
       offset = offset + 6;
+      vacio = false;
     }));
     _scrollController = ScrollController();
     super.initState();
@@ -42,12 +44,13 @@ class _ArtistFoundState extends State<ArtistFound> {
 
   @override
   Widget build(BuildContext context) {
-    if (fetching && foundArtist.isEmpty){
+    if (offset==0){
+      print(' song $fetching');
       return Center(
         child: CircularProgressIndicator(),
       );
     }
-    else if (foundArtist.isNotEmpty || !fetching) {
+    else if (foundArtist.isNotEmpty) {
       return NotificationListener<ScrollNotification>(
           onNotification: (ScrollNotification sn) {
         if (sn is ScrollEndNotification &&
@@ -82,13 +85,10 @@ class _ArtistFoundState extends State<ArtistFound> {
         ],
       ));
     }
-    else if(foundArtist.isEmpty){
+    else if (vacio){
       return UsefulMethods.noItems(context);
     }
-    else {
-      return Center(
-        child: CircularProgressIndicator(),
-      );
-    }
+    else
+      return UsefulMethods.noItems(context);
   }
 }

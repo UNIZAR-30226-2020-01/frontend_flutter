@@ -51,6 +51,26 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.black,
+        onPressed: (){
+          PlayingSingleton()
+            ..setPlayList(Playlist(
+                title: widget.album.titulo,
+                photoUrl: widget.album.photoUrl,
+                playlist: widget.album.list))
+            ..randomize()
+            ..play(PlayingSingleton().song);
+        },
+        child: Container(
+          color: Colors.black,
+            child: UsefulMethods.text('PLAY', 25.0, 0.0, 255, 255, 255, 1.0)
+        ),
+      ),
+      appBar: AppBar(
+
+        title: UsefulMethods.text(widget.album.titulo, 20.0, 0.0, 0, 0, 0, 1.0),
+      ),
       body: SafeArea(
         child: RefreshIndicator(
           onRefresh: () => widget.album.fetchRemote(),
@@ -119,7 +139,7 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
                 ),
               ),
               _fabReproduction(),
-              _name(),
+//              _name(),
             ],
           ),
         ),
@@ -128,7 +148,7 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
   }
 
   _name() {
-    final double defaultTopMargin = 271 - 15.0;
+    final double defaultTopMargin = 271 - 14.0;
     double top = defaultTopMargin;
     return Positioned(
       top: top,
@@ -178,7 +198,7 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
-            RaisedButton(
+            /*RaisedButton(
               onPressed: () => PlayingSingleton()
                 ..setPlayList(Playlist(
                     title: widget.album.titulo,
@@ -191,7 +211,7 @@ class _AlbumDetailScreenState extends State<AlbumDetailScreen> {
               color: Colors.white,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10))),
-            ),
+            ),*/
           ],
         ),
       ),

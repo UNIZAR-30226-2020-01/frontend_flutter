@@ -8,8 +8,10 @@ import 'package:spotiseven/usefullMethods.dart';
 class PlaylistFound extends StatefulWidget {
   final List<Playlist> foundpl;
   String word;
-
-  PlaylistFound({@required this.foundpl, @required this.word});
+  bool vacio;
+  PlaylistFound({@required this.foundpl, @required this.word}){
+    vacio = false;
+  }
 
   @override
   _PlaylistFoundState createState() => _PlaylistFoundState();
@@ -24,6 +26,7 @@ class _PlaylistFoundState extends State<PlaylistFound> {
   int offset = 8;
 
   bool fetching = false;
+  bool get vacio => widget.vacio;
 
   @override
   void initState() {
@@ -39,12 +42,13 @@ class _PlaylistFoundState extends State<PlaylistFound> {
 
   @override
   Widget build(BuildContext context) {
-    if (fetching && foundlp.isEmpty){
+    if (offset==0){
+      print(' song $fetching');
       return Center(
         child: CircularProgressIndicator(),
       );
     }
-    else if (foundlp.isNotEmpty || !fetching) {
+    else if (foundlp.isNotEmpty) {
       return NotificationListener<ScrollNotification>(
           onNotification: (ScrollNotification sn) {
             if (sn is ScrollEndNotification &&
@@ -79,13 +83,10 @@ class _PlaylistFoundState extends State<PlaylistFound> {
             ],
           ));
     }
-    else if(foundlp.isEmpty){
+    else if (vacio){
       return UsefulMethods.noItems(context);
     }
-    else {
-      return Center(
-        child: CircularProgressIndicator(),
-      );
-    }
+    else
+      return UsefulMethods.noItems(context);
   }
 }

@@ -142,30 +142,35 @@ class _DiscoverPodcastState extends State<DiscoverPodcast> {
 
     @override
     Widget build(BuildContext context) {
-      return Container(
-        margin: EdgeInsets.fromLTRB(15, 0, 15, 0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Expanded(
-              flex: 1,
-              child: _foruBar(),
-            ),
-            Expanded(
-              flex: 4,
-              child: _foruElem(),
-            ),
-            Expanded(
-              flex: 1,
-              child: _suggestionsBar(),
-            ),
-            Expanded(
-              flex: 6,
-              child: _suggestionsGrid(),
-            )
-          ],
-        ),
-      );
+      if (_listPodcasts.isEmpty && genres.isEmpty) {
+        return CircularProgressIndicator();
+      }
+      else {
+        return Container(
+          margin: EdgeInsets.fromLTRB(15, 0, 15, 0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Expanded(
+                flex: 1,
+                child: _foruBar(),
+              ),
+              Expanded(
+                flex: 4,
+                child: _foruElem(),
+              ),
+              Expanded(
+                flex: 1,
+                child: _suggestionsBar(),
+              ),
+              Expanded(
+                flex: 6,
+                child: _suggestionsGrid(),
+              )
+            ],
+          ),
+        );
+      }
     }
 }
 

@@ -20,6 +20,7 @@ class _PodcastFoundState extends State<PodcastFound> {
   int offset = 0;
 
   bool fetching = false;
+  bool vacio = true;
 
   ScrollController _scrollController;
 
@@ -28,7 +29,9 @@ class _PodcastFoundState extends State<PodcastFound> {
     PodcastDAO.searchPod(18,0,word).then((List<Podcast> list) => setState(() {
           pods = list;
           offset = offset + 18;
+          vacio = false;
         }));
+
     _scrollController = ScrollController();
     super.initState();
   }
@@ -41,19 +44,20 @@ class _PodcastFoundState extends State<PodcastFound> {
 
   @override
   Widget build(BuildContext context) {
-    if (fetching && pods.isEmpty){
+    if (offset==0){
+      print(' song $fetching');
       return Center(
         child: CircularProgressIndicator(),
       );
     }
-    else if (pods.isNotEmpty || !fetching) {
+    else if (pods.isNotEmpty) {
       return NotificationListener<ScrollNotification>(
           onNotification: (ScrollNotification sn) {
             if (sn is ScrollEndNotification &&
                 sn.metrics.pixels >= 0.7 * sn.metrics.maxScrollExtent && !fetching) {
               fetching = true;
               UsefulMethods.snack(context);
-              PodcastDAO.searchPod(items, offset, word).then((List<Podcast> list) {
+              /*PodcastDAO.searchPod(items, offset, word).then((List<Podcast> list) {
                 if (list.length > 0) {
                   setState(() {
                     print('fetching more items');
@@ -62,7 +66,7 @@ class _PodcastFoundState extends State<PodcastFound> {
                     fetching= false;
                   });
                 }
-              });
+              });*/
             }
             return true;
           },
@@ -80,12 +84,10 @@ class _PodcastFoundState extends State<PodcastFound> {
             ],
           ));
     }
-    else if (pods.isEmpty)
+    else if (vacio){
       return UsefulMethods.noItems(context);
-    /*else {
-      return Center(
-        child: CircularProgressIndicator(),
-      );
-    }*/
+    }
+    else
+      return UsefulMethods.noItems(context);
   }
 }

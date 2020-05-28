@@ -139,7 +139,7 @@ class _GenericPodcastState extends State<GenericPodcast> {
                 ),
               ),
               Container(
-                width: MediaQuery.of(context).size.width * 0.1,
+                width: MediaQuery.of(context).size.width * 0.001,
                 child: IconButton(
                   onPressed: () {
                     print('presionado boton info de podcast');
@@ -147,7 +147,7 @@ class _GenericPodcastState extends State<GenericPodcast> {
                   },
                   icon: Icon(
                     Icons.info,
-                    color: Colors.black,
+                    color: Colors.white,
                   ),
                   color: Colors.black,
                 ),
@@ -213,7 +213,7 @@ class _GenericPodcastState extends State<GenericPodcast> {
         // Efectos
         leading: SizedBox(),
         stretch: true,
-        onStretchTrigger: () => Future.delayed(Duration(microseconds: 1), () async {
+        onStretchTrigger: () => Future.delayed(Duration(microseconds: 2), () async {
               PodcastDAO.amISusbscribed(podcast).then(
                     (bool x) {
                   setState(() {

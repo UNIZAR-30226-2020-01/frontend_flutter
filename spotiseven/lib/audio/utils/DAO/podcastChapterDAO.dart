@@ -34,7 +34,7 @@ class PodcastChapterDAO{
     if(resp.statusCode == 200) {
       Map<String, dynamic> map = (jsonDecode(utf8.decode(resp.bodyBytes)) as Map);
       List<dynamic> lista = map['results'];
-      p = await PodcastDAO.getFromUrl(map['AQUI URL DEL POD PADRE']);
+//      p = await PodcastDAO.getFromUrl(lista[5]);
       if (map['next'] == null && lista.isEmpty){
         //=======================================
         // DEVOLVEMOS NULL PQ SE HAN ACABADO LOS RECURSOS DE LA PAGINACIÓN
@@ -43,7 +43,7 @@ class PodcastChapterDAO{
         return [];
       }
       else {
-        return lista.map((dynamic d) => (PodcastChapter.fromJSONwithPodcast(d,p)) as PodcastChapter)
+        return lista.map((dynamic d) => (PodcastChapter.fromJSON(d)) as PodcastChapter)
           .toList();
       }
     }

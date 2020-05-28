@@ -16,19 +16,21 @@ class AlbumsFound extends StatefulWidget {
 
 class _AlbumsFoundState extends State<AlbumsFound> {
   String get word => widget.word;
-  List<Album> foundAlbum;
+  List<Album> foundAlbum = List();
 
   ScrollController _scrollController;
   int items = 4;
   int offset = 0;
 
   bool fetching = false;
+  bool vacio = true;
 
   @override
   void initState(){
     AlbumDAO.searchAlbum(8,0,word).then((List<Album> list) =>  setState(() {
       foundAlbum = list;
       offset = offset + 8;
+      vacio = false;
     }));
 
     _scrollController = ScrollController();
@@ -43,12 +45,13 @@ class _AlbumsFoundState extends State<AlbumsFound> {
 
   @override
   Widget build(BuildContext context) {
-    if (fetching && foundAlbum.isEmpty){
+    if (offset==0){
+      print(' song $fetching');
       return Center(
         child: CircularProgressIndicator(),
       );
     }
-    else if (foundAlbum.isNotEmpty || !fetching) {
+    else if (foundAlbum.isNotEmpty) {
       return NotificationListener<ScrollNotification>(
           onNotification: (ScrollNotification sn) {
         if (sn is ScrollEndNotification &&
@@ -82,13 +85,10 @@ class _AlbumsFoundState extends State<AlbumsFound> {
         ],
       ));
     }
-    else if(foundAlbum.isEmpty){
+    else if (vacio){
       return UsefulMethods.noItems(context);
     }
-    else {
-      return Center(
-        child: CircularProgressIndicator(),
-      );
-    }
+    else
+      return UsefulMethods.noItems(context);
   }
 }

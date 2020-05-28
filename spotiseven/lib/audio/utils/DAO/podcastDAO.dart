@@ -104,14 +104,14 @@ class PodcastDAO{
     else {
       List<dynamic> dyna = jsonDecode(utf8.decode(response.bodyBytes));
       List<Podcast> lista = dyna.map((d) => Podcast.fromJSONListed(d)).toList();
-      if (lista.contains(p)){
-        print('Está suscrito');
-        return true;
+      bool dev = false;
+      for (int i=0; i< lista.length; i++){
+        if (lista[i].title == p.title){
+          dev = true;
+          break;
+        }
       }
-      else{
-        print('No está suscrito');
-        return false;
-      }
+      return dev;
     }
   }
 
@@ -138,10 +138,12 @@ class PodcastDAO{
   static Future<List<Podcast>> searchPod(int limit, int offset, String query) async {
     print('searching podChaps $query');
     Response resp = await _client.get('$_url/podcasts/?search=$query&limit=$limit&offset=offset'
+//    Response resp = await _client.get('$_url/podcasts/search/?title=$query&limit=$limit&offset'
+        '=offset'
         '=$offset', headers: TokenSingleton().authHeader);
 
     if(resp.statusCode == 200) {
-      Map<String, dynamic> map = (jsonDecode(utf8.decode(resp.bodyBytes)) as Map);
+      Map<String, dynamic> map = (jsonDecode(utf8.decode(resp.bodyBytes)));
       List<dynamic> lista = map['results'];
       if (map['next'] == null && lista.isEmpty){
         //=======================================
@@ -151,9 +153,27 @@ class PodcastDAO{
         return [];
       }
       else return lista.map((dynamic d) => Podcast.fromJSON(d)).toList();
+//      else return lista.map((dynamic d) => Podcast.fromSearch(d)).toList();
     }
     else {
       throw Exception('La busqueda de Artist ha ido mal. Codigo de error ${resp.statusCode}');
+    }
+  }
+
+
+  static Future<List<Podcast>> newSearch (String query) async {
+    print('searching podChaps $query');
+    Response resp = await _client.get
+      ('$_url/podcasts/search/?title=$query', headers: TokenSingleton().authHeader);
+
+    if(resp.statusCode == 200) {
+      List<dynamic> map = (jsonDecode(utf8.decode(resp.bodyBytes)) );
+//        List<dynamic> lista = map['results'];
+      return map.map((dynamic d) => Podcast.fromSearch(d)).toList();
+    }
+    else {
+      throw Exception('La nueva busqueda de songs ha ido mal. Codigo de error ${resp
+          .statusCode}');
     }
   }
 

@@ -106,4 +106,25 @@ class Podcast {
     return p;
   }
 
+  static String getUrl(Map<String, Object> json) {
+    return json['url'];
+  }
+
+
+  static Podcast fromSearch(Map<String, Object> json) {
+    Podcast p = Podcast(
+        title: json['title_original'],
+        canal: CanalPodcast(title: json['publisher_original']),
+        photoUrl: json['image'],
+        numChapters: json['total_episodes'],
+        id: json['id'],
+        url: "https://s7-rest.francecentral.cloudapp.azure.com/podcast/${json['id']}"
+    );
+//    p.chapters = (json['episodes'] as List).map((j) => (PodcastChapter.trendingWithPodcast(j, p) as PodcastChapter)
+//    ).toList();
+    p.chapters = List();
+    print('AJJASDJADSJADS ${p.chapters.first.title}');
+    return p;
+  }
+
 }
